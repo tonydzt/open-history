@@ -68,9 +68,9 @@ export default function SignInPage() {
         <div className="space-y-4">
           {providers && Object.values(providers).length > 0 ? (
             Object.values(providers).map((provider: any) => (
-              <div key={provider.id}> 
+              <div key={provider.id}>
                 {provider.id === 'credentials' ? (
-                  <form 
+                  <form
                     onSubmit={(e) => {
                       e.preventDefault();
                       const username = e.currentTarget.username.value;
@@ -114,8 +114,8 @@ export default function SignInPage() {
                       </svg>
                     )}
                     {provider.id === 'google' && (
-                      <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12.24 10.285v3.43h8.804c-.267 1.765-2.043 5.174-8.804 5.174-5.46 0-9.931-4.53-9.931-10s4.47-10 9.93-10c3.159 0 5.842 1.154 7.961 3.038L15.14 9.23c-1.285-1.272-3.029-2.145-4.9-2.145-3.871 0-7.06 3.189-7.06 7s3.189 7 7.06 7c2.504 0 4.153-1.47 4.679-2.54h-4.679v-3.43z" />
+                      <svg width="24" height="24" aria-hidden="true">
+                        <image href="/google-color.svg" width="24" height="24" />
                       </svg>
                     )}
                     继续使用 {provider.name}
