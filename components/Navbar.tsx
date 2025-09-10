@@ -64,9 +64,10 @@ export default function Navbar() {
           <div className="md:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-gray-700 hover:text-gray-900 focus:outline-none"
+              className="p-2 rounded-full bg-gray-100 text-gray-700 hover:bg-primary-100 hover:text-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all duration-200"
+              aria-label={isMenuOpen ? "关闭菜单" : "打开菜单"}
             >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className={`h-6 w-6 transition-transform duration-300 ${isMenuOpen ? 'rotate-90' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 {isMenuOpen ? (
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 ) : (
@@ -79,17 +80,29 @@ export default function Navbar() {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200">
-            <div className="flex flex-col space-y-4">
-              <Link href="/" className="text-gray-700 hover:text-primary-600 transition-colors">
+          <div className="md:hidden py-3 border-t border-gray-100 bg-white animate-in fade-in slide-in-from-top-5 duration-200">
+            <div className="flex flex-col space-y-2 px-4">
+              <Link 
+                href="/" 
+                className="py-3 px-4 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-all duration-200"
+              >
                 首页
               </Link>
               {session ? (
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-700">{session.user?.name}</span>
+                <div className="py-3 px-4 bg-gray-50 rounded-lg flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    {session.user?.image && (
+                      <img
+                        src={session.user.image}
+                        alt={session.user.name || '用户头像'}
+                        className="w-8 h-8 rounded-full object-cover"
+                      />
+                    )}
+                    <span className="text-gray-700 font-medium">{session.user?.name}</span>
+                  </div>
                   <button
                     onClick={() => signOut()}
-                    className="text-gray-600 hover:text-gray-800 transition-colors"
+                    className="py-2 px-4 text-sm text-gray-600 hover:bg-gray-200 rounded-full transition-all duration-200"
                   >
                     退出
                   </button>
@@ -97,7 +110,7 @@ export default function Navbar() {
               ) : (
                 <button
                   onClick={() => signIn()}
-                  className="btn-primary text-center"
+                  className="btn-primary text-center py-3 rounded-lg mt-2 transition-all duration-200 hover:shadow-md"
                 >
                   登录
                 </button>
