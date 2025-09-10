@@ -2,11 +2,36 @@
 
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 export default function Navbar() {
   const { data: session, status } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const userMenuTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+
+  // 清理定时器
+  useEffect(() => {
+    return () => {
+      if (userMenuTimerRef.current) {
+        clearTimeout(userMenuTimerRef.current);
+      }
+    };
+  }, []);
+
+  const handleUserMenuEnter = () => {
+    if (userMenuTimerRef.current) {
+      clearTimeout(userMenuTimerRef.current);
+    }
+    setIsUserMenuOpen(true);
+  };
+
+  const handleUserMenuLeave = () => {
+    userMenuTimerRef.current = setTimeout(() => {
+      setIsUserMenuOpen(false);
+    }, 300); // 300ms延迟关闭
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
@@ -21,34 +46,59 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6">
+          <div className="hidden md:flex items-center">
             <Link href="/" className="text-gray-700 hover:text-primary-600 transition-colors">
-              首页
+              
             </Link>
           </div>
 
           {/* User Menu */}
           <div className="hidden md:flex items-center space-x-4">
+            {session && (
+              <Link href="/create" className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors shadow-sm hover:shadow">
+                创建事件
+              </Link>
+            )}
             {status === 'loading' ? (
               <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
             ) : session ? (
-              <div className="flex items-center space-x-3">
-                <div className="flex items-center space-x-2">
-                  {session.user?.image && (
+              <div className="relative" ref={userMenuRef}>
+                <button
+                  onMouseEnter={handleUserMenuEnter}
+                  onMouseLeave={handleUserMenuLeave}
+                  className="w-8 h-8 rounded-full overflow-hidden focus:outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer"
+                  aria-label="用户菜单"
+                  aria-expanded={isUserMenuOpen}
+                >
+                  {session.user?.image ? (
                     <img
                       src={session.user.image}
                       alt={session.user.name || '用户头像'}
-                      className="w-8 h-8 rounded-full"
+                      className="w-full h-full object-cover"
                     />
+                  ) : (
+                    <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
+                      {session.user?.name?.charAt(0) || '?'}
+                    </div>
                   )}
-                  <span className="text-sm text-gray-700">{session.user?.name}</span>
-                </div>
-                <button
-                  onClick={() => signOut()}
-                  className="text-gray-600 hover:text-gray-800 transition-colors"
-                >
-                  退出
                 </button>
+                {isUserMenuOpen && (
+                  <div 
+                    className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-1 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
+                    onMouseEnter={handleUserMenuEnter}
+                    onMouseLeave={handleUserMenuLeave}
+                  >
+                    <button
+                      onClick={() => {
+                        signOut();
+                        setIsUserMenuOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    >
+                      退出
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <button
@@ -86,19 +136,30 @@ export default function Navbar() {
                 href="/" 
                 className="py-3 px-4 rounded-lg text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-all duration-200"
               >
-                首页
+                
               </Link>
+              {session && (
+                <Link 
+                  href="/create" 
+                  className="py-3 px-4 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-all duration-200 text-center"
+                >
+                  创建事件
+                </Link>
+              )}
               {session ? (
                 <div className="py-3 px-4 bg-gray-50 rounded-lg flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    {session.user?.image && (
+                  <div className="flex items-center">
+                    {session.user?.image ? (
                       <img
                         src={session.user.image}
                         alt={session.user.name || '用户头像'}
                         className="w-8 h-8 rounded-full object-cover"
                       />
+                    ) : (
+                      <div className="w-8 h-8 bg-gray-200 flex items-center justify-center text-gray-500 rounded-full">
+                        {session.user?.name?.charAt(0) || '?'}
+                      </div>
                     )}
-                    <span className="text-gray-700 font-medium">{session.user?.name}</span>
                   </div>
                   <button
                     onClick={() => signOut()}
