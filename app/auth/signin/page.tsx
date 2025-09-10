@@ -1,9 +1,8 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getProviders, signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
 
 export default function SignInPage() {
   const [providers, setProviders] = useState<Record<string, any> | null>(null);

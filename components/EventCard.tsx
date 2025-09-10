@@ -14,6 +14,7 @@ export default function EventCard({ event }: EventCardProps) {
     });
   };
 
+  // 超过100个字符，自动截断，添加省略号
   const truncateDescription = (text: string, maxLength: number = 100) => {
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength) + '...';
