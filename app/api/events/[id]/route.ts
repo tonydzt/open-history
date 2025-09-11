@@ -39,13 +39,14 @@ const transformPerspective = (dbPerspective: any) => ({
   createdAt: dbPerspective.createdAt.toISOString()
 });
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+
   try {
-    const eventId = (await params).id;
+    const {id} = await params;
     
     // 从数据库中查询特定事件，包含用户和视角信息
     const event = await db.event.findUnique({
-      where: { id: eventId },
+      where: { id: id },
       include: {
         user: true,
         perspectives: {
@@ -75,7 +76,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
 }
 
 // 添加视角的API路由
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions);
     
@@ -83,7 +84,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
       return NextResponse.json({ error: '需要登录' }, { status: 401 });
     }
     
-    const eventId = (await params).id;
+    const {id} = await params;
     const data: CreatePerspectiveData = await request.json();
     
     if (!data.content.trim()) {
@@ -92,7 +93,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
     
     // 检查事件是否存在
     const eventExists = await db.event.findUnique({
-      where: { id: eventId }
+      where: { id: id }
     });
     
     if (!eventExists) {
@@ -104,7 +105,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
       data: {
         title: '用户视角', // 添加默认标题
         content: data.content,
-        eventId,
+        eventId: id,
         userId: session.user.id
       }
     });

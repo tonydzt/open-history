@@ -39,8 +39,8 @@ const transformPerspective = (dbPerspective: any): Perspective => ({
   createdAt: dbPerspective.createdAt.toISOString()
 });
 
-export default async function EventDetailPage({ params }: { params: { id: string } }) {
-  const { id: eventId } = await params;
+export default async function EventDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const {id} = await params;
   const session = await getServerSession(authOptions);
   
   // 在服务器组件中直接从数据库获取数据
@@ -52,7 +52,7 @@ export default async function EventDetailPage({ params }: { params: { id: string
     // 获取事件详情
     const dbEvent = await db.event.findUnique({
       where: {
-        id: eventId
+        id: id
       },
       include: {
         user: true
@@ -68,7 +68,7 @@ export default async function EventDetailPage({ params }: { params: { id: string
       // 获取该事件的所有视角
       const dbPerspectives = await db.perspective.findMany({
         where: {
-          eventId: eventId
+          eventId: id
         },
         include: {
           user: true
