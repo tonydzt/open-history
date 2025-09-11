@@ -39,6 +39,7 @@ const transformPerspective = (dbPerspective: any): Perspective => ({
   createdAt: dbPerspective.createdAt.toISOString()
 });
 
+// tbug修改: nextJS 15的参数需要是{ params }: { params: Promise<{ id: string }> }这种带Promise格式的！
 export default async function EventDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const {id} = await params;
   const session = await getServerSession(authOptions);
