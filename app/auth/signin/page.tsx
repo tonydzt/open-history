@@ -66,62 +66,21 @@ export default function SignInPage() {
 
         <div className="space-y-4">
           {providers && Object.values(providers).length > 0 ? (
-            Object.values(providers).map((provider: any) => (
-              <div key={provider.id}>
-                {provider.id === 'credentials' ? (
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      const username = e.currentTarget.username.value;
-                      if (username) {
-                        signIn(provider.id, { username, callbackUrl });
-                      }
-                    }}
-                    className="space-y-4"
-                  >
-                    <div>
-                      <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
-                        用户名
-                      </label>
-                      <input
-                        id="username"
-                        name="username"
-                        type="text"
-                        required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                        placeholder="请输入用户名进行开发登录"
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      className="w-full flex items-center justify-center px-4 py-3 bg-primary-600 text-white rounded-md shadow-sm text-sm font-medium hover:bg-primary-700 transition-colors"
-                    >
-                      <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                      </svg>
-                      {provider.name}
-                    </button>
-                  </form>
-                ) : (
-                  <button
-                    onClick={() => signIn(provider.id, { callbackUrl })}
-                    className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-                  >
-                    {provider.id === 'github' && (
-                      <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-                      </svg>
-                    )}
-                    {provider.id === 'google' && (
-                      <svg width="24" height="24" aria-hidden="true">
-                        <image href="/google-color.svg" width="24" height="24" />
-                      </svg>
-                    )}
-                    继续使用 {provider.name}
-                  </button>
-                )}
-              </div>
-            ))
+            // 只显示Google登录选项
+            Object.values(providers)
+              .filter((provider: any) => provider.id === 'google')
+              .map((provider: any) => (
+                <button
+                  key={provider.id}
+                  onClick={() => signIn(provider.id, { callbackUrl })}
+                  className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                  <svg width="24" height="24" aria-hidden="true">
+                    <image href="/google-color.svg" width="24" height="24" />
+                  </svg>
+                  继续使用 {provider.name}
+                </button>
+              ))
           ) : (
             <div className="text-center py-6 text-gray-500">
               加载登录选项失败，请刷新页面重试。
@@ -130,7 +89,7 @@ export default function SignInPage() {
         </div>
 
         <div className="mt-8 text-center text-sm text-gray-600">
-          <p>登录即表示您同意我们的 <a href="#" className="text-primary-600 hover:underline">服务条款</a> 和 <a href="#" className="text-primary-600 hover:underline">隐私政策</a></p>
+          <p>登录即表示您同意我们的 <a href="/terms" className="text-primary-600 hover:underline">服务条款</a> 和 <a href="/privacy" className="text-primary-600 hover:underline">隐私政策</a></p>
         </div>
       </div>
     </div>
