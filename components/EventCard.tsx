@@ -71,7 +71,9 @@ export default function EventCard({ event }: EventCardProps) {
             <div className="flex items-center space-x-2">
               {event.author.image && (
                 <img
-                  src={event.author.image}
+                  src={event.author.image.includes('googleusercontent.com') && event.author.image.includes('=s96-c') 
+                    ? event.author.image.replace('=s96-c', '') 
+                    : event.author.image}
                   alt={event.author.name}
                   className="w-6 h-6 rounded-full"
                 />

@@ -1,30 +1,45 @@
-'use client';
-
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 import { Event } from '@/types';
-import { api } from '@/lib/api';
 import EventCard from '@/components/EventCard';
+import db from '@/lib/db';
 
-export default function HomePage() {
-  const { data: session } = useSession();
-  const [events, setEvents] = useState<Event[]>([]);
+// 类型转换函数：将数据库模型转换为前端使用的类型
+const transformEvent = (dbEvent: any): Event => ({
+  id: dbEvent.id,
+  title: dbEvent.title,
+  description: dbEvent.description,
+  timestamp: dbEvent.date.toISOString(),
+  sourceType: 'news', // 默认类型
+  images: [dbEvent.imageUrl],
+  tags: dbEvent.tags || [],
+  authorId: dbEvent.userId,
+  author: {
+    id: dbEvent.user.id,
+    name: dbEvent.user.name || '未知用户',
+    email: dbEvent.user.email || '',
+    image: dbEvent.user.image || ''
+  },
+  createdAt: dbEvent.createdAt.toISOString(),
+  updatedAt: dbEvent.updatedAt.toISOString()
+});
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const data = await api.getEvents();
-        setEvents(data);
-      } catch (err) {
-        console.error('Error fetching events:', err);
-        // 错误会被error.tsx捕获
-        throw err;
-      }
-    };
-
-    fetchEvents();
-  }, []);
+export default async function HomePage() {
+  const session = await getServerSession(authOptions);
+  
+  // 在服务器组件中直接从数据库获取事件数据
+  const events = await db.event.findMany({
+    include: {
+      user: true
+    },
+    orderBy: {
+      createdAt: 'desc'
+    }
+  });
+  
+  // 转换为前端使用的类型
+  const transformedEvents = events.map(transformEvent);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -39,10 +54,10 @@ export default function HomePage() {
       </div>
 
       {/* Events Grid */}
-      {events.length > 0 ? (
+      {transformedEvents.length > 0 ? (
         <div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {events.map((event) => (
+            {transformedEvents.map((event: Event) => (
               <EventCard key={event.id} event={event} />
             ))}
           </div>

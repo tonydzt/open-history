@@ -40,7 +40,9 @@ export default function PerspectiveList({ perspectives }: PerspectiveListProps) 
           <div className="flex items-start space-x-3">
             {perspective.author.image && (
               <img
-                src={perspective.author.image}
+                src={perspective.author.image.includes('googleusercontent.com') && perspective.author.image.includes('=s96-c') 
+                  ? perspective.author.image.replace('=s96-c', '') 
+                  : perspective.author.image}
                 alt={perspective.author.name}
                 className="w-10 h-10 rounded-full flex-shrink-0"
               />
