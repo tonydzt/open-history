@@ -1,13 +1,17 @@
 import Link from 'next/link';
 import { Event } from '@/types';
+import { useTranslations } from 'next-intl';
 
 interface EventCardProps {
   event: Event;
 }
 
 export default function EventCard({ event }: EventCardProps) {
+  const t = useTranslations('Components.EventCard');
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('zh-CN', {
+    // 使用next-intl的locale信息或默认值
+    // 在实际项目中，可以通过useLocale hook获取当前语言环境
+    return new Date(dateString).toLocaleDateString(undefined, {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
@@ -33,7 +37,7 @@ export default function EventCard({ event }: EventCardProps) {
             />
             <div className="absolute top-3 left-3">
               <span className="inline-block px-2 py-1 text-xs font-medium bg-primary-600 text-white rounded-md">
-                {event.sourceType}
+                {t(`sourceTypes.${event.sourceType}`) || event.sourceType}
               </span>
             </div>
           </div>

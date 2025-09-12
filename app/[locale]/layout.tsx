@@ -4,14 +4,18 @@ import './globals.css';
 import Providers from '@/components/Providers';
 import Navbar from '@/components/Navbar';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
-import {routing} from '@/i18n/routing';
+import { getTranslations } from 'next-intl/server';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export const metadata: Metadata = {
-  title: 'Chronicle - 多视角事件记录平台',
-  description: '记录事件，分享视角，构建完整的历史图景',
-};
+export async function generateMetadata({ params }: { params: { locale: string } }) {
+  const t = await getTranslations('Layout');
+  
+  return {
+    title: t('title'),
+    description: t('description'),
+  };
+}
 
 type Props = {
   children: React.ReactNode;

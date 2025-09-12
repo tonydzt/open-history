@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import db from '@/lib/db';
 import { redirect } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
 
 // 类型转换函数
 const transformEvent = (dbEvent: any): Event => ({
@@ -39,10 +40,11 @@ const transformPerspective = (dbPerspective: any): Perspective => ({
   createdAt: dbPerspective.createdAt.toISOString()
 });
 
-// tbug修改: nextJS 15的参数需要是{ params }: { params: Promise<{ id: string }> }这种带Promise格式的！
+// tongbug修改: nextJS 15的参数需要是{ params }: { params: Promise<{ id: string }> }这种带Promise格式的！
 export default async function EventDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const {id} = await params;
   const session = await getServerSession(authOptions);
+  const t = await getTranslations('EventDetailPage');
   
   // 在服务器组件中直接从数据库获取数据
   let event: Event | null = null;
@@ -108,10 +110,10 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z" />
             </svg>
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">加载失败</h3>
-          <p className="text-gray-500 mb-4">{error || '事件不存在'}</p>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">{t('loadingFailed')}</h3>
+          <p className="text-gray-500 mb-4">{error || t('eventNotFound')}</p>
           <a href="/" className="btn-primary inline-block">
-            返回首页
+            {t('backToHome')}
           </a>
         </div>
       </div>
@@ -134,10 +136,10 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
               </svg>
-              <span>分享</span>
+              <span>{t('shareButton')}</span>
             </a>
             <a href={`/event/${event.id}/perspective`} className="btn-primary">
-              补充视角
+              {t('addPerspectiveButton')}
             </a>
           </div>
         </div>
@@ -156,7 +158,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
           )}
           <div>
             <p className="font-medium text-gray-900">{event.author.name}</p>
-            <p className="text-sm text-gray-500">发布于 {formatDate(event.createdAt)}</p>
+            <p className="text-sm text-gray-500">{t('publishedAt')} {formatDate(event.createdAt)}</p>
           </div>
         </div>
       </div>
@@ -180,7 +182,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
 
       {/* Event Description */}
       <div className="mb-8">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-4">事件描述</h2>
+        <h2 className="text-2xl font-semibold text-gray-900 mb-4">{t('eventDescription')}</h2>
         <div className="prose max-w-none whitespace-pre-wrap">
             {event.description}
           </div>
@@ -189,7 +191,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
       {/* Event Tags */}
       {event.tags.length > 0 && (
         <div className="mb-8">
-          <h3 className="text-lg font-semibold text-gray-900 mb-3">标签</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-3">{t('tags')}</h3>
           <div className="flex flex-wrap gap-2">
             {event.tags.map((tag, index) => (
               <span

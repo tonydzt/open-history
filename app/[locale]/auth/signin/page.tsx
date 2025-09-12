@@ -3,21 +3,22 @@
 import { useState, useEffect } from 'react';
 import { getProviders, signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 export default function SignInPage() {
   const [providers, setProviders] = useState<Record<string, any> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/';
   const errorParam = searchParams.get('error');
+  const t = useTranslations('SignInPage');
 
   useEffect(() => {
     if (errorParam) {
-      setError('登录过程中出现错误，请重试或使用其他登录方式。');
+      setError(t('error'));
     }
-  }, [errorParam]);
+  }, [errorParam, t]);
 
   useEffect(() => {
     const fetchProviders = async () => {
@@ -39,7 +40,7 @@ export default function SignInPage() {
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-              加载登录选项...
+              {t('loading')}
             </div>
           </div>
         </div>
@@ -54,8 +55,8 @@ export default function SignInPage() {
           <div className="inline-block w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center mb-4">
             <span className="text-white text-2xl font-bold">C</span>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">登录 Chronicle</h1>
-          <p className="mt-2 text-gray-600">选择以下方式登录或创建账户</p>
+          <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
+          <p className="mt-2 text-gray-600">{t('subtitle')}</p>
         </div>
 
         {error && (
@@ -78,18 +79,23 @@ export default function SignInPage() {
                   <svg width="24" height="24" aria-hidden="true">
                     <image href="/google-color.svg" width="24" height="24" />
                   </svg>
-                  继续使用 {provider.name}
+                  {t('continueWith', { provider: provider.name })}
                 </button>
               ))
           ) : (
             <div className="text-center py-6 text-gray-500">
-              加载登录选项失败，请刷新页面重试。
+              {t('failedToLoad')}
             </div>
           )}
         </div>
 
         <div className="mt-8 text-center text-sm text-gray-600">
-          <p>登录即表示您同意我们的 <a href="/terms" className="text-primary-600 hover:underline">服务条款</a> 和 <a href="/privacy" className="text-primary-600 hover:underline">隐私政策</a></p>
+          <p>
+            {t.rich('termsAgreement', {
+              termsLink: (chunks) => <a href="/terms" className="text-primary-600 hover:underline">{chunks}</a>,
+              privacyLink: (chunks) => <a href="/privacy" className="text-primary-600 hover:underline">{chunks}</a>
+            })}
+          </p>
         </div>
       </div>
     </div>

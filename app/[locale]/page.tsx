@@ -4,7 +4,6 @@ import { authOptions } from '@/lib/auth';
 import { Event } from '@/types';
 import EventCard from '@/components/EventCard';
 import db from '@/lib/db';
-import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 
 // 类型转换函数：将数据库模型转换为前端使用的类型

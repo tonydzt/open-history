@@ -3,6 +3,7 @@
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 
 export default function Navbar() {
   const { data: session, status } = useSession();
@@ -10,6 +11,7 @@ export default function Navbar() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const userMenuTimerRef = useRef<NodeJS.Timeout | null>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
+  const t = useTranslations('Components.Navbar');
 
   // 清理定时器
   useEffect(() => {
@@ -56,7 +58,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-4">
             {session && (
               <Link href="/create" className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors shadow-sm hover:shadow">
-                创建事件
+                {t('createEvent')}
               </Link>
             )}
             {status === 'loading' ? (
@@ -67,13 +69,13 @@ export default function Navbar() {
                   onMouseEnter={handleUserMenuEnter}
                   onMouseLeave={handleUserMenuLeave}
                   className="w-8 h-8 rounded-full overflow-hidden focus:outline-none focus:ring-2 focus:ring-primary-500 cursor-pointer"
-                  aria-label="用户菜单"
+                  aria-label={t('userMenu')}
                   aria-expanded={isUserMenuOpen}
                 >
                   {session.user?.image ? (
                     <img
                       src={session.user.image}
-                      alt={session.user.name || '用户头像'}
+                      alt={session.user.name || t('userAvatar')}
                       className="w-full h-full object-cover"
                     />
                   ) : (
@@ -95,7 +97,7 @@ export default function Navbar() {
                       }}
                       className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                     >
-                      退出
+                      {t('signOut')}
                     </button>
                   </div>
                 )}

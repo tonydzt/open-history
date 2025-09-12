@@ -1,10 +1,12 @@
 import { Perspective } from '@/types';
+import { useTranslations } from 'next-intl';
 
 interface PerspectiveListProps {
   perspectives: Perspective[];
 }
 
 export default function PerspectiveList({ perspectives }: PerspectiveListProps) {
+  const t = useTranslations('Components.PerspectiveList');
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('zh-CN', {
       year: 'numeric',
@@ -23,8 +25,8 @@ export default function PerspectiveList({ perspectives }: PerspectiveListProps) 
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
           </svg>
         </div>
-        <p className="text-gray-500">还没有视角记录</p>
-        <p className="text-sm text-gray-400">成为第一个分享视角的人</p>
+        <p className="text-gray-500">{t('noPerspectives')}</p>
+        <p className="text-sm text-gray-400">{t('beTheFirst')}</p>
       </div>
     );
   }
@@ -32,7 +34,7 @@ export default function PerspectiveList({ perspectives }: PerspectiveListProps) 
   return (
     <div className="space-y-6">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">
-        视角记录 ({perspectives.length})
+        {t('title')} ({perspectives.length})
       </h3>
       
       {perspectives.map((perspective) => (

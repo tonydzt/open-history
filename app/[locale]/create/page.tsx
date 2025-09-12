@@ -3,12 +3,14 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { api } from '@/lib/api';
 import { CreateEventData } from '@/types';
 
 export default function CreateEventPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const t = useTranslations('CreateEventPage');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState<CreateEventData>({
@@ -30,7 +32,7 @@ export default function CreateEventPage() {
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            加载中...
+            {t('loading')}
           </div>
         </div>
       </div>
@@ -43,13 +45,13 @@ export default function CreateEventPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center py-16">
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-3">请先登录</h2>
-            <p className="text-gray-600 mb-6">创建事件功能需要登录后才能使用</p>
-            <a 
-              href="/auth/signin" 
+            <h2 className="text-xl font-bold text-gray-900 mb-3">{t('pleaseLogin')}</h2>
+            <p className="text-gray-600 mb-6">{t('loginRequired')}</p>
+            <a
+              href="/auth/signin"
               className="inline-flex items-center px-6 py-3 font-semibold leading-6 text-sm shadow rounded-md text-white bg-primary-600 hover:bg-primary-500 transition ease-in-out duration-150"
             >
-              立即登录
+              {t('loginNow')}
             </a>
           </div>
         </div>
@@ -78,25 +80,25 @@ export default function CreateEventPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.title.trim() || !formData.description.trim()) {
-      setError('标题和描述为必填项');
+      setError(t('titleAndDescriptionRequired'));
       return;
     }
 
     try {
       setLoading(true);
       setError(null);
-      
+
       const result = await api.createEvent({
         ...formData,
         images: formData.images.filter(img => img.trim()),
         tags: formData.tags.filter(tag => tag.trim()),
       });
-      
+
       router.push(`/event/${result.id}`);
     } catch (err) {
-      setError('创建事件失败，请稍后重试');
+      setError(t('createEventFailed'));
       console.error('Error creating event:', err);
     } finally {
       setLoading(false);
@@ -106,8 +108,8 @@ export default function CreateEventPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">创建新事件</h1>
-        <p className="text-gray-600">记录一个值得被记住的事件，让更多人了解真相</p>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('pageTitle')}</h1>
+        <p className="text-gray-600">{t('pageSubtitle')}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -129,7 +131,7 @@ export default function CreateEventPage() {
         {/* Title */}
         <div>
           <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
-            事件标题 <span className="text-red-500">*</span>
+            {t('eventTitle')} <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
@@ -137,7 +139,7 @@ export default function CreateEventPage() {
             value={formData.title}
             onChange={(e) => handleInputChange('title', e.target.value)}
             className="input-field"
-            placeholder="请输入事件标题"
+            placeholder={t('enterEventTitle')}
             required
           />
         </div>
@@ -145,7 +147,7 @@ export default function CreateEventPage() {
         {/* Description */}
         <div>
           <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
-            事件描述 <span className="text-red-500">*</span>
+            {t('eventDescription')} <span className="text-red-500">*</span>
           </label>
           <textarea
             id="description"
@@ -153,7 +155,7 @@ export default function CreateEventPage() {
             onChange={(e) => handleInputChange('description', e.target.value)}
             className="input-field"
             rows={4}
-            placeholder="请详细描述事件内容"
+            placeholder={t('enterEventDescription')}
             required
           />
         </div>
@@ -161,7 +163,7 @@ export default function CreateEventPage() {
         {/* Timestamp */}
         <div>
           <label htmlFor="timestamp" className="block text-sm font-medium text-gray-700 mb-2">
-            发生时间
+            {t('occurrenceTime')}
           </label>
           <input
             type="datetime-local"
@@ -175,7 +177,7 @@ export default function CreateEventPage() {
         {/* Source Type */}
         <div>
           <label htmlFor="sourceType" className="block text-sm font-medium text-gray-700 mb-2">
-            来源类型
+            {t('sourceType')}
           </label>
           <select
             id="sourceType"
@@ -183,17 +185,17 @@ export default function CreateEventPage() {
             onChange={(e) => handleInputChange('sourceType', e.target.value)}
             className="input-field"
           >
-            <option value="news">新闻</option>
-            <option value="social">社交媒体</option>
-            <option value="personal">个人经历</option>
-            <option value="other">其他</option>
+            <option value="news">{t('sourceTypeOptions.news')}</option>
+            <option value="social">{t('sourceTypeOptions.social')}</option>
+            <option value="personal">{t('sourceTypeOptions.personal')}</option>
+            <option value="other">{t('sourceTypeOptions.other')}</option>
           </select>
         </div>
 
         {/* Images */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            图片链接
+            {t('imageLinks')}
           </label>
           <div className="space-y-2">
             {formData.images.map((image, index) => (
@@ -203,7 +205,7 @@ export default function CreateEventPage() {
                   value={image}
                   onChange={(e) => handleArrayChange('images', index, e.target.value)}
                   className="input-field flex-1"
-                  placeholder="https://example.com/image.jpg"
+                  placeholder={t('imagePlaceholder')}
                 />
                 {formData.images.length > 1 && (
                   <button
@@ -211,7 +213,7 @@ export default function CreateEventPage() {
                     onClick={() => removeArrayItem('images', index)}
                     className="px-3 py-2 text-red-600 hover:text-red-800 transition-colors"
                   >
-                    删除
+                    {t('delete')}
                   </button>
                 )}
               </div>
@@ -221,7 +223,7 @@ export default function CreateEventPage() {
               onClick={() => addArrayItem('images')}
               className="text-sm text-primary-600 hover:text-primary-700 font-medium"
             >
-              + 添加图片
+              + {t('addImage')}
             </button>
           </div>
         </div>
@@ -229,7 +231,7 @@ export default function CreateEventPage() {
         {/* Tags */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            标签
+            {t('tags')}
           </label>
           <div className="space-y-2">
             {formData.tags.map((tag, index) => (
@@ -239,7 +241,7 @@ export default function CreateEventPage() {
                   value={tag}
                   onChange={(e) => handleArrayChange('tags', index, e.target.value)}
                   className="input-field flex-1"
-                  placeholder="标签名称"
+                  placeholder={t('tagPlaceholder')}
                 />
                 {formData.tags.length > 1 && (
                   <button
@@ -247,7 +249,7 @@ export default function CreateEventPage() {
                     onClick={() => removeArrayItem('tags', index)}
                     className="px-3 py-2 text-red-600 hover:text-red-800 transition-colors"
                   >
-                    删除
+                    {t('delete')}
                   </button>
                 )}
               </div>
@@ -257,7 +259,7 @@ export default function CreateEventPage() {
               onClick={() => addArrayItem('tags')}
               className="text-sm text-primary-600 hover:text-primary-700 font-medium"
             >
-              + 添加标签
+              + {t('addTag')}
             </button>
           </div>
         </div>
@@ -270,14 +272,14 @@ export default function CreateEventPage() {
             className="btn-secondary"
             disabled={loading}
           >
-            取消
+            {t('cancel')}
           </button>
           <button
             type="submit"
             className="btn-primary"
             disabled={loading}
           >
-            {loading ? '创建中...' : '创建事件'}
+            {loading ? t('creating') : t('createEvent')}
           </button>
         </div>
       </form>
