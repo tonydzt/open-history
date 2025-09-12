@@ -4,6 +4,8 @@ import { authOptions } from '@/lib/auth';
 import { Event } from '@/types';
 import EventCard from '@/components/EventCard';
 import db from '@/lib/db';
+import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
 // 类型转换函数：将数据库模型转换为前端使用的类型
 const transformEvent = (dbEvent: any): Event => ({
@@ -25,9 +27,11 @@ const transformEvent = (dbEvent: any): Event => ({
   updatedAt: dbEvent.updatedAt.toISOString()
 });
 
+
 export default async function HomePage() {
   const session = await getServerSession(authOptions);
-  
+  const t = await getTranslations('HomePage');
+
   // 在服务器组件中直接从数据库获取事件数据
   const events = await db.event.findMany({
     include: {
@@ -37,7 +41,7 @@ export default async function HomePage() {
       createdAt: 'desc'
     }
   });
-  
+
   // 转换为前端使用的类型
   const transformedEvents = events.map(transformEvent);
 
@@ -46,7 +50,7 @@ export default async function HomePage() {
       {/* Header */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          欢迎来到 Chronicle
+          {t('title')}
         </h1>
         <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
           记录事件，分享视角，构建完整的历史图景。在这里，每个故事都有多个角度，每个视角都值得被倾听。
@@ -72,8 +76,8 @@ export default async function HomePage() {
           <h3 className="text-lg font-medium text-gray-900 mb-2">还没有事件</h3>
           <p className="text-gray-500 mb-6">成为第一个创建事件的人</p>
           {session && (
-            <Link 
-              href="/create" 
+            <Link
+              href="/create"
               className="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-bold text-base rounded-lg shadow-lg hover:shadow-xl hover:bg-primary-700 transition-all duration-300"
             >
               <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
