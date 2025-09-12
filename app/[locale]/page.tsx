@@ -53,7 +53,7 @@ export default async function HomePage() {
           {t('title')}
         </h1>
         <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-          记录事件，分享视角，构建完整的历史图景。在这里，每个故事都有多个角度，每个视角都值得被倾听。
+          {t('subtitle')}
         </p>
       </div>
 
@@ -73,8 +73,8 @@ export default async function HomePage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">还没有事件</h3>
-          <p className="text-gray-500 mb-6">成为第一个创建事件的人</p>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">{t('noEventsTitle')}</h3>
+          <p className="text-gray-500 mb-6">{t('noEventsDescription')}</p>
           {session && (
             <Link
               href="/create"
@@ -83,7 +83,7 @@ export default async function HomePage() {
               <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
-              创建第一个事件
+              {t('createFirstEventButton')}
             </Link>
           )}
         </div>

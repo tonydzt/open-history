@@ -72,9 +72,7 @@ export default function Navbar() {
                 >
                   {session.user?.image ? (
                     <img
-                      src={session.user.image.includes('googleusercontent.com') && session.user.image.includes('=s96-c') 
-                        ? session.user.image.replace('=s96-c', '') 
-                        : session.user.image}
+                      src={session.user.image}
                       alt={session.user.name || '用户头像'}
                       className="w-full h-full object-cover"
                     />
