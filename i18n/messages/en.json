@@ -1,4 +1,5 @@
 {
+
   "HomePage": {
     "title": "Welcome to Chronicle",
     "subtitle": "Record events, share perspectives, and build a complete historical picture. Here, every story has multiple angles, and every perspective deserves to be heard.",
@@ -45,9 +46,15 @@
   "Components": {
     "Navbar": {
       "createEvent": "Create Event",
-      "signOut": "Sign Out",
       "userMenu": "User Menu",
-      "userAvatar": "User Avatar"
+      "userAvatar": "User Avatar",
+      "signOut": "Sign Out",
+      "signIn": "Sign In",
+      "closeMenu": "Close Menu",
+      "openMenu": "Open Menu",
+      "languageSwitch": "Language",
+      "english": "English",
+      "chinese": "中文"
     },
     "PerspectiveList": {
       "title": "Perspectives",

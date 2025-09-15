@@ -3,21 +3,59 @@
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
+import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
   const { data: session, status } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
   const userMenuTimerRef = useRef<NodeJS.Timeout | null>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
+  const languageMenuTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const languageMenuRef = useRef<HTMLDivElement>(null);
   const t = useTranslations('Components.Navbar');
+  const locale = useLocale();
+  const router = useRouter();
+
+  // 切换语言
+  const changeLanguage = (newLocale: string) => {
+    if (newLocale !== locale) {
+      // 获取当前路径并替换语言部分
+      const currentPath = window.location.pathname;
+      const newPath = currentPath.startsWith(`/${locale}`)
+        ? currentPath.replace(`/${locale}`, `/${newLocale}`)
+        : `/${newLocale}${currentPath}`;
+      
+      window.location.href = newPath;
+    }
+    setIsLanguageMenuOpen(false);
+  };
+
+  // 语言菜单进入
+  const handleLanguageMenuEnter = () => {
+    if (languageMenuTimerRef.current) {
+      clearTimeout(languageMenuTimerRef.current);
+    }
+    setIsLanguageMenuOpen(true);
+  };
+
+  // 语言菜单离开
+  const handleLanguageMenuLeave = () => {
+    languageMenuTimerRef.current = setTimeout(() => {
+      setIsLanguageMenuOpen(false);
+    }, 300); // 300ms延迟关闭
+  };
 
   // 清理定时器
   useEffect(() => {
     return () => {
       if (userMenuTimerRef.current) {
         clearTimeout(userMenuTimerRef.current);
+      }
+      if (languageMenuTimerRef.current) {
+        clearTimeout(languageMenuTimerRef.current);
       }
     };
   }, []);
@@ -56,6 +94,48 @@ export default function Navbar() {
 
           {/* User Menu */}
           <div className="hidden md:flex items-center space-x-4">
+            {/* Language Switcher */}
+            <div className="relative" ref={languageMenuRef}>
+              <button
+                onMouseEnter={handleLanguageMenuEnter}
+                onMouseLeave={handleLanguageMenuLeave}
+                className="px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500"
+                aria-label={t('languageSwitch')}
+                aria-expanded={isLanguageMenuOpen}
+              >
+                <div className="flex items-center space-x-1">
+                  <span className="text-sm font-medium">{locale === 'zh' ? t('chinese') : t('english')}</span>
+                  <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </button>
+              {isLanguageMenuOpen && (
+                <div 
+                  className="absolute right-0 mt-2 w-36 bg-white rounded-lg shadow-lg border border-gray-100 py-1 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
+                  onMouseEnter={handleLanguageMenuEnter}
+                  onMouseLeave={handleLanguageMenuLeave}
+                >
+                  {locale !== 'en' && (
+                    <button
+                      onClick={() => changeLanguage('en')}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    >
+                      {t('english')}
+                    </button>
+                  )}
+                  {locale !== 'zh' && (
+                    <button
+                      onClick={() => changeLanguage('zh')}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    >
+                      {t('chinese')}
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+            
             {session && (
               <Link href="/create" className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors shadow-sm hover:shadow">
                 {t('createEvent')}

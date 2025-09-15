@@ -1,4 +1,5 @@
 {
+
   "HomePage": {
     "title": "欢迎来到 Chronicle",
     "subtitle": "记录事件，分享视角，构建完整的历史图景。在这里，每个故事都有多个角度，每个视角都值得被倾听。",
@@ -45,9 +46,15 @@
   "Components": {
     "Navbar": {
       "createEvent": "创建事件",
-      "signOut": "退出",
       "userMenu": "用户菜单",
-      "userAvatar": "用户头像"
+      "userAvatar": "用户头像",
+      "signOut": "退出登录",
+      "signIn": "登录",
+      "closeMenu": "关闭菜单",
+      "openMenu": "打开菜单",
+      "languageSwitch": "语言",
+      "english": "English",
+      "chinese": "中文"
     },
     "PerspectiveList": {
       "title": "视角记录",
