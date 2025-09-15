@@ -1,67 +1,91 @@
 'use client';
 
+import Script from 'next/script';
 import { useEffect } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
-// 扩展Window接口，添加gtag函数和dataLayer数组类型
+// 扩展Window接口以支持gtag函数
 declare global {
   interface Window {
-    gtag?: (...args: any[]) => void;
-    dataLayer?: any[];
+    gtag?: (...args: (string | { [key: string]: string | number | boolean | object | undefined })[]) => void;
+    dataLayer?: (string | { [key: string]: string | number | boolean | object | undefined })[];
   }
 }
 
-const GoogleAnalytics = () => {
-  const pathname = usePathname();
-  const measurementId = process.env.GA_MEASUREMENT_ID;
+// 获取Google Analytics测量ID
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
-  // 检查是否有测量ID，没有则不加载Google Analytics
-  if (!measurementId) {
+interface GoogleAnalyticsProps {
+  debug?: boolean;
+}
+
+/**
+ * Google Analytics 4 组件 - 用于在Next.js 15.x项目中集成GA4
+ */
+export default function GoogleAnalytics({ debug = false }: GoogleAnalyticsProps) {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  // 监听路由变化并发送页面浏览事件
+  useEffect(() => {
+    if (!GA_MEASUREMENT_ID || !pathname || typeof window === 'undefined' || typeof window.gtag !== 'function') return;
+
+    const url = `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
+    window.gtag('config', GA_MEASUREMENT_ID, {
+      page_path: url,
+      debug_mode: debug,
+    });
+  }, [pathname, searchParams, debug]);
+
+  // 检查是否配置了GA测量ID
+  if (!GA_MEASUREMENT_ID) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('Google Analytics未配置，请在.env文件中添加NEXT_PUBLIC_GA_MEASUREMENT_ID');
+    }
     return null;
   }
 
-  // 初始化Google Analytics脚本
-  useEffect(() => {
-    // 只在客户端执行
-    if (typeof window !== 'undefined') {
-      // 创建并插入Google Analytics脚本
-      const script = document.createElement('script');
-      script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
-      script.async = true;
-      document.head.appendChild(script);
+  return (
+    <>
+      {/* Global Site Tag (gtag.js) - Google Analytics */}
+      <Script
+        src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+        strategy="afterInteractive"
+      />
+      <Script id="google-analytics-init" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '${GA_MEASUREMENT_ID}', {
+            page_path: window.location.pathname,
+            debug_mode: ${debug},
+          });
+        `}
+      </Script>
+    </>
+  );
+}
 
-      // 初始化dataLayer和gtag函数
-      window.dataLayer = window.dataLayer || [];
-      window.gtag = function gtag() {
-        if (window.dataLayer) {
-          window.dataLayer.push(arguments);
-        }
-      };
-      if (window.dataLayer && window.gtag) {
-          window.gtag('js', new Date());
-          window.gtag('config', measurementId);
-        }
-
-      // 清理函数
-      return () => {
-        if (script.parentNode) {
-          script.parentNode.removeChild(script);
-        }
-        // 注意：这里不删除dataLayer和gtag，因为可能有其他部分在使用它们
-      };
+/**
+ * 用于手动触发Google Analytics事件的工具函数
+ */
+export const trackEvent = (
+  action: string,
+  category: string,
+  label?: string,
+  value?: number
+) => {
+  if (!GA_MEASUREMENT_ID || typeof window === 'undefined' || typeof window.gtag !== 'function') {
+    if (process.env.NODE_ENV !== 'production' && !GA_MEASUREMENT_ID) {
+      console.warn('Google Analytics未配置，无法发送事件');
     }
-  }, [measurementId]);
+    return;
+  }
 
-  // 监听页面变化，发送页面浏览事件
-  useEffect(() => {
-    if (pathname && typeof window !== 'undefined' && window.dataLayer && typeof window.gtag === 'function') {
-      window.gtag('config', measurementId, {
-        page_path: pathname,
-      });
-    }
-  }, [pathname, measurementId]);
-
-  return null;
+  window.gtag('event', action, {
+    event_category: category,
+    event_label: label,
+    value: value,
+  });
 };
-
-export default GoogleAnalytics;

@@ -2,9 +2,10 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import Providers from '@/components/Providers';
 import Navbar from '@/components/Navbar';
-import { NextIntlClientProvider} from 'next-intl';
+import { NextIntlClientProvider } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
+import { Suspense } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -12,7 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   // 等待params解析
   await params;
   const t = await getTranslations('Layout');
-  
+
   return {
     title: t('title'),
     description: t('description'),
@@ -24,14 +25,16 @@ type Props = {
   params: Promise<{ locale: string }>;
 };
 
-export default async function LocaleLayout({children, params}: Props) {
+export default async function LocaleLayout({ children, params }: Props) {
   // 等待params解析
   const resolvedParams = await params;
 
   return (
     <html>
       <body className={inter.className}>
-        <GoogleAnalytics />
+        <Suspense>
+          <GoogleAnalytics />
+        </Suspense>
         <Providers>
           <NextIntlClientProvider>
             <div className="min-h-screen bg-gray-50">
