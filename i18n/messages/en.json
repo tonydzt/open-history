@@ -29,7 +29,11 @@
     "eventDescription": "Event Description",
     "tags": "Tags",
     "publishedAt": "Published at",
-    "location": "Location"
+    "location": "Location",
+    "deleteEventButton": "Delete Event",
+    "deleteEventConfirm": "Are you sure you want to delete this event? This action cannot be undone.",
+    "deleteEventSuccess": "Event deleted successfully",
+    "deleteEventError": "Failed to delete event"
   },
   "AddPerspectivePage": {
     "title": "Add Perspective",

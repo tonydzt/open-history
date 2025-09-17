@@ -29,7 +29,11 @@
     "eventDescription": "事件描述",
     "tags": "标签",
     "publishedAt": "发布于",
-    "location": "位置"
+    "location": "位置",
+    "deleteEventButton": "删除事件",
+    "deleteEventConfirm": "您确定要删除此事件吗？此操作无法撤销。",
+    "deleteEventSuccess": "事件删除成功",
+    "deleteEventError": "删除事件失败"
   },
   "AddPerspectivePage": {
     "title": "补充视角",

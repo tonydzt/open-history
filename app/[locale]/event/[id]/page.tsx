@@ -1,12 +1,11 @@
 import { Event, Perspective, GeoLocation } from '@/types';
-// Leaflet CSS 需要单独导入
 import 'leaflet/dist/leaflet.css';
 import PerspectiveList from '@/components/PerspectiveList';
 import StaticMap from '@/components/StaticMap';
+import DeleteEventButton from '@/components/DeleteEventButton';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import db from '@/lib/db';
-import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 
 // 类型转换函数
@@ -290,6 +289,11 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
       <div className="border-t border-gray-200 pt-8">
         <PerspectiveList perspectives={perspectives} />
       </div>
+
+      {/* 删除按钮 - 只对事件创作者显示 */}
+      {session?.user?.id === event.authorId && (
+        <DeleteEventButton eventId={event.id} />
+      )}
 
       {/* 分享成功提示将在下一个版本中实现 */}
     </div>

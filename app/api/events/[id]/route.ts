@@ -125,3 +125,49 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     return NextResponse.json({ error: '添加视角失败' }, { status: 500 });
   }
 }
+
+// 删除事件的API路由
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session || !session.user) {
+      return NextResponse.json({ error: '需要登录' }, { status: 401 });
+    }
+    
+    const {id} = await params;
+    
+    // 查找事件并验证所有权
+    const event = await db.event.findUnique({
+      where: { id: id },
+      select: { userId: true }
+    });
+    
+    if (!event) {
+      return NextResponse.json({ error: '事件不存在' }, { status: 404 });
+    }
+    
+    // 权限校验：只有事件创建者才能删除
+    if (event.userId !== session.user.id) {
+      return NextResponse.json({ error: '没有权限删除此事件' }, { status: 403 });
+    }
+    
+    // 事务处理：先删除相关的视角数据，再删除事件
+    await db.$transaction(async (tx) => {
+      // 删除与该事件相关的所有视角
+      await tx.perspective.deleteMany({
+        where: { eventId: id }
+      });
+      
+      // 删除事件
+      await tx.event.delete({
+        where: { id: id }
+      });
+    });
+    
+    return NextResponse.json({ success: true }, { status: 200 });
+  } catch (error) {
+    console.error('删除事件失败:', error);
+    return NextResponse.json({ error: '删除事件失败' }, { status: 500 });
+  }
+}
