@@ -9,8 +9,6 @@ interface EventCardProps {
 export default function EventCard({ event }: EventCardProps) {
   const t = useTranslations('Components.EventCard');
   const formatDate = (dateString: string) => {
-    // 使用next-intl的locale信息或默认值
-    // 在实际项目中，可以通过useLocale hook获取当前语言环境
     return new Date(dateString).toLocaleDateString(undefined, {
       year: 'numeric',
       month: 'long',
@@ -18,33 +16,41 @@ export default function EventCard({ event }: EventCardProps) {
     });
   };
 
-  // 超过100个字符，自动截断，添加省略号
   const truncateDescription = (text: string, maxLength: number = 100) => {
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength) + '...';
   };
 
+  // 检查图片是否有效
+  const isImageValid = event.images && event.images.length > 0 && event.images[0] && event.images[0].trim() !== '';
+
   return (
-    <Link href={`/event/${event.id}`} className="block">
-      <div className="card overflow-hidden hover:scale-[1.02] transition-transform duration-200">
-        {/* Image */}
-        {event.images.length > 0 && (
-          <div className="relative h-48 overflow-hidden">
+    <Link href={`/event/${event.id}`} className="block h-full">
+      <div className="card overflow-hidden hover:scale-[1.02] transition-transform duration-200 h-full flex flex-col">
+        {/* 固定高度的图片区域 */}
+        <div className="relative h-48 overflow-hidden">
+          {isImageValid ? (
             <img
               src={event.images[0]}
               alt={event.title}
               className="w-full h-full object-cover"
             />
-            <div className="absolute top-3 left-3">
-              <span className="inline-block px-2 py-1 text-xs font-medium bg-primary-600 text-white rounded-md">
-                {t(`sourceTypes.${event.sourceType}`) || event.sourceType}
-              </span>
+          ) : (
+            <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+              <svg className="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
             </div>
+          )}
+          <div className="absolute top-3 left-3">
+            <span className="inline-block px-2 py-1 text-xs font-medium bg-primary-600 text-white rounded-md">
+              {t(`sourceTypes.${event.sourceType}`) || event.sourceType}
+            </span>
           </div>
-        )}
+        </div>
 
-        {/* Content */}
-        <div className="p-6 pb-8">
+        {/* 内容区域，使用flex布局确保卡片高度一致 */}
+        <div className="p-6 pb-8 flex-grow flex flex-col">
           <h3 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-2">
             {event.title}
           </h3>
@@ -70,8 +76,8 @@ export default function EventCard({ event }: EventCardProps) {
             </div>
           )}
 
-          {/* Footer */}
-          <div className="flex items-center justify-between mt-6">
+          {/* 底部区域，使用margin-top:auto确保它总是在底部 */}
+          <div className="flex items-center justify-between mt-auto">
             <div className="flex items-center space-x-2">
               {event.author.image && (
                 <img
