@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import db from '@/lib/db';
-import { CreatePerspectiveData } from '@/types';
+import { CreatePerspectiveData, CreateEventData } from '@/types';
 
 // 类型转换函数：将数据库模型转换为前端使用的类型
 const transformEvent = (dbEvent: any) => ({
@@ -123,6 +123,89 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   } catch (error) {
     console.error('添加视角失败:', error);
     return NextResponse.json({ error: '添加视角失败' }, { status: 500 });
+  }
+}
+
+// 更新事件的API路由
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session || !session.user) {
+      return NextResponse.json({ error: '需要登录' }, { status: 401 });
+    }
+    
+    const {id} = await params;
+    const data: CreateEventData = await request.json();
+    
+    // 验证数据
+    if (!data.title || !data.description || !data.timestamp) {
+      return NextResponse.json({ error: '缺少必要字段' }, { status: 400 });
+    }
+    
+    // 查找事件并验证所有权
+    const event = await db.event.findUnique({
+      where: { id: id },
+      select: { userId: true }
+    });
+    
+    if (!event) {
+      return NextResponse.json({ error: '事件不存在' }, { status: 404 });
+    }
+    
+    // 权限校验：只有事件创建者才能更新
+    if (event.userId !== session.user.id) {
+      return NextResponse.json({ error: '没有权限更新此事件' }, { status: 403 });
+    }
+    
+    // 更新事件信息
+    let updatedEvent: any;
+    
+    // 如果有地理位置信息，使用原始SQL查询
+    if (data.geom) {
+      const result = await db.$queryRaw`
+        UPDATE "Event"
+        SET
+          title = ${data.title},
+          description = ${data.description},
+          "imageUrl" = ${data.images[0] || ''},
+          date = ${new Date(data.timestamp)},
+          tags = ${data.tags || []},
+          geom = ST_GeomFromText(${`SRID=4326;POINT(${data.geom.lng} ${data.geom.lat})`}, 4326)::geography,
+          "updatedAt" = NOW()
+        WHERE id = ${id}
+        RETURNING 
+          id,
+          title,
+          description,
+          "imageUrl",
+          date,
+          tags,
+          "userId",
+          ST_AsGeoJSON(geom) as geom,
+          "createdAt",
+          "updatedAt"
+      ` as Array<any>;
+      updatedEvent = result[0];
+    } else {
+      // 没有地理位置信息，使用常规的Prisma操作
+      updatedEvent = await db.event.update({
+        where: { id: id },
+        data: {
+          title: data.title,
+          description: data.description,
+          imageUrl: data.images[0] || '',
+          date: new Date(data.timestamp),
+          tags: data.tags || [],
+          updatedAt: new Date()
+        }
+      });
+    }
+    
+    return NextResponse.json(updatedEvent, { status: 200 });
+  } catch (error) {
+    console.error('更新事件失败:', error);
+    return NextResponse.json({ error: '更新事件失败' }, { status: 500 });
   }
 }
 

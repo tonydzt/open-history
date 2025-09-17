@@ -30,10 +30,15 @@
     "tags": "标签",
     "publishedAt": "发布于",
     "location": "位置",
+    "editEventButton": "编辑事件",
     "deleteEventButton": "删除事件",
     "deleteEventConfirm": "您确定要删除此事件吗？此操作无法撤销。",
     "deleteEventSuccess": "事件删除成功",
-    "deleteEventError": "删除事件失败"
+    "deleteEventError": "删除事件失败",
+    "editButton": "编辑",
+    "deleteButton": "删除",
+    "pageTitle": "事件详情",
+    "pageSubtitle": "查看事件信息和不同视角"
   },
   "AddPerspectivePage": {
     "title": "补充视角",
@@ -327,12 +332,50 @@
         "description": "如果您对本服务条款有任何问题或疑虑，请随时联系我们：",
         "email": "support@chronicle.example.com"
       }
-    },
-    "footer": {
-      "companyName": "Chronicle",
-      "allRightsReserved": "保留所有权利。",
-      "home": "首页",
-      "privacy": "隐私政策"
     }
+  },
+  "EditEventPage": {
+    "title": "编辑事件",
+    "subtitle": "修改事件信息，更新事件内容",
+    "loading": "加载中...",
+    "loadingEvent": "加载事件中...",
+    "pleaseLogin": "请先登录",
+    "loginRequired": "编辑事件需要登录",
+    "loginNow": "立即登录",
+    "pageTitle": "编辑事件",
+    "pageSubtitle": "修改事件信息，更新事件内容",
+    "eventTitle": "事件标题",
+    "eventDescription": "事件描述",
+    "occurrenceTime": "发生时间",
+    "sourceType": "来源类型",
+    "imageLinks": "图片链接",
+    "tags": "标签",
+    "delete": "删除",
+    "addImage": "添加图片",
+    "addTag": "添加标签",
+    "cancel": "取消",
+    "updateEvent": "更新事件",
+    "location": "地理位置",
+    "selectedLocation": "已选位置",
+    "updating": "更新中...",
+    "enterEventTitle": "请输入事件标题",
+    "enterEventDescription": "请详细描述事件",
+    "imagePlaceholder": "https://example.com/image.jpg",
+    "tagPlaceholder": "标签名称",
+    "titleAndDescriptionRequired": "标题和描述为必填项",
+    "updateEventFailed": "更新事件失败，请稍后重试",
+    "fetchEventFailed": "获取事件详情失败，请稍后重试",
+    "sourceTypeOptions": {
+      "news": "新闻",
+      "social": "社交媒体",
+      "personal": "个人经历",
+      "other": "其他"
+    }
+  },
+  "footer": {
+    "companyName": "Chronicle",
+    "allRightsReserved": "保留所有权利。",
+    "home": "首页",
+    "privacy": "隐私政策"
   }
 }

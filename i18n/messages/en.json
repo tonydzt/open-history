@@ -30,10 +30,15 @@
     "tags": "Tags",
     "publishedAt": "Published at",
     "location": "Location",
+    "editEventButton": "Edit Event",
     "deleteEventButton": "Delete Event",
     "deleteEventConfirm": "Are you sure you want to delete this event? This action cannot be undone.",
     "deleteEventSuccess": "Event deleted successfully",
-    "deleteEventError": "Failed to delete event"
+    "deleteEventError": "Failed to delete event",
+    "editButton": "Edit",
+    "deleteButton": "Delete",
+    "pageTitle": "Event Details",
+    "pageSubtitle": "View event information and perspectives"
   },
   "AddPerspectivePage": {
     "title": "Add Perspective",
@@ -327,12 +332,50 @@
         "description": "If you have any questions or concerns about these terms of service, please feel free to contact us:",
         "email": "support@chronicle.example.com"
       }
-    },
-    "footer": {
-      "companyName": "Chronicle",
-      "allRightsReserved": "All rights reserved.",
-      "home": "Home",
-      "privacy": "Privacy Policy"
     }
+  },
+  "EditEventPage": {
+    "title": "Edit Event",
+    "subtitle": "Modify event information, update event content",
+    "loading": "Loading...",
+    "loadingEvent": "Loading event...",
+    "pleaseLogin": "Please Login First",
+    "loginRequired": "Editing events requires login",
+    "loginNow": "Login Now",
+    "pageTitle": "Edit Event",
+    "pageSubtitle": "Modify event information, update event content",
+    "eventTitle": "Event Title",
+    "eventDescription": "Event Description",
+    "occurrenceTime": "Occurrence Time",
+    "sourceType": "Source Type",
+    "imageLinks": "Image Links",
+    "tags": "Tags",
+    "delete": "Delete",
+    "addImage": "Add Image",
+    "addTag": "Add Tag",
+    "cancel": "Cancel",
+    "updateEvent": "Update Event",
+    "location": "Location",
+    "selectedLocation": "Selected Location",
+    "updating": "Updating...",
+    "enterEventTitle": "Please enter event title",
+    "enterEventDescription": "Please describe the event in detail",
+    "imagePlaceholder": "https://example.com/image.jpg",
+    "tagPlaceholder": "Tag name",
+    "titleAndDescriptionRequired": "Title and description are required",
+    "updateEventFailed": "Failed to update event, please try again later",
+    "fetchEventFailed": "Failed to fetch event details, please try again later",
+    "sourceTypeOptions": {
+      "news": "News",
+      "social": "Social Media",
+      "personal": "Personal Experience",
+      "other": "Other"
+    }
+  },
+  "footer": {
+    "companyName": "Chronicle",
+    "allRightsReserved": "All rights reserved.",
+    "home": "Home",
+    "privacy": "Privacy Policy"
   }
 }
