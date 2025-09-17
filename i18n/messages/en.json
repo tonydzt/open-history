@@ -28,7 +28,8 @@
     "addPerspectiveButton": "Add Perspective",
     "eventDescription": "Event Description",
     "tags": "Tags",
-    "publishedAt": "Published at"
+    "publishedAt": "Published at",
+    "location": "Location"
   },
   "AddPerspectivePage": {
     "title": "Add Perspective",
@@ -99,6 +100,8 @@
     "addTag": "Add Tag",
     "cancel": "Cancel",
     "createEvent": "Create Event",
+    "location": "Location",
+    "selectedLocation": "Selected Location",
     "creating": "Creating...",
     "enterEventTitle": "Please enter event title",
     "enterEventDescription": "Please describe the event in detail",

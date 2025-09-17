@@ -28,7 +28,8 @@
     "addPerspectiveButton": "补充视角",
     "eventDescription": "事件描述",
     "tags": "标签",
-    "publishedAt": "发布于"
+    "publishedAt": "发布于",
+    "location": "位置"
   },
   "AddPerspectivePage": {
     "title": "补充视角",
@@ -99,6 +100,8 @@
     "addTag": "添加标签",
     "cancel": "取消",
     "createEvent": "创建事件",
+    "location": "地理位置",
+    "selectedLocation": "已选位置",
     "creating": "创建中...",
     "enterEventTitle": "请输入事件标题",
     "enterEventDescription": "请详细描述事件",

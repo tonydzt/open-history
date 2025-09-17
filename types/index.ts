@@ -5,6 +5,12 @@ export interface User {
   image?: string;
 }
 
+// 地理位置类型定义
+export interface GeoLocation {
+  lat: number;
+  lng: number;
+}
+
 export interface Event {
   id: string;
   title: string;
@@ -15,6 +21,7 @@ export interface Event {
   tags: string[];
   authorId: string;
   author: User;
+  geom?: GeoLocation;
   createdAt: string;
   updatedAt: string;
 }
@@ -35,6 +42,7 @@ export interface CreateEventData {
   sourceType: 'news' | 'social' | 'personal' | 'other';
   images: string[];
   tags: string[];
+  geom?: GeoLocation;
 }
 
 export interface CreatePerspectiveData {

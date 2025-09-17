@@ -55,13 +55,10 @@ export const api = {
   async createEvent(data: CreateEventData): Promise<{ id: string }> {
     try {
       const url = `${API_BASE_URL}/events`;
+      // 确保保留所有字段，包括可能存在的geom字段
       return fetchWithAuth(url, {
         method: 'POST',
-        body: JSON.stringify({
-          ...data,
-          images: data.images.filter(img => img.trim()),
-          tags: data.tags.filter(tag => tag.trim())
-        })
+        body: JSON.stringify(data)
       });
     } catch (error) {
       console.error('创建事件失败:', error);

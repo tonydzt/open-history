@@ -1,5 +1,8 @@
-import { Event, Perspective } from '@/types';
+import { Event, Perspective, GeoLocation } from '@/types';
+// Leaflet CSS 需要单独导入
+import 'leaflet/dist/leaflet.css';
 import PerspectiveList from '@/components/PerspectiveList';
+import StaticMap from '@/components/StaticMap';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import db from '@/lib/db';
@@ -7,24 +10,79 @@ import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 
 // 类型转换函数
-const transformEvent = (dbEvent: any): Event => ({
-  id: dbEvent.id,
-  title: dbEvent.title,
-  description: dbEvent.description,
-  timestamp: dbEvent.date.toISOString(),
-  sourceType: 'news', // 默认类型
-  images: [dbEvent.imageUrl],
-  tags: dbEvent.tags || [],
-  authorId: dbEvent.userId,
-  author: {
-    id: dbEvent.user.id,
-    name: dbEvent.user.name || '未知用户',
-    email: dbEvent.user.email || '',
-    image: dbEvent.user.image || ''
-  },
-  createdAt: dbEvent.createdAt.toISOString(),
-  updatedAt: dbEvent.updatedAt.toISOString()
-});
+const transformEvent = (dbEvent: any): Event => {
+  let geom: GeoLocation | undefined = undefined;
+  // 尝试从geom字段解析地理位置信息
+  if (dbEvent.geom) {
+    try {
+      // 如果geom是对象格式
+      if (typeof dbEvent.geom === 'object') {
+        if (dbEvent.geom.coordinates) {
+          geom = {
+            lat: dbEvent.geom.coordinates[1],
+            lng: dbEvent.geom.coordinates[0]
+          };
+        } else if (dbEvent.geom.lng !== undefined && dbEvent.geom.lat !== undefined) {
+          geom = {
+            lat: parseFloat(dbEvent.geom.lat),
+            lng: parseFloat(dbEvent.geom.lng)
+          };
+        }
+      }
+      // 如果geom是字符串格式
+      else if (typeof dbEvent.geom === 'string') {
+        try {
+          // 尝试解析JSON格式
+          const pointData = JSON.parse(dbEvent.geom);
+          if (pointData.lng !== undefined && pointData.lat !== undefined) {
+            geom = {
+              lat: parseFloat(pointData.lat),
+              lng: parseFloat(pointData.lng)
+            };
+          } else if (pointData.coordinates && Array.isArray(pointData.coordinates)) {
+            geom = {
+              lat: parseFloat(pointData.coordinates[1]),
+              lng: parseFloat(pointData.coordinates[0])
+            };
+          }
+        } catch (jsonError) {
+          // JSON解析失败，尝试解析空间数据格式
+          if (dbEvent.geom.includes('SRID=') || dbEvent.geom.startsWith('POINT')) {
+            const match = dbEvent.geom.match(/POINT\(([^ ]+) ([^)]+)\)/);
+            if (match && match.length === 3) {
+              geom = {
+                lat: parseFloat(match[2]),
+                lng: parseFloat(match[1])
+              };
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error('解析地理位置失败:', error);
+    }
+  }
+
+  return {
+    id: dbEvent.id,
+    title: dbEvent.title,
+    description: dbEvent.description,
+    timestamp: dbEvent.date.toISOString(),
+    sourceType: 'news', // 默认类型
+    images: [dbEvent.imageUrl],
+    tags: dbEvent.tags || [],
+    authorId: dbEvent.userId,
+    author: {
+      id: dbEvent.user.id,
+      name: dbEvent.user.name || '未知用户',
+      email: dbEvent.user.email || '',
+      image: dbEvent.user.image || ''
+    },
+    geom: geom,
+    createdAt: dbEvent.createdAt.toISOString(),
+    updatedAt: dbEvent.updatedAt.toISOString()
+  };
+};
 
 const transformPerspective = (dbPerspective: any): Perspective => ({
   id: dbPerspective.id,
@@ -61,10 +119,21 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
         user: true
       }
     });
-    
+
     if (!dbEvent) {
       error = '事件不存在';
     } else {
+      // 由于geom字段是Unsupported类型，我们需要使用原始SQL查询来获取它
+      const geomResult = (await db.$queryRaw`
+        SELECT ST_AsText(geom) as geom FROM "Event" WHERE id = ${id}
+      `) as any[];
+      
+      // 将geom数据添加到dbEvent中
+      if (geomResult && geomResult.length > 0 && geomResult[0].geom) {
+        // 使用类型断言
+        (dbEvent as any).geom = geomResult[0].geom;
+      }
+      
       // 转换为前端使用的类型
       event = transformEvent(dbEvent);
       
@@ -187,6 +256,18 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
             {event.description}
           </div>
       </div>
+      {/* 显示地理位置信息 */}
+      {event.geom && (
+        <div className="mb-8">
+          <h3 className="text-lg font-semibold mb-2">{t('location')}</h3>
+          <div className="relative h-64 w-full rounded-md border-2 border-gray-300 overflow-hidden">
+            <StaticMap coordinates={event.geom} />
+          </div>
+          <p className="mt-2 text-sm text-gray-600">
+            {event.geom.lat.toFixed(6)}, {event.geom.lng.toFixed(6)}
+          </p>
+        </div>
+      )}
 
       {/* Event Tags */}
       {event.tags.length > 0 && (

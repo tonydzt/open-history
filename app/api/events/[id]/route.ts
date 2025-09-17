@@ -20,6 +20,15 @@ const transformEvent = (dbEvent: any) => ({
     email: dbEvent.user.email || '',
     image: dbEvent.user.image || ''
   },
+  // 从数据库提取地理位置信息（如果存在）
+  ...(dbEvent.geom && {
+    geom: {
+      // 从PostgreSQL的GEOGRAPHY格式中提取经纬度
+      // 格式通常为"SRID=4326;POINT(lng lat)"
+      lat: parseFloat(dbEvent.geom.match(/POINT\(([^\s]+)\s+([^\)]+)\)/)?.[2] || '0'),
+      lng: parseFloat(dbEvent.geom.match(/POINT\(([^\s]+)\s+([^\)]+)\)/)?.[1] || '0')
+    }
+  }),
   createdAt: dbEvent.createdAt.toISOString(),
   updatedAt: dbEvent.updatedAt.toISOString()
 });

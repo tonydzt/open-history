@@ -1,14 +1,17 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { api } from '@/lib/api';
-import { CreateEventData } from '@/types';
+import { CreateEventData, GeoLocation } from '@/types';
+import LeafletMap from '@/components/LeafletMap';
+// Leaflet CSS 需要单独导入
+import 'leaflet/dist/leaflet.css';
 
 export default function CreateEventPage() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const router = useRouter();
   const t = useTranslations('CreateEventPage');
   const [loading, setLoading] = useState(false);
@@ -20,24 +23,8 @@ export default function CreateEventPage() {
     sourceType: 'news',
     images: [''],
     tags: [''],
+    geom: undefined,
   });
-
-  // 检查用户登录状态
-  if (status === 'loading') {
-    return (
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="text-center py-12">
-          <div className="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-white bg-primary-600 hover:bg-primary-500 transition ease-in-out duration-150 cursor-not-allowed">
-            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            {t('loading')}
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   // 如果用户未登录，显示登录提示
   if (!session) {
@@ -61,6 +48,10 @@ export default function CreateEventPage() {
 
   const handleInputChange = (field: keyof CreateEventData, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleGeomChange = (geom: GeoLocation) => {
+    setFormData(prev => ({ ...prev, geom }));
   };
 
   const handleArrayChange = (field: 'images' | 'tags', index: number, value: string) => {
@@ -90,11 +81,16 @@ export default function CreateEventPage() {
       setLoading(true);
       setError(null);
 
-      const result = await api.createEvent({
+      // 准备表单数据，包含地理位置转换
+      const eventData = {
         ...formData,
         images: formData.images.filter(img => img.trim()),
         tags: formData.tags.filter(tag => tag.trim()),
-      });
+        // 直接传递geom对象，API路由会负责转换格式
+        geom: formData.geom
+      };
+
+      const result = await api.createEvent(eventData);
 
       router.push(`/event/${result.id}`);
     } catch (err) {
@@ -261,6 +257,29 @@ export default function CreateEventPage() {
             >
               + {t('addTag')}
             </button>
+          </div>
+        </div>
+
+        {/* Location Selection */}
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            {t('location')}
+          </label>
+          <div className="relative h-80 w-full rounded-md border-2 border-gray-300 overflow-hidden">
+            {typeof window !== 'undefined' && (
+              <LeafletMap 
+                initialGeom={formData.geom}
+                onGeomChange={handleGeomChange}
+              />
+            )}
+            {formData.geom && (
+              <div className="absolute bottom-4 left-4 bg-white bg-opacity-90 px-3 py-2 rounded-md shadow-md">
+                <p className="text-sm font-medium">{t('selectedLocation')}</p>
+                <p className="text-xs text-gray-600">
+                  {formData.geom.lat.toFixed(6)}, {formData.geom.lng.toFixed(6)}
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
