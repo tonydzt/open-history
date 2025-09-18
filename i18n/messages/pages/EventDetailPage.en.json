@@ -1,0 +1,23 @@
+{
+  "EventDetailPage": {
+    "loadingFailed": "Loading Failed",
+    "eventNotFound": "Event not found",
+    "fetchFailed": "Failed to fetch event details, please try again later",
+    "backToHome": "Back to Home",
+    "shareButton": "Share",
+    "addPerspectiveButton": "Add Perspective",
+    "eventDescription": "Event Description",
+    "tags": "Tags",
+    "publishedAt": "Published at",
+    "location": "Location",
+    "editEventButton": "Edit Event",
+    "deleteEventButton": "Delete Event",
+    "deleteEventConfirm": "Are you sure you want to delete this event? This action cannot be undone.",
+    "deleteEventSuccess": "Event deleted successfully",
+    "deleteEventError": "Failed to delete event",
+    "editButton": "Edit",
+    "deleteButton": "Delete",
+    "pageTitle": "Event Details",
+    "pageSubtitle": "View event information and perspectives"
+  }
+}

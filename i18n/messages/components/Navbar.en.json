@@ -1,0 +1,14 @@
+{
+  "Navbar": {
+    "createEvent": "Create Event",
+    "userMenu": "User Menu",
+    "userAvatar": "User Avatar",
+    "signOut": "Sign Out",
+    "signIn": "Sign In",
+    "closeMenu": "Close Menu",
+    "openMenu": "Open Menu",
+    "languageSwitch": "Language",
+    "english": "English",
+    "chinese": "中文"
+  }
+}

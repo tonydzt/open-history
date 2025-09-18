@@ -1,0 +1,11 @@
+{
+  "SignInPage": {
+    "loading": "加载登录选项...",
+    "title": "登录 Chronicle",
+    "subtitle": "选择以下方式登录或创建账户",
+    "error": "登录过程中出现错误，请重试或使用其他登录方式。",
+    "continueWith": "继续使用 {provider}",
+    "failedToLoad": "加载登录选项失败，请刷新页面重试。",
+    "termsAgreement": "登录即表示您同意我们的 <termsLink>服务条款</termsLink> 和 <privacyLink>隐私政策</privacyLink>"
+  }
+}

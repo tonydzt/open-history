@@ -15,7 +15,7 @@ export default function Navbar() {
   const userMenuRef = useRef<HTMLDivElement>(null);
   const languageMenuTimerRef = useRef<NodeJS.Timeout | null>(null);
   const languageMenuRef = useRef<HTMLDivElement>(null);
-  const t = useTranslations('Components.Navbar');
+  const t = useTranslations('Navbar');
   const locale = useLocale();
   const router = useRouter();
 

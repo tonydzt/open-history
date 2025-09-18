@@ -1,0 +1,23 @@
+{
+  "EventDetailPage": {
+    "loadingFailed": "加载失败",
+    "eventNotFound": "事件不存在",
+    "fetchFailed": "获取事件详情失败，请稍后重试",
+    "backToHome": "返回首页",
+    "shareButton": "分享",
+    "addPerspectiveButton": "补充视角",
+    "eventDescription": "事件描述",
+    "tags": "标签",
+    "publishedAt": "发布于",
+    "location": "位置",
+    "editEventButton": "编辑事件",
+    "deleteEventButton": "删除事件",
+    "deleteEventConfirm": "您确定要删除此事件吗？此操作无法撤销。",
+    "deleteEventSuccess": "事件删除成功",
+    "deleteEventError": "删除事件失败",
+    "editButton": "编辑",
+    "deleteButton": "删除",
+    "pageTitle": "事件详情",
+    "pageSubtitle": "查看事件信息和不同视角"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "CreateEventPage": {
+    "title": "Create New Event",
+    "subtitle": "Record an event worth remembering and let more people know the truth",
+    "loading": "Loading...",
+    "pleaseLogin": "Please Login First",
+    "loginRequired": "Creating events requires login",
+    "loginNow": "Login Now",
+    "pageTitle": "Create New Event",
+    "pageSubtitle": "Record an event worth remembering and let more people know the truth",
+    "eventTitle": "Event Title",
+    "eventDescription": "Event Description",
+    "occurrenceTime": "Occurrence Time",
+    "sourceType": "Source Type",
+    "imageLinks": "Image Links",
+    "tags": "Tags",
+    "delete": "Delete",
+    "addImage": "Add Image",
+    "addTag": "Add Tag",
+    "cancel": "Cancel",
+    "createEvent": "Create Event",
+    "location": "Location",
+    "selectedLocation": "Selected Location",
+    "creating": "Creating...",
+    "enterEventTitle": "Please enter event title",
+    "enterEventDescription": "Please describe the event in detail",
+    "imagePlaceholder": "https://example.com/image.jpg",
+    "tagPlaceholder": "Tag name",
+    "titleAndDescriptionRequired": "Title and description are required",
+    "createEventFailed": "Failed to create event, please try again later",
+    "sourceTypeOptions": {
+      "news": "News",
+      "social": "Social Media",
+      "personal": "Personal Experience",
+      "other": "Other"
+    }
+  }
+}

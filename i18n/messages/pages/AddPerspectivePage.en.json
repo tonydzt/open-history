@@ -1,0 +1,15 @@
+{
+  "AddPerspectivePage": {
+    "title": "Add Perspective",
+    "subtitle": "Share your unique perspective and insights on this event",
+    "loading": "Loading...",
+    "contentLabel": "Perspective Content",
+    "contentPlaceholder": "Please share your thoughts, experiences, or insights about this event...",
+    "contentHelper": "Your perspective will help others understand this event more comprehensively",
+    "cancelButton": "Cancel",
+    "submitButton": "Submit Perspective",
+    "submitting": "Submitting...",
+    "errorRequired": "Please enter perspective content",
+    "errorSubmit": "Failed to add perspective, please try again later"
+  }
+}

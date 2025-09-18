@@ -1,0 +1,7 @@
+{
+  "ErrorPage": {
+    "loadingFailed": "加载失败",
+    "defaultErrorMessage": "获取事件列表失败，请稍后重试",
+    "retryButton": "重新加载"
+  }
+}

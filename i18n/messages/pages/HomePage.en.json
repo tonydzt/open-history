@@ -1,0 +1,9 @@
+{
+  "HomePage": {
+    "title": "Welcome to Chronicle",
+    "subtitle": "Record events, share perspectives, and build a complete historical picture. Here, every story has multiple angles, and every perspective deserves to be heard.",
+    "noEventsTitle": "No events yet",
+    "noEventsDescription": "Be the first to create an event",
+    "createFirstEventButton": "Create your first event"
+  }
+}

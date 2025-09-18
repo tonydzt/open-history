@@ -1,0 +1,10 @@
+{
+  "EventCard": {
+    "sourceTypes": {
+      "news": "News",
+      "social": "Social Media",
+      "personal": "Personal Experience",
+      "other": "Other"
+    }
+  }
+}

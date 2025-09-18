@@ -7,7 +7,7 @@ interface EventCardProps {
 }
 
 export default function EventCard({ event }: EventCardProps) {
-  const t = useTranslations('Components.EventCard');
+  const t = useTranslations('EventCard');
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString(undefined, {
       year: 'numeric',

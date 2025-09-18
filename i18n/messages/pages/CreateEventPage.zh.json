@@ -1,0 +1,38 @@
+{
+  "CreateEventPage": {
+    "title": "创建新事件",
+    "subtitle": "记录值得记住的事件，让更多人了解真相",
+    "loading": "加载中...",
+    "pleaseLogin": "请先登录",
+    "loginRequired": "创建事件需要登录",
+    "loginNow": "立即登录",
+    "pageTitle": "创建新事件",
+    "pageSubtitle": "记录值得记住的事件，让更多人了解真相",
+    "eventTitle": "事件标题",
+    "eventDescription": "事件描述",
+    "occurrenceTime": "发生时间",
+    "sourceType": "来源类型",
+    "imageLinks": "图片链接",
+    "tags": "标签",
+    "delete": "删除",
+    "addImage": "添加图片",
+    "addTag": "添加标签",
+    "cancel": "取消",
+    "createEvent": "创建事件",
+    "location": "地理位置",
+    "selectedLocation": "已选位置",
+    "creating": "创建中...",
+    "enterEventTitle": "请输入事件标题",
+    "enterEventDescription": "请详细描述事件",
+    "imagePlaceholder": "https://example.com/image.jpg",
+    "tagPlaceholder": "标签名称",
+    "titleAndDescriptionRequired": "标题和描述为必填项",
+    "createEventFailed": "创建事件失败，请稍后重试",
+    "sourceTypeOptions": {
+      "news": "新闻",
+      "social": "社交媒体",
+      "personal": "个人经历",
+      "other": "其他"
+    }
+  }
+}

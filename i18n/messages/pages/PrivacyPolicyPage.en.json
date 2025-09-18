@@ -1,0 +1,136 @@
+{
+  "PrivacyPolicyPage": {
+    "pageTitle": "Privacy Policy",
+    "introduction": "Chronicle (hereinafter referred to as 'we' or 'this platform') attaches great importance to your privacy protection. This privacy policy aims to help you understand how we collect, use, store and protect your personal information, as well as how you can control this information.",
+    "sections": {
+      "collectedInfo": {
+        "title": "Information We Collect",
+        "providedInfo": {
+          "title": "Information You Provide",
+          "accountInfo": {
+            "title": "Account Information",
+            "description": "When you register an account, we will collect your name, email address, avatar and other information, which may be provided through third-party login services you use (such as Google)"
+          },
+          "contentInfo": {
+            "title": "Content Information",
+            "description": "All content you publish on this platform, including events, perspectives, comments, images and other materials"
+          },
+          "contactInfo": {
+            "title": "Contact Information",
+            "description": "When you contact us, we will collect the communication information you provide"
+          }
+        },
+        "autoCollectedInfo": {
+          "title": "Automatically Collected Information",
+          "logInfo": {
+            "title": "Log Information",
+            "description": "We collect information about how you access and use this platform, including your IP address, browser type, operating system, access date and time, page views, etc."
+          },
+          "deviceInfo": {
+            "title": "Device Information",
+            "description": "We may collect information about the device you use, including device model, unique device identifier, etc."
+          },
+          "cookies": {
+            "title": "Cookies and Similar Technologies",
+            "description": "We use cookies and similar technologies to identify your browser or device, remember your preferences, and collect information about how you use this platform"
+          }
+        }
+      },
+      "howWeUse": {
+        "title": "How We Use Your Information",
+        "points": [
+          "Provide, maintain and improve our services",
+          "Process your account registration and login",
+          "Allow you to create, share and view content",
+          "Send you service notifications, updates and support information",
+          "Monitor and analyze the use of this platform to improve user experience",
+          "Prevent fraud, abuse and violations of our terms of service",
+          "Comply with legal obligations"
+        ]
+      },
+      "infoSharing": {
+        "title": "Information Sharing and Disclosure",
+        "intro": "We will not sell your personal information. We may share your information in the following circumstances:",
+        "withYourConsent": {
+          "title": "With Your Consent",
+          "description": "With your explicit consent, we may share your information"
+        },
+        "thirdPartyProviders": {
+          "title": "Third-Party Service Providers",
+          "description": "We may share your information with third-party service providers who help us operate this platform, and these providers must comply with strict confidentiality agreements"
+        },
+        "legalRequirements": {
+          "title": "Legal Requirements",
+          "description": "We may disclose your information when required by law, or to protect our rights, property or safety, or the rights, property or safety of others"
+        },
+        "businessTransactions": {
+          "title": "Business Transactions",
+          "description": "In the event of a merger, acquisition, asset transfer or similar business transaction, if personal information transfer is involved, we will require the new company or organization holding your personal information to continue to be bound by this privacy policy"
+        }
+      },
+      "infoSecurity": {
+        "title": "Information Security",
+        "description": "We take reasonable security measures to protect your personal information from unauthorized access, use or disclosure. These measures include but are not limited to data encryption, access control, security auditing and regular security assessments. However, please note that internet transmission is not completely secure, and we cannot guarantee the security of any information you transmit via the internet."
+      },
+      "yourPrivacyRights": {
+        "title": "Your Privacy Rights",
+        "accessRight": {
+          "title": "Right of Access",
+          "description": "You have the right to access personal information we hold about you"
+        },
+        "correctionRight": {
+          "title": "Right to Rectification",
+          "description": "You have the right to request us to correct inaccurate personal information"
+        },
+        "deletionRight": {
+          "title": "Right to Erasure",
+          "description": "In certain circumstances, you have the right to request us to delete your personal information"
+        },
+        "restrictionRight": {
+          "title": "Right to Restriction of Processing",
+          "description": "In certain circumstances, you have the right to restrict our processing of your personal information"
+        },
+        "dataPortability": {
+          "title": "Right to Data Portability",
+          "description": "You have the right to receive personal information you have provided to us in a structured, commonly used and machine-readable format, and the right to transmit this data to another data controller"
+        },
+        "objectionRight": {
+          "title": "Right to Object",
+          "description": "In certain circumstances, you have the right to object to our processing of your personal information"
+        },
+        "withdrawConsent": {
+          "title": "Right to Withdraw Consent",
+          "description": "If we process your personal information based on your consent, you have the right to withdraw your consent at any time"
+        },
+        "contactUs": "To exercise any of the above rights, please contact us: support@chronicle.example.com"
+      },
+      "minorsProtection": {
+        "title": "Protection of Minors",
+        "description": "This platform is not directed at minors under the age of 18. We will not intentionally collect personal information from minors under the age of 18. If we discover that we have collected personal information from minors without verifiable parental or legal guardian consent, we will immediately delete the relevant information."
+      },
+      "dataRetention": {
+        "title": "Data Retention",
+        "description": "We will retain your personal information for as long as necessary to achieve the purposes described in this privacy policy, unless laws require or permit longer retention periods. When we no longer need your personal information, we will take reasonable measures to securely delete or anonymize this information."
+      },
+      "internationalDataTransfer": {
+        "title": "International Data Transfers",
+        "description": "Your personal information may be transferred to and stored on servers located outside of China. We will take appropriate security measures to ensure that your personal information is protected at the same level as in China."
+      },
+      "privacyPolicyUpdates": {
+        "title": "Privacy Policy Updates",
+        "description": "We may update this privacy policy from time to time. When we make significant changes, we will post the updated privacy policy on the platform and, where appropriate, notify you by email. Your continued use of this platform will be deemed your acceptance of the modified privacy policy."
+      },
+      "contactUs": {
+        "title": "Contact Us",
+        "description": "If you have any questions or concerns about this privacy policy, or wish to exercise your data subject rights, please contact us:",
+        "email": "support@chronicle.example.com"
+      }
+    },
+    "footer": {
+      "companyName": "Chronicle",
+      "allRightsReserved": "All rights reserved.",
+      "home": "Home",
+      "terms": "Terms of Service"
+    }
+  }
+}

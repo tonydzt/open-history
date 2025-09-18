@@ -1,0 +1,14 @@
+{
+  "Navbar": {
+    "createEvent": "创建事件",
+    "userMenu": "用户菜单",
+    "userAvatar": "用户头像",
+    "signOut": "退出登录",
+    "signIn": "登录",
+    "closeMenu": "关闭菜单",
+    "openMenu": "打开菜单",
+    "languageSwitch": "语言",
+    "english": "English",
+    "chinese": "中文"
+  }
+}

@@ -6,7 +6,7 @@ interface PerspectiveListProps {
 }
 
 export default function PerspectiveList({ perspectives }: PerspectiveListProps) {
-  const t = useTranslations('Components.PerspectiveList');
+  const t = useTranslations('PerspectiveList');
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('zh-CN', {
       year: 'numeric',

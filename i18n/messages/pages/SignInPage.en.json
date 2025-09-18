@@ -1,0 +1,11 @@
+{
+  "SignInPage": {
+    "loading": "Loading login options...",
+    "title": "Sign in to Chronicle",
+    "subtitle": "Select a method below to sign in or create an account",
+    "error": "An error occurred during login, please try again or use another login method.",
+    "continueWith": "Continue with {provider}",
+    "failedToLoad": "Failed to load login options, please refresh the page and try again.",
+    "termsAgreement": "By signing in, you agree to our <termsLink>Terms of Service</termsLink> and <privacyLink>Privacy Policy</privacyLink>"
+  }
+}

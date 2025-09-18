@@ -1,0 +1,7 @@
+{
+  "ErrorPage": {
+    "loadingFailed": "Loading Failed",
+    "defaultErrorMessage": "Failed to fetch event list, please try again later",
+    "retryButton": "Reload"
+  }
+}

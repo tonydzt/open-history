@@ -1,0 +1,15 @@
+{
+  "AddPerspectivePage": {
+    "title": "补充视角",
+    "subtitle": "分享你对这个事件的独特视角和见解",
+    "loading": "加载中...",
+    "contentLabel": "视角内容",
+    "contentPlaceholder": "请分享你对这个事件的看法、经历或见解...",
+    "contentHelper": "你的视角将帮助其他人更全面地了解这个事件",
+    "cancelButton": "取消",
+    "submitButton": "提交视角",
+    "submitting": "提交中...",
+    "errorRequired": "请输入视角内容",
+    "errorSubmit": "添加视角失败，请稍后重试"
+  }
+}
