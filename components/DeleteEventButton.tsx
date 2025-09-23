@@ -44,6 +44,7 @@ const DeleteEventButton: React.FC<DeleteEventButtonProps> = ({ eventId }) => {
 
   return (
     <button
+      id="delete-event-button"
       onClick={handleDelete}
       disabled={isDeleting}
       className="fixed right-6 bottom-6 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md shadow-lg transition-all duration-200 transform hover:scale-105 flex items-center gap-2"

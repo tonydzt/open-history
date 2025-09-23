@@ -3,6 +3,7 @@ import 'leaflet/dist/leaflet.css';
 import PerspectiveList from '@/components/PerspectiveList';
 import StaticMapWrapper from '@/components/StaticMapWrapper';
 import DeleteEventButton from '@/components/DeleteEventButton';
+import EventActionsMenu from '@/components/EventActionsMenu';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import db from '@/lib/db';
@@ -199,17 +200,15 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
             </span>
             <span className="text-sm text-gray-500">{formatDate(event.timestamp)}</span>
           </div>
-          <div className="flex items-center space-x-3">
-            <a href="#" className="btn-secondary flex items-center space-x-2">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
-              </svg>
-              <span>{t('shareButton')}</span>
-            </a>
-            <a href={`/event/${event.id}/perspective`} className="btn-primary">
-              {t('addPerspectiveButton')}
-            </a>
-          </div>
+          <EventActionsMenu 
+            eventId={event.id} 
+            isAuthor={session?.user?.id === event.authorId} 
+            shareButtonText={t('shareButton')}
+            addPerspectiveButtonText={t('addPerspectiveButton')}
+            editButtonText={t('editButton')}
+            deleteEventButtonText={t('deleteEventButton')}
+            actionsMenuText={t('actionsMenu') || 'Actions'}
+          />
         </div>
 
         <h1 className="text-4xl font-bold text-gray-900 mb-4 line-clamp-2">{event.title}</h1>
@@ -290,20 +289,10 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
         <PerspectiveList perspectives={perspectives} />
       </div>
 
-      {/* 操作按钮区 - 只对事件创作者显示 */}
+      {/* 隐藏的删除按钮 - 仅用于下拉菜单调用功能 */}
       {session?.user?.id === event.authorId && (
-        <div className="fixed bottom-8 right-8 flex flex-col-reverse space-y-4 z-50">
-          <DeleteEventButton eventId={event.id} />
-          <a 
-            href={`/event/${event.id}/edit`}
-            className="btn-primary flex items-center space-x-2 shadow-lg hover:shadow-xl transition-shadow"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-            </svg>
-            <span>{t('editButton')}</span>
-          </a>
-        </div>
+        <div className="hidden">
+          <DeleteEventButton eventId={event.id} /></div>
       )}
 
       {/* 分享成功提示将在下一个版本中实现 */}
