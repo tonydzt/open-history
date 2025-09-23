@@ -13,6 +13,8 @@
     "occurrenceTime": "发生时间",
     "sourceType": "来源类型",
     "imageLinks": "图片链接",
+    "image": "图片",
+    "imageUploadFailed": "图片上传失败，请重试",
     "tags": "标签",
     "delete": "删除",
     "addImage": "添加图片",

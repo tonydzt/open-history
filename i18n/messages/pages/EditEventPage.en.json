@@ -14,6 +14,8 @@
     "occurrenceTime": "Occurrence Time",
     "sourceType": "Source Type",
     "imageLinks": "Image Links",
+    "image": "Image",
+    "imageUploadFailed": "Failed to upload image, please try again",
     "tags": "Tags",
     "delete": "Delete",
     "addImage": "Add Image",

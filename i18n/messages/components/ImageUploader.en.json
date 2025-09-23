@@ -1,0 +1,14 @@
+{
+  "ImageUploader": {
+    "buttonText": "Upload Image",
+    "uploading": "Uploading...",
+    "selectFile": "Please select a file",
+    "unsupportedType": "Unsupported file type, only support:",
+    "uploadSuccess": "Upload Successful",
+    "fileName": "File Name:",
+    "fileSize": "Size:",
+    "clear": "Clear",
+    "uploadAreaText": "Drag and drop files here or click to upload",
+    "maxFileSize": "File size exceeds the limit"
+  }
+}

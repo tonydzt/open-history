@@ -26,6 +26,7 @@ async function saveUserAvatarToBlob(userId: string, avatarUrl: string): Promise<
     const blobResult = await put(path, blobData, {
       access: 'public', // 公开访问权限
       contentType: response.headers.get('content-type') || 'image/png',
+      allowOverwrite: true, // 允许覆盖已存在的文件
     });
     
     return blobResult.url;

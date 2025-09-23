@@ -1,0 +1,10 @@
+{
+  "EventImageUploader": {
+    "externalImageUrl": "外站图片URL",
+    "or": "或者",
+    "uploadLocalImage": "上传本地图片",
+    "currentImage": "当前图片",
+    "imageLoadError": "图片无法加载，请检查URL或上传新图片",
+    "clear": "清除"
+  }
+}

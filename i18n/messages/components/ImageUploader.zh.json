@@ -1,0 +1,14 @@
+{
+  "ImageUploader": {
+    "buttonText": "上传图片",
+    "uploading": "上传中...",
+    "selectFile": "请选择一个文件",
+    "unsupportedType": "不支持的文件类型，仅支持:",
+    "uploadSuccess": "上传成功",
+    "fileName": "文件名:",
+    "fileSize": "大小:",
+    "clear": "清除",
+    "uploadAreaText": "拖拽文件到此处或点击上传",
+    "maxFileSize": "文件大小超过限制"
+  }
+}

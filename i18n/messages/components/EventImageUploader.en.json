@@ -1,0 +1,10 @@
+{
+  "EventImageUploader": {
+    "externalImageUrl": "External Image URL",
+    "or": "or",
+    "uploadLocalImage": "Upload Local Image",
+    "currentImage": "Current Image",
+    "imageLoadError": "Failed to load image. Please check the URL or upload a new image.",
+    "clear": "Clear"
+  }
+}

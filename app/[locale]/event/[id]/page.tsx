@@ -1,7 +1,7 @@
 import { Event, Perspective, GeoLocation } from '@/types';
 import 'leaflet/dist/leaflet.css';
 import PerspectiveList from '@/components/PerspectiveList';
-import StaticMap from '@/components/StaticMap';
+import StaticMapWrapper from '@/components/StaticMapWrapper';
 import DeleteEventButton from '@/components/DeleteEventButton';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
@@ -260,7 +260,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
         <div className="mb-8">
           <h3 className="text-lg font-semibold mb-2">{t('location')}</h3>
           <div className="relative h-64 w-full rounded-md border-2 border-gray-300 overflow-hidden">
-            <StaticMap coordinates={event.geom} />
+            <StaticMapWrapper coordinates={event.geom} />
           </div>
           <p className="mt-2 text-sm text-gray-600">
             {event.geom.lat.toFixed(6)}, {event.geom.lng.toFixed(6)}

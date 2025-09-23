@@ -40,10 +40,11 @@ export async function POST(request: Request): Promise<NextResponse> {
         // 确保这里有适当的认证和授权逻辑
         
         // 注意：clientPayload 在类型定义中是 string，但实际使用中可能是 JSON 字符串
-        // 如果需要从客户端传递 contentType，可以让客户端将其作为 JSON 字符串传递
+        // 尝试解析 clientPayload 为 JSON 对象
+        let parsedPayload: Record<string, any> = {};
         try {
-          // 尝试解析 clientPayload 为 JSON 对象
-          const parsedPayload = clientPayload ? JSON.parse(clientPayload) : {};
+          parsedPayload = clientPayload ? JSON.parse(clientPayload) : {};
+          
           // 验证文件类型
           if (parsedPayload?.contentType && !isValidImageType(parsedPayload.contentType)) {
             throw new Error('不支持的文件类型，仅支持图片文件');
@@ -51,6 +52,19 @@ export async function POST(request: Request): Promise<NextResponse> {
         } catch (parseError) {
           // 如果解析失败，忽略此验证
           console.warn('无法解析 clientPayload:', parseError);
+        }
+
+        // 提取 eventId 和 fileName 从客户端载荷
+        const eventId = parsedPayload.eventId || '';
+        const fileName = parsedPayload.fileName || '';
+        
+        // 如果提供了 eventId，则使用指定的路径格式
+        let tokenPathname = pathname;
+        if (eventId && fileName) {
+          // 获取文件扩展名
+          const fileExtension = fileName.split('.').pop() || '';
+          // 构建新的路径：/event/{eventid}/{图片名}
+          tokenPathname = `/event/${eventId}/${fileName.replace(`.${fileExtension}`, '')}.${fileExtension}`;
         }
 
         return {
@@ -69,8 +83,11 @@ export async function POST(request: Request): Promise<NextResponse> {
           // 可选的token负载，将在上传完成回调中传递给服务器
           tokenPayload: JSON.stringify({
             userId: session.user.id,
-            uploadTime: new Date().toISOString()
-          })
+            uploadTime: new Date().toISOString(),
+            eventId: eventId || null
+          }),
+          // 指定上传路径
+          tokenPathname: tokenPathname
         };
       },
       onUploadCompleted: async ({ blob, tokenPayload }) => {

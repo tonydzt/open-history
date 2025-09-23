@@ -6,7 +6,8 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { api } from '@/lib/api';
 import { CreateEventData, GeoLocation } from '@/types';
-import LeafletMap from '@/components/LeafletMap';
+import LeafletMapWrapper from '@/components/LeafletMapWrapper';
+import EventImageUploader from '@/components/EventImageUploader';
 // Leaflet CSS 需要单独导入
 import 'leaflet/dist/leaflet.css';
 
@@ -188,40 +189,19 @@ export default function CreateEventPage() {
           </select>
         </div>
 
-        {/* Images */}
+        {/* Image */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            {t('imageLinks')}
+            {t('image')}
           </label>
-          <div className="space-y-2">
-            {formData.images.map((image, index) => (
-              <div key={index} className="flex space-x-2">
-                <input
-                  type="url"
-                  value={image}
-                  onChange={(e) => handleArrayChange('images', index, e.target.value)}
-                  className="input-field flex-1"
-                  placeholder={t('imagePlaceholder')}
-                />
-                {formData.images.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeArrayItem('images', index)}
-                    className="px-3 py-2 text-red-600 hover:text-red-800 transition-colors"
-                  >
-                    {t('delete')}
-                  </button>
-                )}
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={() => addArrayItem('images')}
-              className="text-sm text-primary-600 hover:text-primary-700 font-medium"
-            >
-              + {t('addImage')}
-            </button>
-          </div>
+          <EventImageUploader
+            value={formData.images[0] || ''}
+            onChange={(url) => handleInputChange('images', [url])}
+            onUploadError={(error) => {
+              console.error('Image upload error:', error);
+              setError(t('imageUploadFailed'));
+            }}
+          />
         </div>
 
         {/* Tags */}
@@ -267,7 +247,7 @@ export default function CreateEventPage() {
           </label>
           <div className="relative h-80 w-full rounded-md border-2 border-gray-300 overflow-hidden">
             {typeof window !== 'undefined' && (
-              <LeafletMap 
+              <LeafletMapWrapper 
                 initialGeom={formData.geom}
                 onGeomChange={handleGeomChange}
               />
