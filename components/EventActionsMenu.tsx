@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/DropdownMenu';
+import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 interface EventActionsMenuProps {
   eventId: string;
@@ -31,6 +33,9 @@ const EventActionsMenu: React.FC<EventActionsMenuProps> = ({
   actionsMenuText
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const router = useRouter();
+  const t = useTranslations('EventDetailPage');
 
   const handleAddPerspective = () => {
     setIsMenuOpen(false);
@@ -50,15 +55,39 @@ const EventActionsMenu: React.FC<EventActionsMenuProps> = ({
     }
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     setIsMenuOpen(false);
+    
     if (onDelete) {
       onDelete();
-    } else {
-      const deleteButton = document.getElementById('delete-event-button');
-      if (deleteButton) {
-        (deleteButton as HTMLButtonElement).click();
+      return;
+    }
+    
+    // 使用原生confirm对话框
+    if (!window.confirm(t('deleteEventConfirm'))) {
+      return;
+    }
+
+    setIsDeleting(true);
+    
+    try {
+      const response = await fetch(`/api/events/${eventId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        throw new Error(t('deleteEventError'));
       }
+
+      // 删除成功后重定向到主页
+      alert(t('deleteEventSuccess'));
+      router.push('/');
+    } catch (error) {
+      console.error('删除事件时发生错误:', error);
+      alert(error instanceof Error ? error.message : t('deleteEventError'));
+    } finally {
+      setIsDeleting(false);
     }
   };
 

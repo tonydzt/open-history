@@ -2,7 +2,6 @@ import { Event, Perspective, GeoLocation } from '@/types';
 import 'leaflet/dist/leaflet.css';
 import PerspectiveList from '@/components/PerspectiveList';
 import StaticMapWrapper from '@/components/StaticMapWrapper';
-import DeleteEventButton from '@/components/DeleteEventButton';
 import EventActionsMenu from '@/components/EventActionsMenu';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
@@ -289,11 +288,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
         <PerspectiveList perspectives={perspectives} />
       </div>
 
-      {/* 隐藏的删除按钮 - 仅用于下拉菜单调用功能 */}
-      {session?.user?.id === event.authorId && (
-        <div className="hidden">
-          <DeleteEventButton eventId={event.id} /></div>
-      )}
+      {/* 删除功能已整合到EventActionsMenu组件中 */}
 
       {/* 分享成功提示将在下一个版本中实现 */}
     </div>
