@@ -1,8 +1,8 @@
 import { Event, Perspective, GeoLocation } from '@/types';
 import 'leaflet/dist/leaflet.css';
-import PerspectiveList from '@/components/PerspectiveList';
-import StaticMapWrapper from '@/components/StaticMapWrapper';
-import EventActionsMenu from '@/components/EventActionsMenu';
+import PerspectiveList from '@/components/features/events/PerspectiveList';
+import StaticMapWrapper from '@/components/features/map/StaticMapWrapper';
+import EventActionsMenu from '@/components/features/events/EventActionsMenu';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import db from '@/lib/db';

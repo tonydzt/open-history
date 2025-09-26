@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { Event } from '@/types';
-import EventCard from '@/components/EventCard';
+import EventCard from '@/components/features/events/EventCard';
 import db from '@/lib/db';
 import { getTranslations } from 'next-intl/server';
 

@@ -1,10 +1,10 @@
 import { Inter } from 'next/font/google';
 import './globals.css';
-import Providers from '@/components/Providers';
-import Navbar from '@/components/Navbar';
+import Providers from '@/components/common/Providers';
+import Navbar from '@/components/common/Navbar';
 import { NextIntlClientProvider } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
-import GoogleAnalytics from '@/components/GoogleAnalytics';
+import GoogleAnalytics from '@/components/features/analytics/GoogleAnalytics';
 import { Suspense } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });

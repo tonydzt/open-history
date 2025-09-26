@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
+import Navbar from '@/components/common/Navbar';
 import { useTranslations } from 'next-intl';
 
 export default function PrivacyPage() {

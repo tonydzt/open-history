@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { type PutBlobResult } from '@vercel/blob';
-import ImageUploader from './ImageUploader';
+import ImageUploader from '@/components/common/ImageUploader';
 import { useTranslations } from 'next-intl';
 
 interface EventImageUploaderProps {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/DropdownMenu';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/common/DropdownMenu';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
