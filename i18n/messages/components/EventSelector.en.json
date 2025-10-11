@@ -1,0 +1,13 @@
+{
+  "EventSelector": {
+    "selectEvents": "Select Events",
+    "close": "Close",
+    "selectAll": "Select All",
+    "selectedCount": "{count} selected",
+    "noEvents": "No events available",
+    "prevPage": "Previous",
+    "nextPage": "Next",
+    "cancel": "Cancel",
+    "addSelected": "Add Selected"
+  }
+}

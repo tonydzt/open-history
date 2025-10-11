@@ -156,8 +156,6 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
     error = '获取事件详情失败，请稍后重试';
     console.error('Error fetching event:', err);
   }
-  
-
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('zh-CN', {

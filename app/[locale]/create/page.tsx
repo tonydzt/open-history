@@ -8,11 +8,12 @@ import { api } from '@/lib/api';
 import { CreateEventData, GeoLocation } from '@/types';
 import LeafletMapWrapper from '@/components/features/map/LeafletMapWrapper';
 import EventImageUploader from '@/components/features/events/EventImageUploader';
+import LoadingIndicator from '@/components/common/LoadingIndicator';
 // Leaflet CSS 需要单独导入
 import 'leaflet/dist/leaflet.css';
 
 export default function CreateEventPage() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const t = useTranslations('CreateEventPage');
   const [loading, setLoading] = useState(false);
@@ -26,6 +27,17 @@ export default function CreateEventPage() {
     tags: [''],
     geom: undefined,
   });
+
+  // 如果会话状态正在加载中，显示加载指示器
+  if (status === 'loading') {
+    return (
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="text-center py-12">
+          <LoadingIndicator buttonStyle={true} loadingText={t('loading')} />
+        </div>
+      </div>
+    );
+  }
 
   // 如果用户未登录，显示登录提示
   if (!session) {
@@ -247,7 +259,7 @@ export default function CreateEventPage() {
           </label>
           <div className="relative h-80 w-full rounded-md border-2 border-gray-300 overflow-hidden">
             {typeof window !== 'undefined' && (
-              <LeafletMapWrapper 
+              <LeafletMapWrapper
                 initialGeom={formData.geom}
                 onGeomChange={handleGeomChange}
               />
