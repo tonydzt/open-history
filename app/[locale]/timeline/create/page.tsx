@@ -1,5 +1,6 @@
 'use client'
 import { TimelineData } from '@/db/types';
+import { EventCard } from '@/db/model/vo/EventCard';
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -7,16 +8,6 @@ import { useTranslations } from 'next-intl';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
 import EventSelector from '@/components/features/events/EventSelector';
 import TimelineJS from '@/components/features/timeline/TimelineJS';
-
-// 定义事件类型
-interface Event {
-  id: string;
-  title: string;
-  description?: string;
-  timestamp: string;
-  images?: string[];
-  tags?: string[];
-}
 
 // 模拟创建时间轴的API调用
 const mockCreateTimeline = async (timelineData: TimelineData): Promise<{ id: string }> => {
@@ -48,7 +39,7 @@ export default function CreateTimelinePage() {
   });
   
   // 已选择的事件数据
-  const [selectedEvents, setSelectedEvents] = useState<Event[]>([]);
+  const [selectedEvents, setSelectedEvents] = useState<EventCard[]>([]);
 
   // 如果会话状态正在加载中，显示加载指示器
   if (status === 'loading') {
@@ -90,7 +81,7 @@ export default function CreateTimelinePage() {
   };
 
   // 处理添加事件
-  const handleAddEvents = (events: Event[]) => {
+  const handleAddEvents = (events: EventCard[]) => {
     // 避免重复添加事件
     const existingEventIds = new Set(selectedEvents.map(event => event.id));
     const newEvents = events.filter(event => !existingEventIds.has(event.id));
@@ -238,8 +229,6 @@ export default function CreateTimelinePage() {
             ) : (
               <TimelineJS 
                 data={prepareTimelineData()}
-                onInitFailed={() => setTimelineInitFailed(true)}
-                loadingText={t('loadingPreview')}
               />
             )}
           </div>

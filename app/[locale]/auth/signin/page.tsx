@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { getProviders, signIn } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 export default function SignInPage() {
