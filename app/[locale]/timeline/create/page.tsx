@@ -1,12 +1,12 @@
 'use client'
-import { TimelineData } from '@/types';
-import { useState, useRef } from 'react';
+import { TimelineData } from '@/db/types';
+import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
 import EventSelector from '@/components/features/events/EventSelector';
-import TimelineJS from '@/components/common/TimelineJS';
+import TimelineJS from '@/components/features/timeline/TimelineJS';
 
 // 定义事件类型
 interface Event {
@@ -40,7 +40,11 @@ export default function CreateTimelinePage() {
   const [formData, setFormData] = useState<TimelineData>({
     title: '',
     description: '',
-    events: []
+    events: [],
+    id: '',
+    createdAt: '',
+    updatedAt: '',
+    authorId: ''
   });
   
   // 已选择的事件数据

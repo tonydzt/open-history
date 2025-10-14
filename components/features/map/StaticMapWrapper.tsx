@@ -1,6 +1,6 @@
 'use client';
 
-import { GeoLocation } from '@/types';
+import { GeoLocation } from '@/db/types';
 import MapComponent from './MapComponent';
 
 interface StaticMapProps {

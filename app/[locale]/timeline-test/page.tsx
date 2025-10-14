@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import TimelineComponent from '@/components/common/TimelineJS';
+import TimelineComponent from '@/components/features/timeline/TimelineJS';
 
 const TimelineTestPage = () => {
   const [initFailed, setInitFailed] = useState(false);

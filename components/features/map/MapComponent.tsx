@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { GeoLocation } from '@/types';
+import { GeoLocation } from '@/db/types';
 // Leaflet CSS 需要单独导入
 import 'leaflet/dist/leaflet.css';
 

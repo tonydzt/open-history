@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import db from '@/lib/db';
-import { CreatePerspectiveData, CreateEventData } from '@/types';
+import { CreatePerspectiveData, CreateEventData } from '@/db/types';
 
 // 类型转换函数：将数据库模型转换为前端使用的类型
 const transformEvent = (dbEvent: any) => ({

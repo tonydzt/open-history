@@ -1,6 +1,6 @@
 'use client'; // 必须在客户端渲染
 
-import { Timeline } from '@/types/timeline-type';
+import { Timeline } from '@/db/types/timeline-type';
 import { useEffect, useRef } from 'react';
 
 // 动态导入，避免服务端渲染

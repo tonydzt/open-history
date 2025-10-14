@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { api } from '@/lib/api';
-import { CreateEventData, GeoLocation } from '@/types';
+import { CreateEventData, GeoLocation } from '@/db/types';
 import LeafletMapWrapper from '@/components/features/map/LeafletMapWrapper';
 import EventImageUploader from '@/components/features/events/EventImageUploader';
 import LoadingIndicator from '@/components/common/LoadingIndicator';

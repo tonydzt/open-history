@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Event } from '@/types';
+import { Event } from '@/db/types';
 import { useTranslations } from 'next-intl';
 
 interface EventCardProps {

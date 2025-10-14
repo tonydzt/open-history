@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { CreateEventData, GeoLocation } from '@/types';
+import { CreateEventData, GeoLocation } from '@/db/types';
 import LeafletMapWrapper from '@/components/features/map/LeafletMapWrapper';
 import EventImageUploader from '@/components/features/events/EventImageUploader';
 // Leaflet CSS 需要单独导入

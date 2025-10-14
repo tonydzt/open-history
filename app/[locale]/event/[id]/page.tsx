@@ -1,4 +1,4 @@
-import { Event, Perspective, GeoLocation } from '@/types';
+import { Event, Perspective, GeoLocation } from '@/db/types';
 import 'leaflet/dist/leaflet.css';
 import PerspectiveList from '@/components/features/events/PerspectiveList';
 import StaticMapWrapper from '@/components/features/map/StaticMapWrapper';

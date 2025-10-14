@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import db from '@/lib/db';
-import { CreateEventData } from '@/types';
+import { CreateEventData } from '@/db/types';
 import { v4 as uuidv4 } from 'uuid';
 
 // 类型转换函数：将数据库模型转换为前端使用的类型
