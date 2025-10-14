@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import TimelineJS from '@/components/common/TimelineJS';
+import TimelineComponent from '@/components/common/TimelineJS';
 
 const TimelineTestPage = () => {
   const [initFailed, setInitFailed] = useState(false);
@@ -121,11 +121,6 @@ const TimelineTestPage = () => {
     scale: 'human'
   };
 
-  // 处理TimelineJS初始化失败
-  const handleInitFailed = () => {
-    setInitFailed(true);
-  };
-
   // 重试初始化
   const handleRetry = () => {
     setInitFailed(false);
@@ -166,10 +161,8 @@ const TimelineTestPage = () => {
             </div>
           ) : (
             <div className="h-[600px] bg-white rounded-lg border border-gray-200 shadow-md overflow-hidden">
-              <TimelineJS 
+              <TimelineComponent 
                 data={mockTimelineData} 
-                onInitFailed={handleInitFailed}
-                loadingText="正在加载时间轴..."
               />
             </div>
           )}
