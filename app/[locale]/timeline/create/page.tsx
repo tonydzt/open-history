@@ -1,5 +1,5 @@
 'use client'
-import { TimelineData } from '@/db/types';
+import { Timeline } from '@/db/model/vo/Timeline';
 import { EventCard } from '@/db/model/vo/EventCard';
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
@@ -10,7 +10,7 @@ import EventSelector from '@/components/features/events/EventSelector';
 import TimelineComponent from '@/components/features/timeline/TimelineJS';
 
 // 模拟创建时间轴的API调用
-const mockCreateTimeline = async (timelineData: TimelineData): Promise<{ id: string }> => {
+const mockCreateTimeline = async (timelineData: Timeline): Promise<{ id: string }> => {
   // 模拟网络延迟
   await new Promise(resolve => setTimeout(resolve, 800));
   // 模拟返回创建的时间轴ID
@@ -28,14 +28,8 @@ export default function CreateTimelinePage() {
   const [timelineInitFailed, setTimelineInitFailed] = useState(false);
   
   // 时间轴基本信息
-  const [formData, setFormData] = useState<TimelineData>({
-    title: '',
-    description: '',
-    events: [],
-    id: '',
-    createdAt: '',
-    updatedAt: '',
-    authorId: ''
+  const [formData, setFormData] = useState<Timeline>({
+    events: []
   });
   
   // 已选择的事件数据
@@ -74,11 +68,17 @@ export default function CreateTimelinePage() {
 
   // 处理基本信息变更
   const handleBasicInfoChange = (field: 'title' | 'description', value: string) => {
-    setFormData(prev => ({
-      // 这是 对象扩展运算符（spread operator），它用于将 prev 对象的所有属性复制到一个新的对象中。这样做的目的是在更新状态时保持 不可变性，即不直接修改原始状态对象
-      ...prev,
-      [field]: value
-    }));
+    if (field === 'title') {
+      setFormData(prev => ({
+        ...prev,
+        title: prev.title ? { ...prev.title, text: { headline: value } } : { text: { headline: value } }
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        title: prev.title ? { ...prev.title, text: { ...prev.title.text, text: value } } : { text: { text: value } }
+      }));
+    }
   };
 
   // 处理添加事件
@@ -91,10 +91,22 @@ export default function CreateTimelinePage() {
       const updatedEvents = [...selectedEvents, ...newEvents];
       setSelectedEvents(updatedEvents);
       
-      // 更新表单数据中的事件ID列表
+      // 更新表单数据中的事件列表
       setFormData(prev => ({
         ...prev,
-        events: updatedEvents.map(event => event.id)
+        events: updatedEvents.map(event => ({
+          start_date: {
+            year: new Date(event.timestamp).getFullYear(),
+            month: new Date(event.timestamp).getMonth() + 1,
+            day: new Date(event.timestamp).getDate()
+          },
+          text: {
+            headline: event.title,
+            text: event.description
+          },
+          media: event.images && event.images.length > 0 ? { url: event.images[0] } : undefined,
+          unique_id: event.id
+        }))
       }));
     }
     
@@ -107,18 +119,18 @@ export default function CreateTimelinePage() {
     setSelectedEvents(prev => prev.filter(event => event.id !== eventId));
     setFormData(prev => ({
       ...prev,
-      events: prev.events.filter(id => id !== eventId)
+      events: prev.events.filter(event => event.unique_id !== eventId)
     }));
   };
 
   // 预览时间轴
   const handlePreview = () => {
-    if (!formData.title.trim()) {
+    if (!formData.title || !formData.title.text || !formData.title.text.headline) {
       setError(t('titleRequired'));
       return;
     }
     
-    if (selectedEvents.length === 0) {
+    if (selectedEvents.length === 0 || formData.events.length === 0) {
       setError(t('atLeastOneEvent'));
       return;
     }
@@ -137,12 +149,12 @@ export default function CreateTimelinePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.title.trim()) {
+    if (!formData.title || !formData.title.text || !formData.title.text.headline) {
       setError(t('titleRequired'));
       return;
     }
     
-    if (selectedEvents.length === 0) {
+    if (selectedEvents.length === 0 || formData.events.length === 0) {
       setError(t('atLeastOneEvent'));
       return;
     }
@@ -151,16 +163,8 @@ export default function CreateTimelinePage() {
     setError(null);
     
     try {
-      // 添加用户ID
-      const timelineDataWithUser = {
-        ...formData,
-        authorId: session.user.id,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
-      
       // 调用模拟API
-      const result = await mockCreateTimeline(timelineDataWithUser);
+      const result = await mockCreateTimeline(formData);
       
       // 成功后跳转到时间轴详情页
       router.push(`/timeline/${result.id}`);
@@ -173,11 +177,7 @@ export default function CreateTimelinePage() {
 
   // 准备TimelineJS数据格式
   const prepareTimelineData = () => {
-    return {
-      title: formData.title,
-      description: formData.description,
-      events: selectedEvents
-    };
+    return formData;
   };
 
   return (
@@ -263,7 +263,7 @@ export default function CreateTimelinePage() {
               <input
                 type="text"
                 id="timeline-title"
-                value={formData.title}
+                value={formData.title?.text?.headline || ''}
                 onChange={(e) => handleBasicInfoChange('title', e.target.value)}
                 placeholder={t('timelineTitlePlaceholder')}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
@@ -278,7 +278,7 @@ export default function CreateTimelinePage() {
               </label>
               <textarea
                 id="timeline-description"
-                value={formData.description}
+                value={formData.title?.text?.text || ''}
                 onChange={(e) => handleBasicInfoChange('description', e.target.value)}
                 placeholder={t('timelineDescriptionPlaceholder')}
                 rows={4}
