@@ -1,30 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
-
-// 定义事件类型
-interface Event {
-  id: string;
-  title: string;
-  description: string;
-  timestamp: string;
-  images?: string[];
-  tags?: string[];
-}
+import { EventCard } from '@/db/model/vo/EventCard';
 
 interface EventSelectorProps {
   isOpen: boolean;
   onClose: () => void;
-  onAddEvents: (events: Event[]) => void;
+  onAddEvents: (events: EventCard[]) => void;
 }
 
 // 模拟获取事件列表的API
-const mockGetEvents = async (page: number, pageSize: number): Promise<{ events: Event[], total: number }> => {
+const mockGetEvents = async (page: number, pageSize: number): Promise<{ events: EventCard[], total: number }> => {
   // 模拟网络延迟
   await new Promise(resolve => setTimeout(resolve, 500));
   
   // 模拟事件数据
-  const allEvents: Event[] = Array.from({ length: 30 }, (_, i) => ({
+  const allEvents: EventCard[] = Array.from({ length: 30 }, (_, i) => ({
     id: `event_${Date.now()}_${i}`,
     title: `示例事件 ${i + 1}`,
     description: `这是一个示例事件的描述文本，包含了事件的详细信息。事件编号: ${i + 1}`,
@@ -45,7 +36,7 @@ const mockGetEvents = async (page: number, pageSize: number): Promise<{ events: 
 
 const EventSelector: React.FC<EventSelectorProps> = ({ isOpen, onClose, onAddEvents }) => {
   const t = useTranslations('EventSelector');
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<EventCard[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
   const [page, setPage] = useState(1);

@@ -1,8 +1,8 @@
-import {getRequestConfig} from 'next-intl/server';
-import {hasLocale} from 'next-intl';
-import {routing} from './routing';
+import { getRequestConfig } from 'next-intl/server';
+import { hasLocale } from 'next-intl';
+import { routing } from './routing';
 
-export default getRequestConfig(async ({requestLocale}) => {
+export default getRequestConfig(async ({ requestLocale }) => {
   // Typically corresponds to the `[locale]` segment
   const requested = await requestLocale;
   const locale = hasLocale(routing.locales, requested)
@@ -19,6 +19,7 @@ export default getRequestConfig(async ({requestLocale}) => {
     componentsImageUploader,
     componentsEventImageUploader,
     componentsEventSelector,
+    componentsTimelineJS,
     pagesEditEventPage,
     pagesSignInPage,
     pagesAddPerspectivePage,
@@ -39,6 +40,7 @@ export default getRequestConfig(async ({requestLocale}) => {
     import(`./messages/components/ImageUploader.${locale}.json`),
     import(`./messages/components/EventImageUploader.${locale}.json`),
     import(`./messages/components/EventSelector.${locale}.json`),
+    import(`./messages/components/TimelineJS.${locale}.json`),
     import(`./messages/pages/EditEventPage.${locale}.json`),
     import(`./messages/pages/SignInPage.${locale}.json`),
     import(`./messages/pages/AddPerspectivePage.${locale}.json`),
@@ -64,6 +66,7 @@ export default getRequestConfig(async ({requestLocale}) => {
       ...componentsImageUploader.default,
       ...componentsEventImageUploader.default,
       ...componentsEventSelector.default,
+      ...componentsTimelineJS.default,
       ...pagesEditEventPage.default,
       ...pagesSignInPage.default,
       ...pagesAddPerspectivePage.default,

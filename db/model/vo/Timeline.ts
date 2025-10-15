@@ -164,3 +164,5 @@ export interface Timeline {
    */
   scale?: TimelineScale;
 }
+
+

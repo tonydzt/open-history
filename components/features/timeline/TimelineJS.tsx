@@ -2,11 +2,13 @@
 
 import { Timeline } from '@/db/model/vo/Timeline';
 import { useEffect, useRef } from 'react';
+import { useTranslations } from 'next-intl';
 
 // 动态导入，避免服务端渲染
 const TimelineComponent = ({ data }: { data: Timeline }) => {
 
   const timelineRef = useRef(null);
+  const t = useTranslations('TimelineJS');
 
   useEffect(() => {
     // 加载 CSS 文件
@@ -49,9 +51,9 @@ const TimelineComponent = ({ data }: { data: Timeline }) => {
             // 初始化时间轴
             var options = {
               hash_bookmark: false,
-              initial_zoom: 5
+              language: t('language')
             }
-            
+
             // tongbug修改：这里的TL是本地原生JS库/timelinejs/timeline-min.js里引入的，无法通过TypeScript 的类型检查，但是能正常使用。所以这里通过@ts-ignore忽略这个检查
             // 这里@ts-ignore 只会忽略紧跟在它下面的那一行的 TypeScript 检查
             // @ts-ignore
@@ -77,8 +79,18 @@ const TimelineComponent = ({ data }: { data: Timeline }) => {
   }, [data]);
 
   return (
-    <div>
-      <div ref={timelineRef} id="timeline-container" style={{ width: '100%', height: '100vh' }} />
+    <div style={{ display: 'flex', flexDirection: 'column', width: '100%', minHeight: '0' }}>
+      <div 
+        ref={timelineRef} 
+        id="timeline-container" 
+        style={{ 
+          width: '100%', 
+          height: 'auto', 
+          minHeight: '600px',
+          flex: 1, 
+          overflow: 'visible'
+        }} 
+      />
     </div>
   );
 };

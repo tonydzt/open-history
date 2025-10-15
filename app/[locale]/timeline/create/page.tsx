@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
 import EventSelector from '@/components/features/events/EventSelector';
-import TimelineJS from '@/components/features/timeline/TimelineJS';
+import TimelineComponent from '@/components/features/timeline/TimelineJS';
 
 // 模拟创建时间轴的API调用
 const mockCreateTimeline = async (timelineData: TimelineData): Promise<{ id: string }> => {
@@ -75,6 +75,7 @@ export default function CreateTimelinePage() {
   // 处理基本信息变更
   const handleBasicInfoChange = (field: 'title' | 'description', value: string) => {
     setFormData(prev => ({
+      // 这是 对象扩展运算符（spread operator），它用于将 prev 对象的所有属性复制到一个新的对象中。这样做的目的是在更新状态时保持 不可变性，即不直接修改原始状态对象
       ...prev,
       [field]: value
     }));
@@ -227,7 +228,7 @@ export default function CreateTimelinePage() {
                 </button>
               </div>
             ) : (
-              <TimelineJS 
+              <TimelineComponent 
                 data={prepareTimelineData()}
               />
             )}

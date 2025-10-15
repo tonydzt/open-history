@@ -3,7 +3,7 @@ export interface EventCard {
   title: string;
   description: string;
   timestamp: string;
-  sourceType: 'news' | 'social' | 'personal' | 'other';
   images: string[];
   tags: string[];
 }
+
