@@ -54,10 +54,31 @@ const TimelineComponent = ({ data }: { data: Timeline }) => {
               language: t('language')
             }
 
+            // 准备数据，确保背景设置正确应用
+            const timelineData = { ...data };
+            
+            // TimelineJS库需要特殊处理背景设置
+            // 如果有通用背景设置，应用到标题页和事件页
+            if (timelineData.background) {
+              // 应用到标题页
+              if (!timelineData.title) {
+                timelineData.title = { text: { headline: '', text: '' } };
+              }
+              timelineData.title.background = timelineData.background;
+              
+              // 应用到所有事件页
+              if (timelineData.events && timelineData.events.length > 0) {
+                timelineData.events = timelineData.events.map(event => ({
+                  ...event,
+                  background: event.background || timelineData.background
+                }));
+              }
+            }
+
             // tongbug修改：这里的TL是本地原生JS库/timelinejs/timeline-min.js里引入的，无法通过TypeScript 的类型检查，但是能正常使用。所以这里通过@ts-ignore忽略这个检查
             // 这里@ts-ignore 只会忽略紧跟在它下面的那一行的 TypeScript 检查
             // @ts-ignore
-            timelineRef.current = new TL.Timeline(timelineRef.current, data, options);
+            timelineRef.current = new TL.Timeline(timelineRef.current, timelineData, options);
           }
         } catch (error) {
           console.error('Error loading external resources', error);

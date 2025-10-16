@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
 import EventSelector from '@/components/features/events/EventSelector';
 import TimelineComponent from '@/components/features/timeline/TimelineJS';
+import ImageUploader from '@/components/common/ImageUploader';
 
 // 模拟创建时间轴的API调用
 const mockCreateTimeline = async (timelineData: Timeline): Promise<{ id: string }> => {
@@ -31,6 +32,8 @@ export default function CreateTimelinePage() {
   const [formData, setFormData] = useState<Timeline>({
     events: []
   });
+  
+
   
   // 已选择的事件数据
   const [selectedEvents, setSelectedEvents] = useState<EventCard[]>([]);
@@ -79,6 +82,39 @@ export default function CreateTimelinePage() {
         title: prev.title ? { ...prev.title, text: { ...prev.title.text, text: value } } : { text: { text: value } }
       }));
     }
+  };
+  
+  // 处理背景设置变更
+  const handleBackgroundChange = (field: 'color' | 'alt', value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      background: prev.background ? { ...prev.background, [field]: value } : { [field]: value }
+    }));
+  };
+  
+  // 处理背景图片上传成功
+  const handleBackgroundImageUploadSuccess = (result: any) => {
+    setFormData(prev => ({
+      ...prev,
+      background: prev.background 
+        ? { ...prev.background, url: result.url, alt: result.pathname.split('/').pop() }
+        : { url: result.url, alt: result.pathname.split('/').pop() }
+    }));
+  };
+  
+  // 处理背景图片上传失败
+  const handleBackgroundImageUploadError = (error: Error) => {
+    setError(`图片上传失败: ${error.message}`);
+  };
+  
+  // 移除背景图片
+  const handleRemoveBackgroundImage = () => {
+    setFormData(prev => ({
+      ...prev,
+      background: prev.background 
+        ? { ...prev.background, url: undefined, alt: undefined }
+        : undefined
+    }));
   };
 
   // 处理添加事件
@@ -284,6 +320,90 @@ export default function CreateTimelinePage() {
                 rows={4}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
               />
+            </div>
+            
+            {/* 背景设置 */}
+            <div className="mb-6">
+              <h3 className="text-lg font-medium text-gray-900 mb-4">{t('backgroundSettings')}</h3>
+              
+              {/* 背景颜色 */}
+              <div className="mb-4">
+                <label htmlFor="background-color" className="block text-sm font-medium text-gray-700 mb-1">
+                  {t('backgroundColor')}
+                </label>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="color"
+                    id="background-color"
+                    value={formData.background?.color || '#ffffff'}
+                    onChange={(e) => handleBackgroundChange('color', e.target.value)}
+                    className="w-10 h-10 rounded border-2 border-gray-300 cursor-pointer"
+                  />
+                  <input
+                    type="text"
+                    value={formData.background?.color || ''}
+                    onChange={(e) => handleBackgroundChange('color', e.target.value)}
+                    placeholder="#ffffff"
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                  />
+                </div>
+              </div>
+              
+              {/* 背景图片 */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  {t('backgroundImage')}
+                </label>
+                {formData.background?.url ? (
+                  <div className="relative">
+                    <img 
+                      src={formData.background.url} 
+                      alt={formData.background.alt || ''}
+                      className="max-w-full h-48 object-cover rounded-md border border-gray-200"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleRemoveBackgroundImage}
+                      className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md text-gray-500 hover:text-red-500 transition-colors"
+                      aria-label={t('removeImage')}
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveBackgroundImage()}
+                      className="mt-2 px-3 py-1 bg-gray-100 text-gray-700 rounded-md text-sm hover:bg-gray-200 transition-colors"
+                    >
+                      {t('changeImage')}
+                    </button>
+                  </div>
+                ) : (
+                  <ImageUploader
+                    onUploadSuccess={handleBackgroundImageUploadSuccess}
+                    onUploadError={handleBackgroundImageUploadError}
+                    buttonText={t('uploadImage')}
+                  />
+                )}
+              </div>
+              
+              {/* 背景图片替代文本 */}
+              {formData.background?.url && (
+                <div className="mb-4">
+                  <label htmlFor="background-alt" className="block text-sm font-medium text-gray-700 mb-1">
+                    {t('imageAltText')}
+                  </label>
+                  <input
+                    type="text"
+                    id="background-alt"
+                    value={formData.background.alt || ''}
+                    onChange={(e) => handleBackgroundChange('alt', e.target.value)}
+                    placeholder={t('imageAltTextPlaceholder')}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                  />
+                </div>
+              )}
             </div>
           </div>
           

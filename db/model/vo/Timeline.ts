@@ -163,6 +163,10 @@ export interface Timeline {
    * 时间尺度（可选），默认为'human'
    */
   scale?: TimelineScale;
+  /**
+   * 通用背景设置（可选），将应用到所有事件页和标题页
+   */
+  background?: Background;
 }
 
 
