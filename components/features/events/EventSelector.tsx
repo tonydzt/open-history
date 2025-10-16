@@ -7,34 +7,38 @@ interface EventSelectorProps {
   isOpen: boolean;
   onClose: () => void;
   onAddEvents: (events: EventCard[]) => void;
+  selectedEventIds?: string[];
 }
 
-// 模拟获取事件列表的API
-const mockGetEvents = async (page: number, pageSize: number): Promise<{ events: EventCard[], total: number }> => {
-  // 模拟网络延迟
-  await new Promise(resolve => setTimeout(resolve, 500));
-  
-  // 模拟事件数据
-  const allEvents: EventCard[] = Array.from({ length: 30 }, (_, i) => ({
-    id: `event_${Date.now()}_${i}`,
-    title: `示例事件 ${i + 1}`,
-    description: `这是一个示例事件的描述文本，包含了事件的详细信息。事件编号: ${i + 1}`,
-    timestamp: new Date(Date.now() - i * 86400000 * 7).toISOString().slice(0, 10),
-    images: i % 3 === 0 ? [`https://picsum.photos/seed/${i}/300/200`] : [],
-    tags: i % 2 === 0 ? [`标签${i % 5 + 1}`, `标签${(i + 1) % 5 + 1}`] : []
-  }));
-  
-  const startIndex = (page - 1) * pageSize;
-  const endIndex = startIndex + pageSize;
-  const paginatedEvents = allEvents.slice(startIndex, endIndex);
-  
-  return {
-    events: paginatedEvents,
-    total: allEvents.length
-  };
+// 从API获取事件列表
+const fetchEvents = async (page: number, pageSize: number): Promise<{ events: EventCard[], total: number }> => {
+  try {
+    const response = await fetch(
+      `/api/component/events/EventSelector/GetEventByPages?page=${page}&pageSize=${pageSize}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    
+    if (!response.ok) {
+      throw new Error('获取事件列表失败');
+    }
+    
+    const data = await response.json();
+    return {
+      events: data.events || [],
+      total: data.total || 0
+    };
+  } catch (error) {
+    console.error('Failed to fetch events:', error);
+    throw error;
+  }
 };
 
-const EventSelector: React.FC<EventSelectorProps> = ({ isOpen, onClose, onAddEvents }) => {
+const EventSelector: React.FC<EventSelectorProps> = ({ isOpen, onClose, onAddEvents, selectedEventIds = [] }) => {
   const t = useTranslations('EventSelector');
   const [events, setEvents] = useState<EventCard[]>([]);
   const [loading, setLoading] = useState(false);
@@ -47,11 +51,12 @@ const EventSelector: React.FC<EventSelectorProps> = ({ isOpen, onClose, onAddEve
   const loadEvents = async (pageNum: number) => {
     setLoading(true);
     try {
-      const result = await mockGetEvents(pageNum, pageSize);
+      const result = await fetchEvents(pageNum, pageSize);
       setEvents(result.events);
       setTotalPages(Math.ceil(result.total / pageSize));
     } catch (error) {
       console.error('Failed to load events:', error);
+      // 可以在这里添加用户友好的错误提示
     } finally {
       setLoading(false);
     }
@@ -94,12 +99,16 @@ const EventSelector: React.FC<EventSelectorProps> = ({ isOpen, onClose, onAddEve
     }
   };
 
-  // 关闭选择框时清空选择
+  // 当选择框打开或已选中的事件ID变化时，更新选中状态
   useEffect(() => {
-    if (!isOpen) {
-      setSelectedEvents([]);
+    if (isOpen) {
+      // 只保留当前页面中存在且在selectedEventIds中的事件ID
+      const filteredSelectedEvents = events
+        .map(event => event.id)
+        .filter(id => selectedEventIds.includes(id));
+      setSelectedEvents(filteredSelectedEvents);
     }
-  }, [isOpen]);
+  }, [isOpen, events, selectedEventIds]);
 
   // 如果选择框未打开，不渲染
   if (!isOpen) return null;

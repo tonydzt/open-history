@@ -293,35 +293,49 @@ export default function CreateTimelinePage() {
             
             {/* 已选择的事件列表 */}
             {selectedEvents.length > 0 ? (
-              <div className="space-y-4">
-                {selectedEvents.map((event) => (
-                  <div key={event.id} className="bg-gray-50 p-4 rounded-lg flex items-center justify-between">
-                    <div className="flex items-start space-x-3">
-                      <div className="flex-1">
-                        <h3 className="font-medium text-gray-900">{event.title}</h3>
-                        <div className="text-sm text-gray-500">
-                          {new Date(event.timestamp).toLocaleDateString()}
-                          {event.tags && event.tags.length > 0 && (
-                            <span className="ml-2">
-                              {event.tags.slice(0, 3).join(', ')}
-                              {event.tags.length > 3 && '+更多'}
-                            </span>
-                          )}
+              <div>
+                <div className="space-y-4">
+                  {selectedEvents.map((event) => (
+                    <div key={event.id} className="bg-gray-50 p-4 rounded-lg flex items-center justify-between">
+                      <div className="flex items-start space-x-3">
+                        <div className="flex-1">
+                          <h3 className="font-medium text-gray-900">{event.title}</h3>
+                          <div className="text-sm text-gray-500">
+                            {new Date(event.timestamp).toLocaleDateString()}
+                            {event.tags && event.tags.length > 0 && (
+                              <span className="ml-2">
+                                {event.tags.slice(0, 3).join(', ')}
+                                {event.tags.length > 3 && '+更多'}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveEvent(event.id)}
+                        className="text-gray-400 hover:text-red-500 transition-colors"
+                        aria-label={t('removeEvent')}
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveEvent(event.id)}
-                      className="text-gray-400 hover:text-red-500 transition-colors"
-                      aria-label={t('removeEvent')}
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-                ))}
+                  ))}
+                </div>
+                <div className="mt-6">
+                  <button
+                    type="button"
+                    onClick={() => setIsEventSelectorOpen(true)}
+                    className="w-full px-4 py-3 bg-primary-600 text-white rounded-md hover:bg-primary-500 transition-colors flex items-center justify-center"
+                  >
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                    {t('addMoreEvents') || t('selectEvents')}
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="text-center py-12 bg-gray-50 rounded-lg">
@@ -366,6 +380,7 @@ export default function CreateTimelinePage() {
         isOpen={isEventSelectorOpen}
         onClose={() => setIsEventSelectorOpen(false)}
         onAddEvents={handleAddEvents}
+        selectedEventIds={selectedEvents.map(event => event.id)}
       />
     </div>
   );

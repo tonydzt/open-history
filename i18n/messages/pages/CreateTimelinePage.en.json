@@ -27,6 +27,7 @@
     "removeEvent": "Remove event",
     "noEventsSelected": "No events selected",
     "selectEvents": "Select events",
+    "addMoreEvents": "Add More Events",
     "event": "Event",
     "eventTitle": "Event Title",
     "eventTitlePlaceholder": "Enter event title",

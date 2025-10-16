@@ -27,6 +27,7 @@
     "removeEvent": "移除事件",
     "noEventsSelected": "未选择事件",
     "selectEvents": "选择事件",
+    "addMoreEvents": "添加更多事件",
     "event": "事件",
     "eventTitle": "事件标题",
     "eventTitlePlaceholder": "输入事件标题",
