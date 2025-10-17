@@ -30,7 +30,8 @@ export default getRequestConfig(async ({ requestLocale }) => {
     pagesHomePage,
     pagesLoadingPage,
     pagesPrivacyPolicyPage,
-    pagesTermsPage
+    pagesTermsPage,
+    pagesTimelineDetailPage
   ] = await Promise.all([
     import(`./messages/common/footer.${locale}.json`),
     import(`./messages/common/Layout.${locale}.json`),
@@ -51,7 +52,8 @@ export default getRequestConfig(async ({ requestLocale }) => {
     import(`./messages/pages/HomePage.${locale}.json`),
     import(`./messages/pages/LoadingPage.${locale}.json`),
     import(`./messages/pages/PrivacyPolicyPage.${locale}.json`),
-    import(`./messages/pages/TermsPage.${locale}.json`)
+    import(`./messages/pages/TermsPage.${locale}.json`),
+    import(`./messages/pages/TimelineDetailPage.${locale}.json`)
   ]);
 
   // Merge all translation files
@@ -77,7 +79,8 @@ export default getRequestConfig(async ({ requestLocale }) => {
       ...pagesHomePage.default,
       ...pagesLoadingPage.default,
       ...pagesPrivacyPolicyPage.default,
-      ...pagesTermsPage.default
+      ...pagesTermsPage.default,
+      ...pagesTimelineDetailPage.default
     }
   };
 });

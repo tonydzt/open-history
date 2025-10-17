@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import TimelineComponent from '@/components/features/timeline/TimelineJS';
+import { TimelineScale } from '@/db/model/vo/Timeline';
 
 const TimelineTestPage = () => {
   const [initFailed, setInitFailed] = useState(false);
@@ -118,7 +119,8 @@ const TimelineTestPage = () => {
         group: "测试标签5"
       }
     ],
-    scale: 'human'
+    // tongbug修改：这里用as TimelineScale这种方式，来修复枚举量不对的问题
+    scale: 'human' as TimelineScale
   };
 
   // 重试初始化

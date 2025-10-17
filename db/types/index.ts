@@ -49,14 +49,4 @@ export interface CreatePerspectiveData {
   content: string;
 }
 
-export interface TimelineData {
-  id: string;
-  title: string;
-  description: string;
-  events: Event[];
-  createdAt: string;
-  updatedAt: string;
-  authorId: string;
-};
-
 

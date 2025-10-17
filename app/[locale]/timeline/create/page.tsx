@@ -10,12 +10,22 @@ import EventSelector from '@/components/features/events/EventSelector';
 import TimelineComponent from '@/components/features/timeline/TimelineJS';
 import ImageUploader from '@/components/common/ImageUploader';
 
-// 模拟创建时间轴的API调用
-const mockCreateTimeline = async (timelineData: Timeline): Promise<{ id: string }> => {
-  // 模拟网络延迟
-  await new Promise(resolve => setTimeout(resolve, 800));
-  // 模拟返回创建的时间轴ID
-  return { id: `timeline_${Date.now()}` };
+// 创建时间轴的API调用
+const createTimeline = async (timelineData: Timeline): Promise<{ id: string }> => {
+  const response = await fetch('/api/component/timeline', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(timelineData),
+  });
+  
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || 'Failed to create timeline');
+  }
+  
+  return response.json();
 };
 
 export default function CreateTimelinePage() {
@@ -199,8 +209,8 @@ export default function CreateTimelinePage() {
     setError(null);
     
     try {
-      // 调用模拟API
-      const result = await mockCreateTimeline(formData);
+      // 调用实际API
+      const result = await createTimeline(formData);
       
       // 成功后跳转到时间轴详情页
       router.push(`/timeline/${result.id}`);
