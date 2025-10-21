@@ -13,6 +13,7 @@
     "visibility_private": "私有",
     "loading": "正在加载时间轴详情...",
     "loadingMessage": "请稍候，我们正在获取时间轴数据。",
+    "edit": "编辑",
     "error": {
       "title": "发生错误",
       "message": "加载时间轴详情时遇到错误，请稍后再试。",

@@ -1,5 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 import TimelineJS from '@/components/features/timeline/TimelineJS';
 import { getTimelineById, formatTimelineData } from '@/db/access/timeline';
 import { getTimelineEvents, extractEventIds, getEventsByIds } from '@/db/access/timelineEvent';
@@ -21,6 +23,10 @@ export default async function TimelineDetailPage({
   const t = await getTranslations({ locale, namespace: 'TimelineDetailPage' });
 
   try {
+    // 获取当前用户会话信息
+    const session = await getServerSession(authOptions);
+    const user = session?.user;
+    
     // 获取时间轴基本信息
     const timeline = await getTimelineById(id);
     
@@ -49,7 +55,18 @@ export default async function TimelineDetailPage({
         <div className="max-w-4xl mx-auto">
           {/* 时间轴标题和描述 */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2">{timeline.title}</h1>
+            <div className="flex justify-between items-center mb-2">
+              <h1 className="text-3xl font-bold">{timeline.title}</h1>
+              {/* 编辑按钮 - 只有创建人才能看到 */}
+              {user && timeline.authorId === user.id && (
+                <a 
+                  href={`/timeline/${id}/edit`} 
+                  className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-500 transition-colors"
+                >
+                  {t('edit')}
+                </a>
+              )}
+            </div>
             <p className="text-gray-600 mb-4">{timeline.description}</p>
           </div>
 
