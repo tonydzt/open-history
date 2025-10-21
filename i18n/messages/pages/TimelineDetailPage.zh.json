@@ -1,22 +1,24 @@
 {
-  "createdBy": "创建者",
-  "createdAt": "创建时间",
-  "unknown": "未知",
-  "timelineInfo": "时间轴信息",
-  "scale": "时间尺度",
-  "scale_human": "人类时间",
-  "scale_cosmological": "宇宙时间",
-  "eventCount": "事件数量",
-  "visibility": "可见性",
-  "visibility_public": "公开",
-  "visibility_private": "私有",
-  "loading": "正在加载时间轴详情...",
-  "loadingMessage": "请稍候，我们正在获取时间轴数据。",
-  "error": {
-    "title": "发生错误",
-    "message": "加载时间轴详情时遇到错误，请稍后再试。",
-    "tryAgain": "重试",
-    "goBack": "返回",
-    "goHome": "返回首页"
+  "TimelineDetailPage": {
+    "createdBy": "创建者",
+    "createdAt": "创建时间",
+    "unknown": "未知",
+    "timelineInfo": "时间轴信息",
+    "scale": "时间尺度",
+    "scale_human": "人类时间",
+    "scale_cosmological": "宇宙时间",
+    "eventCount": "事件数量",
+    "visibility": "可见性",
+    "visibility_public": "公开",
+    "visibility_private": "私有",
+    "loading": "正在加载时间轴详情...",
+    "loadingMessage": "请稍候，我们正在获取时间轴数据。",
+    "error": {
+      "title": "发生错误",
+      "message": "加载时间轴详情时遇到错误，请稍后再试。",
+      "tryAgain": "重试",
+      "goBack": "返回",
+      "goHome": "返回首页"
+    }
   }
 }

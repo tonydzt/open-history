@@ -1,22 +1,24 @@
 {
-  "createdBy": "Created by",
-  "createdAt": "Created at",
-  "unknown": "Unknown",
-  "timelineInfo": "Timeline Information",
-  "scale": "Scale",
-  "scale_human": "Human",
-  "scale_cosmological": "Cosmological",
-  "eventCount": "Event Count",
-  "visibility": "Visibility",
-  "visibility_public": "Public",
-  "visibility_private": "Private",
-  "loading": "Loading timeline details...",
-  "loadingMessage": "Please wait while we fetch the timeline data.",
-  "error": {
-    "title": "Something went wrong",
-    "message": "We encountered an error while loading the timeline details. Please try again later.",
-    "tryAgain": "Try Again",
-    "goBack": "Go Back",
-    "goHome": "Go Home"
+  "TimelineDetailPage": {
+    "createdBy": "Created by",
+    "createdAt": "Created at",
+    "unknown": "Unknown",
+    "timelineInfo": "Timeline Information",
+    "scale": "Scale",
+    "scale_human": "Human",
+    "scale_cosmological": "Cosmological",
+    "eventCount": "Event Count",
+    "visibility": "Visibility",
+    "visibility_public": "Public",
+    "visibility_private": "Private",
+    "loading": "Loading timeline details...",
+    "loadingMessage": "Please wait while we fetch the timeline data.",
+    "error": {
+      "title": "Something went wrong",
+      "message": "We encountered an error while loading the timeline details. Please try again later.",
+      "tryAgain": "Try Again",
+      "goBack": "Go Back",
+      "goHome": "Go Home"
+    }
   }
 }
