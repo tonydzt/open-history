@@ -12,7 +12,7 @@ import ImageUploader from '@/components/common/ImageUploader';
 
 // 更新时间轴的API调用
 const updateTimeline = async (id: string, timelineData: Timeline): Promise<{ success: boolean }> => {
-  const response = await fetch(`/api/component/timeline/${id}`, {
+  const response = await fetch(`/api/timeline/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ const updateTimeline = async (id: string, timelineData: Timeline): Promise<{ suc
 
 // 获取时间轴详情的API调用
 const getTimelineDetail = async (id: string): Promise<any> => {
-  const response = await fetch(`/api/component/timeline/${id}`);
+  const response = await fetch(`/api/timeline/${id}`);
   
   if (!response.ok) {
     throw new Error('Failed to fetch timeline detail');

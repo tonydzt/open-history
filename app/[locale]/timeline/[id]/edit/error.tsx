@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 
 export default function EditTimelineError({ error, reset }: { error: Error & { digest?: string }, reset: () => void }) {
-  const t = useTranslations();
+  const t = useTranslations('EditTimelinePage');
   const router = useRouter();
   
   useEffect(() => {

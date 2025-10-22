@@ -12,7 +12,7 @@ import ImageUploader from '@/components/common/ImageUploader';
 
 // 创建时间轴的API调用
 const createTimeline = async (timelineData: Timeline): Promise<{ id: string }> => {
-  const response = await fetch('/api/component/timeline', {
+  const response = await fetch('/api/timeline', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -42,8 +42,6 @@ export default function CreateTimelinePage() {
   const [formData, setFormData] = useState<Timeline>({
     events: []
   });
-  
-
   
   // 已选择的事件数据
   const [selectedEvents, setSelectedEvents] = useState<EventCard[]>([]);
