@@ -5,12 +5,14 @@ import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from './DropdownMenu';
 
 export default function Navbar() {
   const { data: session, status } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
+  const [isCreateMenuOpen, setIsCreateMenuOpen] = useState(false);
   const userMenuTimerRef = useRef<NodeJS.Timeout | null>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const languageMenuTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -137,9 +139,42 @@ export default function Navbar() {
             </div>
             
             {session && (
-              <Link href="/create" className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors shadow-sm hover:shadow">
-                {t('createEvent')}
-              </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="relative z-10">
+                  <button 
+                    onClick={() => setIsCreateMenuOpen(!isCreateMenuOpen)}
+                    className="w-8 h-8 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors shadow-sm hover:shadow flex items-center justify-center"
+                    aria-label="创建菜单"
+                    aria-expanded={isCreateMenuOpen}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent 
+                  open={isCreateMenuOpen} 
+                  onOpenChange={setIsCreateMenuOpen}
+                  align="right"
+                >
+                  <DropdownMenuItem onClick={() => {
+                    setIsCreateMenuOpen(false);
+                    router.push('/create');
+                  }}>
+                    <div className="flex items-center gap-2 w-full">
+                      <span>{t('createEvent')}</span>
+                    </div>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => {
+                    setIsCreateMenuOpen(false);
+                    router.push('/timeline/create');
+                  }}>
+                    <div className="flex items-center gap-2 w-full">
+                      <span>{t('createTimeline') || '创建时间轴'}</span>
+                    </div>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
             {status === 'loading' ? (
               <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>

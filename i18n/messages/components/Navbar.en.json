@@ -1,6 +1,7 @@
 {
   "Navbar": {
     "createEvent": "Create Event",
+    "createTimeline": "Create Timeline",
     "userMenu": "User Menu",
     "userAvatar": "User Avatar",
     "signOut": "Sign Out",
