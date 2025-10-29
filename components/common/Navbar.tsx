@@ -207,6 +207,13 @@ export default function Navbar() {
                     onMouseEnter={handleUserMenuEnter}
                     onMouseLeave={handleUserMenuLeave}
                   >
+                    <Link 
+                      href={`/${locale}/home`} 
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
+                      {t('homePage')}
+                    </Link>
                     <button
                       onClick={() => {
                         signOut();
@@ -266,28 +273,36 @@ export default function Navbar() {
                 </Link>
               )}
               {session ? (
-                <div className="py-3 px-4 bg-gray-50 rounded-lg flex items-center justify-between">
-                  <div className="flex items-center">
-                    {session.user?.image ? (
-                      <img
-                        src={session.user.image.includes('googleusercontent.com') && session.user.image.includes('=s96-c') 
-                        ? session.user.image.replace('=s96-c', '') 
-                        : session.user.image}
-                        alt={session.user.name || '用户头像'}
-                        className="w-8 h-8 rounded-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-8 h-8 bg-gray-200 flex items-center justify-center text-gray-500 rounded-full">
-                        {session.user?.name?.charAt(0) || '?'}
-                      </div>
-                    )}
-                  </div>
-                  <button
-                    onClick={() => signOut()}
-                    className="py-2 px-4 text-sm text-gray-600 hover:bg-gray-200 rounded-full transition-all duration-200"
+                <div className="space-y-2">
+                  <Link 
+                    href={`/${locale}/home`} 
+                    className="block py-3 px-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all duration-200"
                   >
-                    退出
-                  </button>
+                    {t('homePage')}
+                  </Link>
+                  <div className="py-3 px-4 bg-gray-50 rounded-lg flex items-center justify-between">
+                    <div className="flex items-center">
+                      {session.user?.image ? (
+                        <img
+                          src={session.user.image.includes('googleusercontent.com') && session.user.image.includes('=s96-c') 
+                          ? session.user.image.replace('=s96-c', '') 
+                          : session.user.image}
+                          alt={session.user.name || '用户头像'}
+                          className="w-8 h-8 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 bg-gray-200 flex items-center justify-center text-gray-500 rounded-full">
+                          {session.user?.name?.charAt(0) || '?'}
+                        </div>
+                      )}
+                    </div>
+                    <button
+                      onClick={() => signOut()}
+                      className="py-2 px-4 text-sm text-gray-600 hover:bg-gray-200 rounded-full transition-all duration-200"
+                    >
+                      {t('signOut')}
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <button

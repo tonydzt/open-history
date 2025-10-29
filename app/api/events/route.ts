@@ -2,37 +2,8 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import db from '@/lib/db';
-import { CreateEventData } from '@/db/types';
+import { CreateEventData, transformEvent } from '@/db/model/vo/Event';
 import { v4 as uuidv4 } from 'uuid';
-
-// 类型转换函数：将数据库模型转换为前端使用的类型
-const transformEvent = (dbEvent: any) => ({
-  id: dbEvent.id,
-  title: dbEvent.title,
-  description: dbEvent.description,
-  timestamp: dbEvent.date.toISOString(),
-  sourceType: 'news', // 默认类型
-  images: [dbEvent.imageUrl],
-  tags: dbEvent.tags || [],
-  authorId: dbEvent.userId,
-  author: {
-    id: dbEvent.user.id,
-    name: dbEvent.user.name || '未知用户',
-    email: dbEvent.user.email || '',
-    image: dbEvent.user.image || ''
-  },
-  // 从数据库提取地理位置信息（如果存在）
-  ...(dbEvent.geom && {
-    geom: {
-      // 从PostgreSQL的GEOGRAPHY格式中提取经纬度
-      // 格式通常为"SRID=4326;POINT(lng lat)"
-      lat: parseFloat(dbEvent.geom.match(/POINT\(([^\s]+)\s+([^\)]+)\)/)?.[2] || '0'),
-      lng: parseFloat(dbEvent.geom.match(/POINT\(([^\s]+)\s+([^\)]+)\)/)?.[1] || '0')
-    }
-  }),
-  createdAt: dbEvent.createdAt.toISOString(),
-  updatedAt: dbEvent.updatedAt.toISOString()
-});
 
 export async function GET() {
   try {

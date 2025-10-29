@@ -17,21 +17,23 @@ model User {
   updatedAt     DateTime      @updatedAt
   events        Event[]
   perspectives  Perspective[]
+  collection    collection[]
 }
 
 model Event {
-  id           String                    @id @default(cuid())
-  title        String
-  description  String
-  imageUrl     String
-  date         DateTime
-  tags         String[]
-  createdAt    DateTime                  @default(now())
-  updatedAt    DateTime                  @updatedAt
-  userId       String
-  geom         Unsupported("geography")?
-  user         User                      @relation(fields: [userId], references: [id])
-  perspectives Perspective[]
+  id               String                    @id @default(cuid())
+  title            String
+  description      String
+  imageUrl         String
+  date             DateTime
+  tags             String[]
+  createdAt        DateTime                  @default(now())
+  updatedAt        DateTime                  @updatedAt
+  userId           String
+  geom             Unsupported("geography")?
+  user             User                      @relation(fields: [userId], references: [id])
+  perspectives     Perspective[]
+  collection_event collection_event[]
 }
 
 model Perspective {
@@ -82,4 +84,25 @@ model spatial_ref_sys {
   auth_srid Int?
   srtext    String? @db.VarChar(2048)
   proj4text String? @db.VarChar(2048)
+}
+
+model collection {
+  id               String             @id
+  name             String             @db.VarChar(255)
+  description      String?
+  userId           String
+  createdAt        DateTime?          @default(now()) @db.Timestamp(6)
+  updatedAt        DateTime?          @default(now()) @db.Timestamp(6)
+  User             User               @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "collection_userid_fkey")
+  collection_event collection_event[]
+}
+
+model collection_event {
+  id           String     @id(map: "collectionevent_pkey")
+  collectionId String
+  eventId      String
+  createdAt    DateTime?  @default(now()) @db.Timestamp(6)
+  updatedAt    DateTime?  @default(now()) @db.Timestamp(6)
+  collection   collection @relation(fields: [collectionId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "collectionevent_collectionid_fkey")
+  Event        Event      @relation(fields: [eventId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "collectionevent_eventid_fkey")
 }

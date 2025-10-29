@@ -1,4 +1,5 @@
-import { Event, Perspective, CreateEventData, CreatePerspectiveData } from '@/db/types';
+import { Event, CreateEventData } from '@/db/model/vo/Event';
+import { Perspective, CreatePerspectiveData } from '@/db/model/vo/Perspective';
 
 // 模拟网络延迟 - 保留以提供更好的用户体验
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));

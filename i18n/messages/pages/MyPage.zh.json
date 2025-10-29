@@ -1,0 +1,8 @@
+{
+  "MyPage": {
+    "pageTitle": "我的主页",
+    "tabEvents": "我的事件",
+    "tabTimelines": "我的时间轴",
+    "tabCollections": "我的收藏夹"
+  }
+}

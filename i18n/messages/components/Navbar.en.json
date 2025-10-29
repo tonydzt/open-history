@@ -1,5 +1,6 @@
 {
   "Navbar": {
+    "homePage": "My Home Page",
     "createEvent": "Create Event",
     "createTimeline": "Create Timeline",
     "userMenu": "User Menu",

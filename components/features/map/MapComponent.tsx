@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { GeoLocation } from '@/db/types';
+import { GeoLocation } from '@/db/model/vo/Event';
 // Leaflet CSS 需要单独导入
 import 'leaflet/dist/leaflet.css';
 

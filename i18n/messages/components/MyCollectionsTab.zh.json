@@ -1,0 +1,12 @@
+{
+  "MyCollectionsTab": {
+    "myCollectionsTitle": "我的收藏夹",
+    "createNewCollection": "创建新收藏夹",
+    "collectionList": "收藏夹列表",
+    "events": "事件",
+    "noEventsInCollection": "收藏夹中没有事件",
+    "noCollectionsCreated": "还没有创建任何收藏夹",
+    "noCollectionsDescription": "创建您的第一个收藏夹，收集您感兴趣的事件",
+    "createFirstCollection": "创建第一个收藏夹"
+  }
+}

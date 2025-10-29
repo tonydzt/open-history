@@ -1,0 +1,14 @@
+{
+  "MyEventsTab": {
+    "myEventsTitle": "My Events",
+    "createNewEvent": "Create New Event",
+    "noEventsCreated": "No events created yet",
+    "noEventsDescription": "Create your first event to start recording important moments",
+    "createFirstEvent": "Create First Event",
+    "loadingEvents": "Loading events...",
+    "errorTitle": "Something went wrong",
+    "retryButton": "Retry",
+    "loadingMore": "Loading more..."
+  }
+}
+

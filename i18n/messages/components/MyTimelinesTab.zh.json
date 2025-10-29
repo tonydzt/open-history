@@ -1,0 +1,15 @@
+{
+  "MyTimelinesTab": {
+    "myTimelinesTitle": "我的时间轴",
+    "createNewTimeline": "创建新时间轴",
+    "updatedAt": "更新于",
+    "eventCount": "事件数",
+    "visibility": {
+      "public": "公开",
+      "private": "私密"
+    },
+    "noTimelinesCreated": "还没有创建任何时间轴",
+    "noTimelinesDescription": "创建您的第一个时间轴，组织您的事件",
+    "createFirstTimeline": "创建第一个时间轴"
+  }
+}

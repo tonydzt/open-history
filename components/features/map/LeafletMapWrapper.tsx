@@ -1,6 +1,6 @@
 'use client';
 
-import { GeoLocation } from '@/db/types';
+import { GeoLocation } from '@/db/model/vo/Event';
 import MapComponent from './MapComponent';
 
 interface LeafletMapProps {

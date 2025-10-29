@@ -20,6 +20,9 @@ export default getRequestConfig(async ({ requestLocale }) => {
     componentsEventImageUploader,
     componentsEventSelector,
     componentsTimelineJS,
+    componentsMyEventsTab,
+    componentsMyTimelinesTab,
+    componentsMyCollectionsTab,
     pagesEditEventPage,
     pagesEditTimelinePage,
     pagesSignInPage,
@@ -32,7 +35,8 @@ export default getRequestConfig(async ({ requestLocale }) => {
     pagesLoadingPage,
     pagesPrivacyPolicyPage,
     pagesTermsPage,
-    pagesTimelineDetailPage
+    pagesTimelineDetailPage,
+    pagesMyPagePage
   ] = await Promise.all([
     import(`./messages/common/footer.${locale}.json`),
     import(`./messages/common/Layout.${locale}.json`),
@@ -43,6 +47,9 @@ export default getRequestConfig(async ({ requestLocale }) => {
     import(`./messages/components/EventImageUploader.${locale}.json`),
     import(`./messages/components/EventSelector.${locale}.json`),
     import(`./messages/components/TimelineJS.${locale}.json`),
+    import(`./messages/components/MyEventsTab.${locale}.json`),
+    import(`./messages/components/MyTimelinesTab.${locale}.json`),
+    import(`./messages/components/MyCollectionsTab.${locale}.json`),
     import(`./messages/pages/EditEventPage.${locale}.json`),
     import(`./messages/pages/EditTimelinePage.${locale}.json`),
     import(`./messages/pages/SignInPage.${locale}.json`),
@@ -55,7 +62,8 @@ export default getRequestConfig(async ({ requestLocale }) => {
     import(`./messages/pages/LoadingPage.${locale}.json`),
     import(`./messages/pages/PrivacyPolicyPage.${locale}.json`),
     import(`./messages/pages/TermsPage.${locale}.json`),
-    import(`./messages/pages/TimelineDetailPage.${locale}.json`)
+    import(`./messages/pages/TimelineDetailPage.${locale}.json`),
+    import(`./messages/pages/MyPage.${locale}.json`)
   ]);
 
   // Merge all translation files
@@ -71,7 +79,10 @@ export default getRequestConfig(async ({ requestLocale }) => {
       ...componentsEventImageUploader.default,
       ...componentsEventSelector.default,
       ...componentsTimelineJS.default,
-      ...pagesEditEventPage.default,
+        ...componentsMyEventsTab.default,
+        ...componentsMyTimelinesTab.default,
+        ...componentsMyCollectionsTab.default,
+        ...pagesEditEventPage.default,
     ...pagesEditTimelinePage.default,
     ...pagesSignInPage.default,
       ...pagesAddPerspectivePage.default,
@@ -83,7 +94,8 @@ export default getRequestConfig(async ({ requestLocale }) => {
       ...pagesLoadingPage.default,
       ...pagesPrivacyPolicyPage.default,
       ...pagesTermsPage.default,
-      ...pagesTimelineDetailPage.default
+      ...pagesTimelineDetailPage.default,
+      ...pagesMyPagePage.default
     }
   };
 });

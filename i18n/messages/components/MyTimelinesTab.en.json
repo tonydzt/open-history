@@ -1,0 +1,15 @@
+{
+  "MyTimelinesTab": {
+    "myTimelinesTitle": "My Timelines",
+    "createNewTimeline": "Create New Timeline",
+    "updatedAt": "Updated at",
+    "eventCount": "Event count",
+    "visibility": {
+      "public": "Public",
+      "private": "Private"
+    },
+    "noTimelinesCreated": "No timelines created yet",
+    "noTimelinesDescription": "Create your first timeline to organize your events",
+    "createFirstTimeline": "Create First Timeline"
+  }
+}

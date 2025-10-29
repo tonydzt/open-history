@@ -1,4 +1,4 @@
-import { Perspective } from '@/db/types';
+import { Perspective } from '@/db/model/vo/Perspective';
 import { useTranslations } from 'next-intl';
 
 interface PerspectiveListProps {

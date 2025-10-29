@@ -1,0 +1,12 @@
+{
+  "MyCollectionsTab": {
+    "myCollectionsTitle": "My Collections",
+    "createNewCollection": "Create New Collection",
+    "collectionList": "Collection List",
+    "events": "events",
+    "noEventsInCollection": "No events in this collection",
+    "noCollectionsCreated": "No collections created yet",
+    "noCollectionsDescription": "Create your first collection to gather events of interest",
+    "createFirstCollection": "Create First Collection"
+  }
+}
