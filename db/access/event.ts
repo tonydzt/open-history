@@ -1,4 +1,4 @@
-import prisma from '@/lib/db';
+import db from '@/lib/db';
 import { Event } from '@prisma/client';
 
 /**
@@ -30,7 +30,7 @@ export const getEventsByUserId = async (
   }
 
   // 执行查询
-  const events = await prisma.event.findMany(query);
+  const events = await db.event.findMany(query);
 
   // 判断是否还有更多数据
   const hasMore = events.length > pageSize;

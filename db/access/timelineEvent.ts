@@ -1,4 +1,4 @@
-import prisma from '@/lib/db';
+import db from '@/lib/db';
 
 /**
  * 获取时间轴事件关联关系
@@ -6,7 +6,7 @@ import prisma from '@/lib/db';
  * @returns 时间轴事件关联列表
  */
 export const getTimelineEvents = async (timelineId: string) => {
-  return await prisma.timelineEvent.findMany({
+  return await db.timelineEvent.findMany({
     where: { timelineId },
     select: { eventId: true }
   });
@@ -18,7 +18,7 @@ export const getTimelineEvents = async (timelineId: string) => {
  * @returns 事件列表
  */
 export const getEventsByIds = async (eventIds: string[]) => {
-  return await prisma.event.findMany({
+  return await db.event.findMany({
     where: { id: { in: eventIds } }
   });
 };
