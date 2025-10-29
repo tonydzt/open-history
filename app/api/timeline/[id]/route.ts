@@ -112,7 +112,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   }
 }
 
-export async function PUT(request: NextRequest, context: { params: { id: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     // 获取用户会话
     const session = await getServerSession(authOptions);
@@ -121,7 +121,8 @@ export async function PUT(request: NextRequest, context: { params: { id: string 
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
-    const timelineId = context.params.id;
+    const resolvedParams = await params;
+    const timelineId = resolvedParams.id;
     
     if (!timelineId) {
       return NextResponse.json({ error: 'Timeline ID is required' }, { status: 400 });
