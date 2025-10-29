@@ -4,9 +4,10 @@ import { authOptions } from '@/lib/auth';
 import db from '@/lib/db';
 import { Timeline, Slide, Date as TimelineDate } from '@/db/model/vo/Timeline';
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const timelineId = params.id;
+    const resolvedParams = await params;
+    const timelineId = resolvedParams.id;
     
     if (!timelineId) {
       return NextResponse.json({ error: 'Timeline ID is required' }, { status: 400 });
