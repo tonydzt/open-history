@@ -58,7 +58,7 @@ export default async function TimelineDetailPage({
             <div className="flex justify-between items-center mb-2">
               <h1 className="text-3xl font-bold">{timeline.title}</h1>
               {/* 编辑按钮 - 只有创建人才能看到 */}
-              {user && timeline.authorId === user.id && (
+              {user && timeline.userId === user.id && (
                 <a 
                   href={`/timeline/${id}/edit`} 
                   className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-500 transition-colors"

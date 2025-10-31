@@ -100,7 +100,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     return NextResponse.json({
       ...timelineData,
       metadata: {
-        authorId: timeline.authorId
+        userId: timeline.userId
       }
     });
   } catch (error) {
@@ -147,7 +147,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: 'Timeline not found' }, { status: 404 });
     }
     
-    if (existingTimeline.authorId !== session.user.id) {
+    if (existingTimeline.userId !== session.user.id) {
       return NextResponse.json({ error: 'Forbidden - You are not the owner of this timeline' }, { status: 403 });
     }
     

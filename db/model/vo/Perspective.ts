@@ -3,7 +3,7 @@ import { User } from './User';
 export interface Perspective {
   id: string;
   content: string;
-  authorId: string;
+  userId: string;
   author: User;
   eventId: string;
   createdAt: string;
@@ -17,7 +17,7 @@ export interface CreatePerspectiveData {
 export const transformPerspective = (dbPerspective: any) => ({
   id: dbPerspective.id,
   content: dbPerspective.content,
-  authorId: dbPerspective.userId,
+  userId: dbPerspective.userId,
   author: {
     id: dbPerspective.user.id,
     name: dbPerspective.user.name || '未知用户',

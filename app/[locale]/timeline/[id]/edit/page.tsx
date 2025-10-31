@@ -75,7 +75,7 @@ export default function EditTimelinePage() {
         const timelineData = await getTimelineDetail(timelineId);
         
         // 检查是否为时间轴所有者
-        if (session?.user?.id === timelineData.authorId) {
+        if (session?.user?.id === timelineData.userId) {
           setIsOwner(true);
         }
         

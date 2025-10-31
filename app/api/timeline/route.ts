@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
           description: descriptionValue || undefined,
           backgroundImageUrl: timelineData.background?.url || undefined,
           backgroundImageAlt: timelineData.background?.alt || undefined,
-          authorId:  session.user.id
+          userId:  session.user.id
         },
       });
       

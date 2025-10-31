@@ -56,12 +56,12 @@ model Timeline {
   backgroundColor    String?
   backgroundImageUrl String?
   backgroundImageAlt String?
-  authorId           String
+  userId             String
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @default(now()) @updatedAt
   timelineEvents     TimelineEvent[]
 
-  @@index([authorId])
+  @@index([userId])
 }
 
 model TimelineEvent {
@@ -93,6 +93,7 @@ model collection {
   userId           String
   createdAt        DateTime?          @default(now()) @db.Timestamp(6)
   updatedAt        DateTime?          @default(now()) @db.Timestamp(6)
+  num              Int?               @default(0)
   User             User               @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "collection_userid_fkey")
   collection_event collection_event[]
 }

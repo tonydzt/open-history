@@ -71,7 +71,7 @@ const transformEvent = (dbEvent: any): Event => {
     sourceType: 'news', // 默认类型
     images: [dbEvent.imageUrl],
     tags: dbEvent.tags || [],
-    authorId: dbEvent.userId,
+    userId: dbEvent.userId,
     author: {
       id: dbEvent.user.id,
       name: dbEvent.user.name || '未知用户',
@@ -87,7 +87,7 @@ const transformEvent = (dbEvent: any): Event => {
 const transformPerspective = (dbPerspective: any): Perspective => ({
   id: dbPerspective.id,
   content: dbPerspective.content,
-  authorId: dbPerspective.userId,
+  userId: dbPerspective.userId,
   author: {
     id: dbPerspective.user.id,
     name: dbPerspective.user.name || '未知用户',
@@ -200,7 +200,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
           </div>
           <EventActionsMenu 
             eventId={event.id} 
-            isAuthor={session?.user?.id === event.authorId} 
+            isAuthor={session?.user?.id === event.userId} 
             shareButtonText={t('shareButton')}
             addPerspectiveButtonText={t('addPerspectiveButton')}
             editButtonText={t('editButton')}

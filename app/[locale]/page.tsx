@@ -15,7 +15,7 @@ const transformEvent = (dbEvent: any): Event => ({
   sourceType: 'news', // 默认类型
   images: [dbEvent.imageUrl],
   tags: dbEvent.tags || [],
-  authorId: dbEvent.userId,
+  userId: dbEvent.userId,
   author: {
     id: dbEvent.user.id,
     name: dbEvent.user.name || '未知用户',

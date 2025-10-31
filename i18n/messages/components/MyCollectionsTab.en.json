@@ -7,6 +7,13 @@
     "noEventsInCollection": "No events in this collection",
     "noCollectionsCreated": "No collections created yet",
     "noCollectionsDescription": "Create your first collection to gather events of interest",
-    "createFirstCollection": "Create First Collection"
+    "createFirstCollection": "Create First Collection",
+    "createCollection": "Create Collection",
+    "collectionName": "Collection Name",
+    "enterCollectionName": "Enter collection name",
+    "collectionDescription": "Collection Description",
+    "enterCollectionDescription": "Enter collection description",
+    "cancel": "Cancel",
+    "create": "Create"
   }
 }

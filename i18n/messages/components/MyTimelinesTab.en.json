@@ -3,13 +3,17 @@
     "myTimelinesTitle": "My Timelines",
     "createNewTimeline": "Create New Timeline",
     "updatedAt": "Updated at",
-    "eventCount": "Event count",
     "visibility": {
       "public": "Public",
       "private": "Private"
     },
     "noTimelinesCreated": "No timelines created yet",
     "noTimelinesDescription": "Create your first timeline to organize your events",
-    "createFirstTimeline": "Create First Timeline"
+    "createFirstTimeline": "Create First Timeline",
+    "loading": "Loading",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "loadingMore": "Loading more...",
+    "loadMore": "Load more"
   }
 }

@@ -7,6 +7,13 @@
     "noEventsInCollection": "收藏夹中没有事件",
     "noCollectionsCreated": "还没有创建任何收藏夹",
     "noCollectionsDescription": "创建您的第一个收藏夹，收集您感兴趣的事件",
-    "createFirstCollection": "创建第一个收藏夹"
+    "createFirstCollection": "创建第一个收藏夹",
+    "createCollection": "创建收藏夹",
+    "collectionName": "收藏夹名称",
+    "enterCollectionName": "请输入收藏夹名称",
+    "collectionDescription": "收藏夹描述",
+    "enterCollectionDescription": "请输入收藏夹描述",
+    "cancel": "取消",
+    "create": "创建"
   }
 }

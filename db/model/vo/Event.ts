@@ -8,7 +8,7 @@ export interface Event {
   sourceType: 'news' | 'social' | 'personal' | 'other';
   images: string[];
   tags: string[];
-  authorId: string;
+  userId: string;
   author: User;
   geom?: GeoLocation;
   createdAt: string;
@@ -39,7 +39,7 @@ export const transformEvent = (dbEvent: any) => ({
   sourceType: 'news', // 默认类型
   images: [dbEvent.imageUrl],
   tags: dbEvent.tags || [],
-  authorId: dbEvent.userId,
+  userId: dbEvent.userId,
   author: {
     id: dbEvent.user.id,
     name: dbEvent.user.name || '未知用户',
