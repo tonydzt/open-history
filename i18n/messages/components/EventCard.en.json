@@ -5,6 +5,9 @@
       "social": "Social Media",
       "personal": "Personal Experience",
       "other": "Other"
-    }
+    },
+    "collect": "Collect",
+    "collected": "Collected",
+    "pleaseLogin": "Please login to collect events"
   }
 }

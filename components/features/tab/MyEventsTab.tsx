@@ -112,7 +112,7 @@ const MyEventsTab: React.FC = () => {
   if (loading || status === 'loading') {
     return (
       <div className="p-8 text-center">
-        <LoadingIndicator loadingText={t('loadingEvents')} />
+        <LoadingIndicator />
       </div>
     );
   }
@@ -153,10 +153,10 @@ const MyEventsTab: React.FC = () => {
             <EventCard key={event.id} event={event} />
           ))}
           {loadingMore && (
-            <div className="col-span-full py-4 text-center">
-              <LoadingIndicator loadingText={t('loadingMore')} className="text-sm" />
-            </div>
-          )}
+        <div className="col-span-full py-4 text-center">
+          <LoadingIndicator className="text-sm" />
+        </div>
+      )}
           <div ref={loadingRef} style={{ height: '20px' }} />
         </div>
       ) : (

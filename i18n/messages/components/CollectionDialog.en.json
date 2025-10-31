@@ -1,0 +1,12 @@
+{
+  "CollectionDialog": {
+    "title": "Add to Collection",
+    "selectCollection": "Select Collection",
+    "confirm": "Add",
+    "cancel": "Cancel",
+    "adding": "Adding...",
+    "loadFailed": "Failed to load collections. Please try again.",
+    "addFailed": "Failed to add event to collection.",
+    "noCollections": "You don't have any collections yet."
+  }
+}

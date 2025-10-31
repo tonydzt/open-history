@@ -10,10 +10,8 @@
     "noTimelinesCreated": "No timelines created yet",
     "noTimelinesDescription": "Create your first timeline to organize your events",
     "createFirstTimeline": "Create First Timeline",
-    "loading": "Loading",
     "error": "Something went wrong",
     "retry": "Retry",
-    "loadingMore": "Loading more...",
     "loadMore": "Load more"
   }
 }

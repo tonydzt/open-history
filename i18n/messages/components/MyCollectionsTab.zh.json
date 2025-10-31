@@ -14,6 +14,11 @@
     "collectionDescription": "收藏夹描述",
     "enterCollectionDescription": "请输入收藏夹描述",
     "cancel": "取消",
-    "create": "创建"
+    "create": "创建",
+    "editCollection": "编辑收藏夹",
+    "save": "保存",
+    "edit": "编辑",
+    "delete": "删除",
+    "confirmDeleteCollection": "确定要删除这个收藏夹吗？"
   }
 }

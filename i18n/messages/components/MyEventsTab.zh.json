@@ -5,9 +5,7 @@
     "noEventsCreated": "还没有创建任何事件",
     "noEventsDescription": "创建您的第一个事件，开始记录重要时刻",
     "createFirstEvent": "创建第一个事件",
-    "loadingEvents": "加载事件中...",
     "errorTitle": "出现错误",
-    "retryButton": "重试",
-    "loadingMore": "加载更多..."
+    "retryButton": "重试"
   }
 }

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import LoadingIndicator from '@/components/common/LoadingIndicator';
 
 // API响应中单个时间轴项的类型定义
 interface TimelineResponseItem {
@@ -110,7 +111,7 @@ const MyTimelinesTab: React.FC = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center p-10">
-        <div className="text-gray-600">{t('loading')}...</div>
+        <LoadingIndicator />
       </div>
     );
   }
@@ -190,7 +191,7 @@ const MyTimelinesTab: React.FC = () => {
                 onClick={handleLoadMore}
                 disabled={loadingMore}
               >
-                {loadingMore ? t('loadingMore') : t('loadMore')}
+                {loadingMore ? <LoadingIndicator buttonStyle={true} /> : t('loadMore')}
               </button>
             </div>
           )}

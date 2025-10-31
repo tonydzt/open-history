@@ -1,0 +1,12 @@
+{
+  "CollectionDialog": {
+    "title": "添加到收藏夹",
+    "selectCollection": "选择收藏夹",
+    "confirm": "添加",
+    "cancel": "取消",
+    "adding": "添加中...",
+    "loadFailed": "加载收藏夹失败，请重试。",
+    "addFailed": "添加事件到收藏夹失败。",
+    "noCollections": "您还没有任何收藏夹。"
+  }
+}

@@ -10,10 +10,8 @@
     "noTimelinesCreated": "还没有创建任何时间轴",
     "noTimelinesDescription": "创建您的第一个时间轴，组织您的事件",
     "createFirstTimeline": "创建第一个时间轴",
-    "loading": "加载中",
     "error": "出现错误",
     "retry": "重试",
-    "loadingMore": "加载更多...",
     "loadMore": "加载更多"
   }
 }
