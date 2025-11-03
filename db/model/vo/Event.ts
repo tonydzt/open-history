@@ -30,6 +30,11 @@ export interface GeoLocation {
   lng: number;
 }
 
+export interface EventsPageResponse {
+  events: Event[];
+  total: number;
+}
+
 // 类型转换函数：将数据库模型转换为前端使用的类型
 export const transformEvent = (dbEvent: any) => ({
   id: dbEvent.id,
@@ -58,3 +63,13 @@ export const transformEvent = (dbEvent: any) => ({
   createdAt: dbEvent.createdAt.toISOString(),
   updatedAt: dbEvent.updatedAt.toISOString()
 });
+
+export const transformCollectionEventToEvent = (dbCollectionEvent: any): Event => {
+  // 确保传入的对象包含Event属性
+  if (!dbCollectionEvent.Event) {
+    throw new Error('Invalid collectionEvent: Event property is missing');
+  }
+  const dbEvent = dbCollectionEvent.Event;
+  return transformEvent(dbEvent);
+};
+

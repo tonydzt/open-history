@@ -135,4 +135,31 @@ export const getUserCollections = async (
     collections,
     nextCursor,
   };
+}
+
+/**
+ * 查询用户的所有收藏夹列表
+ */
+export const getAllUserCollections = async (
+  userId: string
+) => {
+  const whereClause: Prisma.collectionWhereInput = {
+    userId,
+  };
+
+  const orderBy: Prisma.collectionOrderByWithRelationInput = {
+    updatedAt: 'desc',
+  };
+
+  const collections = await prisma.collection.findMany({
+    where: whereClause,
+    orderBy,
+    include: {
+      _count: {
+        select: { collection_event: true },
+      },
+    },
+  });
+
+  return collections;
 };

@@ -28,6 +28,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
+    console.error('Failed to fetch collection events from database:', error);
     return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 }

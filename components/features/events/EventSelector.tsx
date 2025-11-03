@@ -10,11 +10,51 @@ interface EventSelectorProps {
   selectedEventIds?: string[];
 }
 
-// 从API获取事件列表
-const fetchEvents = async (page: number, pageSize: number): Promise<{ events: EventCard[], total: number }> => {
+interface Collection {
+  id: string;
+  name: string;
+  description?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  _count: {
+    collection_event: number;
+  };
+}
+
+// 从API获取收藏夹列表
+const fetchCollections = async (): Promise<Collection[]> => {
   try {
     const response = await fetch(
-      `/api/component/events/EventSelector/GetEventByPages?page=${page}&pageSize=${pageSize}`,
+      '/api/component/tab/collection?limit=50',
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    
+    if (!response.ok) {
+      throw new Error('获取收藏夹列表失败');
+    }
+    
+    const data = await response.json();
+    return data.collections || [];
+  } catch (error) {
+    console.error('Failed to fetch collections:', error);
+    return [];
+  }
+};
+
+// 从API获取事件列表
+const fetchEvents = async (page: number, pageSize: number, collectionId?: string): Promise<{ events: EventCard[], total: number }> => {
+  try {
+    let url = `/api/component/events/EventSelector/GetEventByPages?page=${page}&pageSize=${pageSize}`;
+    if (collectionId) {
+      url += `&collectionId=${collectionId}`;
+    }
+    
+    const response = await fetch(url,
       {
         method: 'GET',
         headers: {
@@ -41,17 +81,31 @@ const fetchEvents = async (page: number, pageSize: number): Promise<{ events: Ev
 const EventSelector: React.FC<EventSelectorProps> = ({ isOpen, onClose, onAddEvents, selectedEventIds = [] }) => {
   const t = useTranslations('EventSelector');
   const [events, setEvents] = useState<EventCard[]>([]);
+  const [collections, setCollections] = useState<Collection[]>([]);
+  const [selectedCollection, setSelectedCollection] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [selectedEvents, setSelectedEvents] = useState<string[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 10;
 
+  // 加载收藏夹列表
+  const loadCollections = async () => {
+    if (!isOpen) return;
+    
+    try {
+      const result = await fetchCollections();
+      setCollections(result);
+    } catch (error) {
+      console.error('Failed to load collections:', error);
+    }
+  };
+
   // 加载事件列表
-  const loadEvents = async (pageNum: number) => {
+  const loadEvents = async (pageNum: number, collectionId?: string) => {
     setLoading(true);
     try {
-      const result = await fetchEvents(pageNum, pageSize);
+      const result = await fetchEvents(pageNum, pageSize, collectionId);
       setEvents(result.events);
       setTotalPages(Math.ceil(result.total / pageSize));
     } catch (error) {
@@ -62,12 +116,17 @@ const EventSelector: React.FC<EventSelectorProps> = ({ isOpen, onClose, onAddEve
     }
   };
 
+  // 初始化加载收藏夹列表
+  useEffect(() => {
+    loadCollections();
+  }, [isOpen]);
+
   // 初始化加载和分页变化时加载
   useEffect(() => {
     if (isOpen) {
-      loadEvents(page);
+      loadEvents(page, selectedCollection || undefined);
     }
-  }, [isOpen, page]);
+  }, [isOpen, page, selectedCollection]);
 
   // 处理事件选择
   const handleEventSelect = (eventId: string) => {
@@ -130,7 +189,30 @@ const EventSelector: React.FC<EventSelectorProps> = ({ isOpen, onClose, onAddEve
           </button>
         </div>
 
-        {/* 选择框内容 */}
+        {/* 收藏夹选择区域 - 固定在最上方 */}
+        <div className="p-6 border-b border-gray-100">
+          <label htmlFor="collection-select" className="block text-sm font-medium text-gray-700 mb-2">
+            {t('selectCollection')}
+          </label>
+          <select
+            id="collection-select"
+            value={selectedCollection}
+            onChange={(e) => {
+              setSelectedCollection(e.target.value);
+              setPage(1); // 重置到第一页
+            }}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 text-sm"
+          >
+            <option value="">{t('allEvents')}</option>
+            {collections.map((collection) => (
+              <option key={collection.id} value={collection.id}>
+                {collection.name} ({collection._count.collection_event})
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* 事件列表区域 - 可滚动 */}
         <div className="flex-1 overflow-auto p-6">
           {loading ? (
             <div className="flex justify-center items-center h-64">

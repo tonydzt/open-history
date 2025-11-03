@@ -8,6 +8,8 @@
     "prevPage": "Previous",
     "nextPage": "Next",
     "cancel": "Cancel",
-    "addSelected": "Add Selected"
+    "addSelected": "Add Selected",
+    "selectCollection": "Select Collection",
+    "allEvents": "All Events"
   }
 }

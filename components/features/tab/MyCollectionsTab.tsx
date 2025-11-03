@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { collection } from '@prisma/client';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
+import EventCard from '@/components/features/events/EventCard';
+import { CollectionEvent, CollectionEventsResponse } from '@/db/model/vo/collectionEvent';
 
 // 扩展collection类型，添加_count字段
 interface CollectionWithCount extends collection {
@@ -30,6 +32,10 @@ const MyCollectionsTab: React.FC = () => {
   const [newCollectionDescription, setNewCollectionDescription] = useState('');
   const [editCollectionName, setEditCollectionName] = useState('');
   const [editCollectionDescription, setEditCollectionDescription] = useState('');
+  // 新增：收藏夹事件列表相关状态
+  const [collectionEvents, setCollectionEvents] = useState<CollectionEvent[]>([]);
+  const [eventsLoading, setEventsLoading] = useState(false);
+  const [eventsError, setEventsError] = useState<string | null>(null);
 
   const handleOpenCreateModal = () => {
     setShowCreateModal(true);
@@ -84,6 +90,15 @@ const MyCollectionsTab: React.FC = () => {
   useEffect(() => {
     fetchCollections();
   }, []);
+
+  // 当选中的收藏夹变化时，获取该收藏夹的事件列表
+  useEffect(() => {
+    if (selectedCollection) {
+      fetchCollectionEvents(selectedCollection);
+    } else {
+      setCollectionEvents([]);
+    }
+  }, [selectedCollection]);
 
   // 创建收藏夹
   const handleCreateCollection = async () => {
@@ -198,6 +213,28 @@ const MyCollectionsTab: React.FC = () => {
     return collection?._count?.collection_event || 0;
   };
 
+  // 获取收藏夹事件列表
+  const fetchCollectionEvents = async (collectionId: string) => {
+    try {
+      setEventsLoading(true);
+      setEventsError(null);
+      
+      // 调用新的收藏夹事件列表接口
+      const response = await fetch(`/api/component/tab/collection/collectionEvent?collectionId=${collectionId}`);
+      
+      if (!response.ok) {
+        throw new Error('获取收藏夹事件列表失败');
+      }
+      
+      const data: CollectionEventsResponse = await response.json();
+      setCollectionEvents(data.events || []);
+    } catch (err) {
+      setEventsError((err as Error).message);
+    } finally {
+      setEventsLoading(false);
+    }
+  };
+
   const selectedCollectionData = collections.find(c => c.id === selectedCollection);
 
   return (
@@ -291,10 +328,20 @@ const MyCollectionsTab: React.FC = () => {
                   <p className="text-sm text-gray-500 mt-1">{selectedCollectionData.description}</p>
                 </div>
                 <div className="p-4">
-                  {/* 暂时只显示事件数量，不加载具体事件 */}
-                  {getEventCount(selectedCollection || '') > 0 ? (
-                    <div className="text-center py-8">
-                      <p className="text-gray-500">{t('noEventsInCollection')}</p>
+                  {eventsLoading ? (
+                    <div className="flex justify-center items-center py-12">
+                      <LoadingIndicator />
+                    </div>
+                  ) : eventsError ? (
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+                      {eventsError}
+                    </div>
+                  ) : collectionEvents.length > 0 ? (
+                    <div className="space-y-4">
+                      {collectionEvents.map((item) => (
+                        // tong注释: item.event!，这里!是非空断言操作符，用于告诉编译器某个值不会是null或undefined，使用 ! 操作符会跳过 TypeScript 的空值检查，这样可能会导致运行时错误
+                        <EventCard key={item.eventId} event={item.event!} />
+                      ))}
                     </div>
                   ) : (
                     <div className="text-center py-8">
