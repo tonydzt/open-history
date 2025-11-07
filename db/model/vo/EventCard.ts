@@ -1,3 +1,5 @@
+import { GeoLocation } from '@/db/model/vo/Event';
+
 export interface EventCard {
   id: string;
   title: string;
@@ -5,6 +7,7 @@ export interface EventCard {
   timestamp: string;
   images: string[];
   tags: string[];
+  geom?: GeoLocation;
 }
 
 /**
@@ -18,6 +21,15 @@ export const transformToEventCard = (dbEvent: any): EventCard => ({
   description: dbEvent.description,
   timestamp: dbEvent.date.toISOString().slice(0, 10), // 只保留日期部分
   images: dbEvent.imageUrl ? [dbEvent.imageUrl] : [],
-  tags: dbEvent.tags || []
+  tags: dbEvent.tags || [],
+  // 从数据库提取地理位置信息（如果存在）
+  ...(dbEvent.geom && {
+    geom: {
+      // 从PostgreSQL的GEOGRAPHY格式中提取经纬度
+      // 格式通常为"SRID=4326;POINT(lng lat)"
+      lat: parseFloat(dbEvent.geom.match(/POINT\(([^\s]+)\s+([^\)]+)\)/)?.[2] || '0'),
+      lng: parseFloat(dbEvent.geom.match(/POINT\(([^\s]+)\s+([^\)]+)\)/)?.[1] || '0')
+    }
+  })
 });
 

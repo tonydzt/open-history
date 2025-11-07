@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>European Historical Cities Tour - StoryMapJS Demo</title>
+    <link rel="stylesheet" href="https://cdn.knightlab.com/libs/orangeline/latest/css/orangeline.min.css">
+    <link rel="stylesheet" href="https://cdn.knightlab.com/libs/storymapjs/latest/css/storymap.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 95vh;
+        }
+        
+        header {
+            background: linear-gradient(to right, #2c3e50, #4a6491);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 5px solid #fdbb2d;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .content-wrapper {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .city-sidebar {
+            width: 250px;
+            background: #f8f9fa;
+            border-right: 2px solid #dee2e6;
+            padding: 15px;
+            overflow-y: auto;
+        }
+        
+        .city-list {
+            list-style: none;
+        }
+        
+        .city-item {
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid #3498db;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .city-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        .city-item.active {
+            background: #2c3e50;
+            color: white;
+            border-left: 4px solid #fdbb2d;
+        }
+        
+        .city-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .city-date {
+            font-size: 0.85rem;
+            opacity: 0.7;
+            margin-top: 4px;
+        }
+        
+        #storymap-container {
+            flex: 1;
+            height: 100%;
+            background: #eef2f5;
+        }
+        
+        .info-panel {
+            background: white;
+            padding: 15px;
+            border-top: 3px solid #2c3e50;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .city-info {
+            display: none;
+        }
+        
+        .city-info.active {
+            display: block;
+        }
+        
+        .city-headline {
+            color: #2c3e50;
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+            border-bottom: 2px solid #fdbb2d;
+            padding-bottom: 6px;
+        }
+        
+        .city-date {
+            color: #e74c3c;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+        
+        .city-text {
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        
+        .route-info {
+            background: #e8f4fc;
+            border-left: 4px solid #3498db;
+            padding: 8px 12px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: #2c3e50;
+            color: white;
+            font-size: 0.85rem;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* StoryMapJS 自定义样式 */
+        .vco-storymap {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+        }
+        
+        .vco-slider .nav-next, .vco-slider .nav-previous {
+            background-color: #2c3e50 !important;
+        }
+        
+        .vco-timeline .vco-feature h3 {
+            color: #2c3e50 !important;
+        }
+        
+        @media (max-width: 768px) {
+            .content-wrapper {
+                flex-direction: column;
+            }
+            
+            .city-sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 2px solid #dee2e6;
+                max-height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>European Historical Cities Tour</h1>
+            <p class="subtitle">Explore five European cities with rich historical and cultural heritage using StoryMapJS</p>
+        </header>
+        
+        <div class="content-wrapper">
+            <div class="city-sidebar">
+                <h3 style="margin-bottom: 15px; color: #2c3e50; border-bottom: 1px solid #dee2e6; padding-bottom: 8px;">Cities</h3>
+                <ul class="city-list">
+                    <li class="city-item active" data-slide-index="0">
+                        <div class="city-name">European Tour Overview</div>
+                        <div class="city-date">Cultural Journey</div>
+                    </li>
+                    <li class="city-item" data-slide-index="1">
+                        <div class="city-name">Rome</div>
+                        <div class="city-date">Founded 753 BC</div>
+                    </li>
+                    <li class="city-item" data-slide-index="2">
+                        <div class="city-name">Paris</div>
+                        <div class="city-date">Founded 3rd Century BC</div>
+                    </li>
+                    <li class="city-item" data-slide-index="3">
+                        <div class="city-name">London</div>
+                        <div class="city-date">Founded 43 AD</div>
+                    </li>
+                    <li class="city-item" data-slide-index="4">
+                        <div class="city-name">Prague</div>
+                        <div class="city-date">Founded 9th Century</div>
+                    </li>
+                    <li class="city-item" data-slide-index="5">
+                        <div class="city-name">Athens</div>
+                        <div class="city-date">Founded 3000 BC</div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div id="storymap-container"></div>
+        </div>
+        
+        <div class="info-panel">
+            <div class="city-info active" data-index="0">
+                <h2 class="city-headline">European Historical Cities Tour</h2>
+                <p class="city-text">Explore five great cities that shaped European history, from the cradle of classical civilization to the center of modern art.</p>
+                <div class="route-info">
+                    <strong>Travel Route:</strong> Starting from Rome, heading north to Paris, then crossing the English Channel to London, then east to Prague, and finally south to Athens.
+                </div>
+            </div>
+            
+            <div class="city-info" data-index="1">
+                <h2 class="city-headline">Rome - The Eternal City</h2>
+                <div class="city-date">Founded 753 BC</div>
+                <p class="city-text">Rome is known as the "Eternal City" with over 2,500 years of history. From the center of the ancient Roman Empire to the prosperity of the Renaissance, this city witnessed key moments in Western civilization.</p>
+                <p class="city-text">Main attractions include: Colosseum, Roman Forum, Pantheon and Trevi Fountain. Rome is also home to the world's smallest country - Vatican City.</p>
+            </div>
+            
+            <div class="city-info" data-index="2">
+                <h2 class="city-headline">Paris - City of Light</h2>
+                <div class="city-date">Founded 3rd Century BC</div>
+                <p class="city-text">Paris is one of Europe's most important cultural and artistic centers, known for its romantic atmosphere, exquisite architecture and world-class museums.</p>
+                <p class="city-text">Iconic structures include the Eiffel Tower, Notre Dame Cathedral, Louvre Museum and Arc de Triomphe. Paris is also the birthplace of Impressionist art.</p>
+            </div>
+            
+            <div class="city-info" data-index="3">
+                <h2 class="city-headline">London - Where Modern Meets Traditional</h2>
+                <div class="city-date">Founded 43 AD</div>
+                <p class="city-text">London is an international metropolis that blends long history with modern innovation. From Roman Londinium to the center of the British Empire, to today's global financial hub.</p>
+                <p class="city-text">Famous landmarks include Big Ben, Tower of London, Buckingham Palace and British Museum. London's West End is a world-renowned theater district.</p>
+            </div>
+            
+            <div class="city-info" data-index="4">
+                <h2 class="city-headline">Prague - City of a Hundred Spires</h2>
+                <div class="city-date">Founded 9th Century</div>
+                <p class="city-text">Prague is one of Europe's most beautiful cities, known for its well-preserved historic center, Gothic and Baroque architecture.</p>
+                <p class="city-text">Main attractions include Prague Castle, Charles Bridge, Old Town Square and the Astronomical Clock. The city is also the hometown of famous writer Franz Kafka.</p>
+            </div>
+            
+            <div class="city-info" data-index="5">
+                <h2 class="city-headline">Athens - Cradle of Western Civilization</h2>
+                <div class="city-date">Founded 3000 BC</div>
+                <p class="city-text">Athens is one of the world's oldest cities, known as the birthplace of democracy, philosophy and the Olympic Games.</p>
+                <p class="city-text">Iconic monuments include the Acropolis, Parthenon, Ancient Agora and Temple of Olympian Zeus. Athens has had a profound influence on Western philosophy, art and political thought.</p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>StoryMapJS Demo - Based on KnightLab Official Implementation</p>
+        </footer>
+    </div>
+
+    <!-- 引入StoryMapJS库 -->
+    <script src="https://cdn.knightlab.com/libs/storymapjs/latest/js/storymap.js"></script>
+    
+    <script>
+        // StoryMapJS 数据配置
+        const storyMapData = {
+            "storymap": {
+                "language": "en", // 设置为英语
+                "map_type": "osm:standard",
+                "map_as_image": false,
+                "slides": [
+                    {
+                        "type": "overview",
+                        "date": "European Cultural Journey",
+                        "text": {
+                            "headline": "European Historical Cities Tour",
+                            "text": "<p>Explore five great cities that shaped European history, from the cradle of classical civilization to the center of modern art.</p>"
+                        },
+                        "location": {
+                            "lat": 48.5,
+                            "lon": 10.0
+                        },
+                        "zoom": 4
+                    },
+                    {
+                        "date": "753 BC",
+                        "text": {
+                            "headline": "Rome - The Eternal City",
+                            "text": "<p>Rome is known as the 'Eternal City' with over 2,500 years of history. From the center of the ancient Roman Empire to the prosperity of the Renaissance, this city witnessed key moments in Western civilization.</p><p>Main attractions include: Colosseum, Roman Forum, Pantheon and Trevi Fountain. Rome is also home to the world's smallest country - Vatican City.</p>"
+                        },
+                        "location": {
+                            "lat": 41.9028,
+                            "lon": 12.4964
+                        },
+                        "zoom": 12
+                    },
+                    {
+                        "date": "3rd Century BC",
+                        "text": {
+                            "headline": "Paris - City of Light",
+                            "text": "<p>Paris is one of Europe's most important cultural and artistic centers, known for its romantic atmosphere, exquisite architecture and world-class museums.</p><p>Iconic structures include the Eiffel Tower, Notre Dame Cathedral, Louvre Museum and Arc de Triomphe. Paris is also the birthplace of Impressionist art.</p>"
+                        },
+                        "location": {
+                            "lat": 48.8566,
+                            "lon": 2.3522
+                        },
+                        "zoom": 12
+                    },
+                    {
+                        "date": "43 AD",
+                        "text": {
+                            "headline": "London - Where Modern Meets Traditional",
+                            "text": "<p>London is an international metropolis that blends long history with modern innovation. From Roman Londinium to the center of the British Empire, to today's global financial hub.</p><p>Famous landmarks include Big Ben, Tower of London, Buckingham Palace and British Museum. London's West End is a world-renowned theater district.</p>"
+                        },
+                        "location": {
+                            "lat": 51.5074,
+                            "lon": -0.1278
+                        },
+                        "zoom": 11
+                    },
+                    {
+                        "date": "9th Century",
+                        "text": {
+                            "headline": "Prague - City of a Hundred Spires",
+                            "text": "<p>Prague is one of Europe's most beautiful cities, known for its well-preserved historic center, Gothic and Baroque architecture.</p><p>Main attractions include Prague Castle, Charles Bridge, Old Town Square and the Astronomical Clock. The city is also the hometown of famous writer Franz Kafka.</p>"
+                        },
+                        "location": {
+                            "lat": 50.0755,
+                            "lon": 14.4378
+                        },
+                        "zoom": 12
+                    },
+                    {
+                        "date": "3000 BC",
+                        "text": {
+                            "headline": "Athens - Cradle of Western Civilization",
+                            "text": "<p>Athens is one of the world's oldest cities, known as the birthplace of democracy, philosophy and the Olympic Games.</p><p>Iconic monuments include the Acropolis, Parthenon, Ancient Agora and Temple of Olympian Zeus. Athens has had a profound influence on Western philosophy, art and political thought.</p>"
+                        },
+                        "location": {
+                            "lat": 37.9838,
+                            "lon": 23.7275
+                        },
+                        "zoom": 12
+                    }
+                ]
+            }
+        };
+
+        // 初始化StoryMapJS
+        let storymap;
+        
+        function initStoryMap() {
+            // 使用正确的StoryMapJS构造函数
+            storymap = new KLStoryMap.StoryMap('storymap-container', storyMapData);
+            
+            // 监听StoryMap事件以更新侧边栏状态
+            if (storymap && storymap.on) {
+                storymap.on('slidechange', function(e) {
+                    updateSidebar(e.slideIndex);
+                    updateInfoPanel(e.slideIndex);
+                });
+            }
+            
+            // 初始更新侧边栏和信息面板
+            updateSidebar(0);
+            updateInfoPanel(0);
+            
+            // 调整容器大小
+            function resizeContainer() {
+                const container = document.getElementById('storymap-container');
+                const windowHeight = window.innerHeight;
+                container.style.height = (windowHeight * 0.7) + 'px';
+                if (storymap && storymap.updateDisplay) {
+                    storymap.updateDisplay();
+                }
+            }
+            
+            window.addEventListener('resize', resizeContainer);
+            resizeContainer();
+        }
+
+        // 更新侧边栏激活状态
+        function updateSidebar(slideIndex) {
+            // 移除所有激活状态
+            document.querySelectorAll('.city-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // 为当前幻灯片对应的城市项添加激活状态
+            const currentCityItem = document.querySelector(`.city-item[data-slide-index="${slideIndex}"]`);
+            if (currentCityItem) {
+                currentCityItem.classList.add('active');
+            }
+        }
+
+        // 更新信息面板
+        function updateInfoPanel(slideIndex) {
+            // 隐藏所有信息面板
+            document.querySelectorAll('.city-info').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            
+            // 显示当前信息面板
+            const currentPanel = document.querySelector(`.city-info[data-index="${slideIndex}"]`);
+            if (currentPanel) {
+                currentPanel.classList.add('active');
+            }
+        }
+
+        // 为城市列表项添加点击事件
+        document.addEventListener('DOMContentLoaded', function() {
+            const cityItems = document.querySelectorAll('.city-item');
+            
+            cityItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const slideIndex = parseInt(this.getAttribute('data-slide-index'));
+                    
+                    // 跳转到对应的StoryMap幻灯片
+                    if (storymap && storymap.goTo) {
+                        storymap.goTo(slideIndex);
+                    }
+                    
+                    // 更新侧边栏状态
+                    updateSidebar(slideIndex);
+                    
+                    // 更新信息面板
+                    updateInfoPanel(slideIndex);
+                });
+            });
+        });
+
+        // 页面加载完成后初始化StoryMapJS
+        window.addEventListener('load', initStoryMap);
+    </script>
+</body>
+</html>
