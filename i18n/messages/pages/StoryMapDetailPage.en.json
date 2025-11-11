@@ -1,0 +1,15 @@
+{
+  "StoryMapDetailPage": {
+    "loading": "Loading story map...",
+    "error": "Error",
+    "storymapNotFound": "Story map not found",
+    "invalidStorymapId": "Invalid story map ID",
+    "failedToFetchData": "Failed to fetch story map data",
+    "unknownError": "An unknown error occurred",
+    "back": "Back",
+    "edit": "Edit",
+    "storymapTitle": "Story Map Title",
+    "storymapInitFailed": "Failed to initialize story map.",
+    "retry": "Retry"
+  }
+}

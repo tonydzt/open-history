@@ -1,0 +1,15 @@
+{
+  "StoryMapDetailPage": {
+    "loading": "加载故事地图中...",
+    "error": "错误",
+    "storymapNotFound": "故事地图不存在",
+    "invalidStorymapId": "无效的故事地图ID",
+    "failedToFetchData": "获取故事地图数据失败",
+    "unknownError": "发生未知错误",
+    "back": "返回",
+    "edit": "编辑",
+    "storymapTitle": "故事地图标题",
+    "storymapInitFailed": "初始化故事地图失败。",
+    "retry": "重试"
+  }
+}

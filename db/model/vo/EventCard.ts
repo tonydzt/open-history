@@ -1,4 +1,4 @@
-import { GeoLocation } from '@/db/model/vo/Event';
+import { GeoLocation, Event } from '@/db/model/vo/Event';
 
 export interface EventCard {
   id: string;
@@ -31,5 +31,20 @@ export const transformToEventCard = (dbEvent: any): EventCard => ({
       lng: parseFloat(dbEvent.geom.match(/POINT\(([^\s]+)\s+([^\)]+)\)/)?.[1] || '0')
     }
   })
+});
+
+/**
+ * 将Event接口转换为EventCard接口
+ * @param event Event接口对象
+ * @returns EventCard接口对象
+ */
+export const transformEventToEventCard = (event: Event): EventCard => ({
+  id: event.id,
+  title: event.title,
+  description: event.description,
+  timestamp: event.timestamp.slice(0, 10), // 只保留日期部分
+  images: event.images || [],
+  tags: event.tags || [],
+  geom: event.geom
 });
 

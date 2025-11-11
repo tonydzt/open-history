@@ -10,13 +10,25 @@ import { EventCard } from '@/db/model/vo/EventCard';
 import { StoryMapData, StoryMapSlide, transformLocation } from '@/db/model/vo/Storymap';
 
 // 创建故事地图的API调用
-const createStoryMap = async (storymapData: StoryMapData): Promise<{ id: string }> => {
+const createStoryMap = async (storymapData: StoryMapData, selectedEvents: EventCard[]): Promise<{ id: string }> => {
+  // 提取首页幻灯片中的标题和描述
+  const overviewSlide = storymapData.storymap.slides.find(slide => slide.type === 'overview');
+  const name = overviewSlide?.text.headline || '';
+  const description = overviewSlide?.text.text || '';
+  
+  // 提取事件ID列表
+  const eventIds = selectedEvents.map(event => event.id);
+  
   const response = await fetch('/api/storymap', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(storymapData),
+    body: JSON.stringify({
+      name,
+      description,
+      eventIds
+    }),
   });
   
   if (!response.ok) {
@@ -24,7 +36,8 @@ const createStoryMap = async (storymapData: StoryMapData): Promise<{ id: string 
     throw new Error(errorData.error || 'Failed to create storymap');
   }
   
-  return response.json();
+  const result = await response.json();
+  return { id: result.storymap.id };
 };
 
 export default function CreateStoryMapPage() {
@@ -234,8 +247,8 @@ export default function CreateStoryMapPage() {
     setError(null);
     
     try {
-      // 调用实际API
-      const result = await createStoryMap(formData);
+      // 调用实际API，传递selectedEvents
+      const result = await createStoryMap(formData, selectedEvents);
       
       // 成功后跳转到故事地图详情页
       router.push(`/storymap/${result.id}`);

@@ -10,7 +10,11 @@ interface StoryMapJSProps {
 
 const StoryMapJS = ({ data, className = '' }: StoryMapJSProps) => {
   const storymapRef = useRef<any>(null);
+  const storymapInstanceRef = useRef<any>(null);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+  const [sidebarVisible, setSidebarVisible] = useState(true);
+  const [sidebarWidth, setSidebarWidth] = useState<string>('25%'); // 默认25%宽度（对应1/4）
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     // 加载 CSS 文件
@@ -56,15 +60,18 @@ const StoryMapJS = ({ data, className = '' }: StoryMapJSProps) => {
 
           // 确保DOM渲染完成后再初始化
           if (storymapRef.current) {
+            // 先清空容器内容，避免重复渲染
+            storymapRef.current.innerHTML = '';
+            
             // @ts-ignore
-            storymapRef.current = new (window as any).KLStoryMap.StoryMap(
+            storymapInstanceRef.current = new (window as any).KLStoryMap.StoryMap(
               storymapRef.current,
               data
             );
 
             // 监听幻灯片变化事件
-            if (storymapRef.current && storymapRef.current.on) {
-              storymapRef.current.on('slidechange', function (e: any) {
+            if (storymapInstanceRef.current && storymapInstanceRef.current.on) {
+              storymapInstanceRef.current.on('slidechange', function (e: any) {
                 setActiveSlideIndex(e.slideIndex);
               });
             }
@@ -79,30 +86,96 @@ const StoryMapJS = ({ data, className = '' }: StoryMapJSProps) => {
 
     // 组件卸载时清理
     return () => {
-      if (storymapRef.current) {
-        // 清理StoryMap实例
-        if (storymapRef.current && 'innerHTML' in storymapRef.current) {
-          (storymapRef.current as HTMLElement).innerHTML = ''; // 清空 div 内容
-        }
+      // 清理事件监听器
+      if (storymapInstanceRef.current && storymapInstanceRef.current.off) {
+        storymapInstanceRef.current.off('slidechange');
       }
+      
+      // 清空容器内容
+      if (storymapRef.current && 'innerHTML' in storymapRef.current) {
+        (storymapRef.current as HTMLElement).innerHTML = '';
+      }
+      
+      // 重置实例引用
+      storymapInstanceRef.current = null;
     };
   }, [data]);
 
   // 切换到指定幻灯片
   const goToSlide = (index: number) => {
-    if (storymapRef.current && storymapRef.current.goTo) {
-      storymapRef.current.goTo(index);
+    if (storymapInstanceRef.current && storymapInstanceRef.current.goTo) {
+      storymapInstanceRef.current.goTo(index);
       setActiveSlideIndex(index);
     }
   };
 
+  // 切换侧边栏显示状态
+  const toggleSidebar = () => {
+    setSidebarVisible(!sidebarVisible);
+  };
+
+  // 处理拖拽开始
+  const handleDragStart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  // 处理拖拽过程
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isDragging || !sidebarVisible) return;
+      
+      // 获取父容器宽度
+      const container = storymapRef.current?.parentElement?.parentElement;
+      if (!container) return;
+      
+      const containerWidth = container.offsetWidth;
+      // 计算侧边栏宽度占比
+      let newWidthPercent = (e.clientX / containerWidth) * 100;
+      
+      // 设置最小宽度（20%）和最大宽度（50%）限制
+      newWidthPercent = Math.max(20, Math.min(50, newWidthPercent));
+      
+      setSidebarWidth(`${newWidthPercent}%`);
+    };
+
+    const handleMouseUp = () => {
+      if (isDragging) {
+        setIsDragging(false);
+      }
+    };
+
+    // 只有在拖拽状态下才添加事件监听器
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+    }
+
+    // 清理事件监听器
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isDragging, sidebarVisible]);
+
   return (
-    <div className={`flex flex-col lg:flex-row bg-white rounded-lg overflow-hidden shadow-md ${className}`}>
+    <div className={`relative flex flex-col lg:flex-row bg-white rounded-lg overflow-hidden shadow-md ${className}`} style={{ cursor: isDragging ? 'col-resize' : 'default' }}>
       {/* 左侧侧边栏 */}
-      <div className="lg:w-1/4 bg-gray-50 border-r border-gray-200 p-4 overflow-y-auto">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
-          Slides
-        </h3>
+      <div 
+        className={`bg-gray-50 border-r border-gray-200 p-4 overflow-y-auto transition-all duration-300 ${sidebarVisible ? 'block' : 'hidden lg:w-0'}`}
+        style={{ width: sidebarVisible ? sidebarWidth : '0' }}
+      >
+        <div className="flex justify-between items-center mb-4 pb-2 border-b border-gray-200">
+          <button
+            onClick={toggleSidebar}
+            className="text-gray-500 hover:text-gray-700 p-1 rounded"
+            aria-label="Hide sidebar"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+        </div>
         <ul className="space-y-2">
           {data.storymap.slides.map((slide, index) => (
             <li key={index}>
@@ -118,12 +191,36 @@ const StoryMapJS = ({ data, className = '' }: StoryMapJSProps) => {
         </ul>
       </div>
 
+      {/* 可拖拽分隔线 */}
+      {sidebarVisible && (
+        <div 
+          className="w-1 bg-gray-200 cursor-col-resize hover:bg-gray-300 transition-colors flex items-center justify-center"
+          onMouseDown={handleDragStart}
+          aria-label="Resize sidebar"
+        >
+          <div className="w-0.5 h-8 bg-gray-400 rounded-full"></div>
+        </div>
+      )}
+      
+      {/* 显示侧边栏按钮 - 当侧边栏隐藏时显示在地图区域 */}
+      {!sidebarVisible && (
+        <button
+          onClick={toggleSidebar}
+          className="absolute top-4 left-4 z-10 p-2 bg-white rounded-full shadow-md text-gray-600 hover:bg-gray-50"
+          aria-label="Show sidebar"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      )}
+      
       {/* 右侧地图容器 */}
-      <div className="lg:w-3/4">
+      <div className={`flex-1 w-full transition-all duration-300`}>
         <div
           ref={storymapRef}
           id="storymap-container"
-          className="w-full h-[600px]"
+          className="w-full h-full min-h-[600px]"
         />
       </div>
     </div>

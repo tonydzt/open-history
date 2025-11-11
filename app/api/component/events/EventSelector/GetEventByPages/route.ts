@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { getCollectionEventsByPageSize } from '@/db/access/collectionEvent';
+import { transformEventToEventCard } from '@/db/model/vo/EventCard';
 
 export async function GET(request: Request) {
   try {
@@ -32,14 +33,7 @@ export async function GET(request: Request) {
     );
     
     // 将Event类型转换为EventCard类型，保持与原接口一致的返回格式
-    const transformedEvents = result.events.map((event) => ({
-      id: event.id,
-      title: event.title,
-      description: event.description,
-      timestamp: event.timestamp.slice(0, 10), // 只保留日期部分
-      images: event.images || [],
-      tags: event.tags || []
-    }));
+    const transformedEvents = result.events.map(transformEventToEventCard);
     
     return NextResponse.json({
       events: transformedEvents,

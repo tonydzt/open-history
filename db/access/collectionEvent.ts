@@ -206,31 +206,106 @@ export const getCollectionEventsByPageSize = async (
     };
   }
 
-  const orderBy: Prisma.collection_eventOrderByWithRelationInput = {
-    createdAt: 'desc',
-  };
+  // 构建SQL查询条件
+  let whereSql = '';
+  let params: any[] = [];
 
-  // 获取事件列表
-  const collectionEvents = await prisma.collection_event.findMany({
-    where: whereClause,
-    orderBy,
-    skip,
-    take: normalizedPageSize,
-    include: {
-      Event: {
-        include: {
-          user: true,
-        },
-      },
-    },
-  });
+  if (collectionId) {
+    whereSql = 'WHERE ce."collectionId" = $1';
+    params.push(collectionId);
+  } else {
+    const userCollections = await getAllUserCollections(userId);
+    const collectionIds = userCollections.map(col => col.id);
+    
+    if (collectionIds.length === 0) {
+      return {
+        events: [],
+        total: 0,
+      };
+    }
+    
+    whereSql = 'WHERE ce."collectionId" = ANY($1)';
+    params.push(collectionIds);
+  }
+
+  // 添加分页参数
+  params.push(normalizedPageSize, skip);
+  const limitOffsetSql = `
+    ORDER BY ce."createdAt" DESC
+    LIMIT $2
+    OFFSET $3
+  `;
+
+  // 使用queryRaw查询以获取geom字段，构造与transformCollectionEventToEvent函数兼容的结构
+  const sqlQuery = `
+    SELECT 
+      ce.id,
+      ce."collectionId",
+      ce."eventId",
+      ce."createdAt",
+      ce."updatedAt",
+      json_build_object(
+        'id', e.id,
+        'title', e.title,
+        'description', e.description,
+        'date', e.date,
+        'imageUrl', e."imageUrl",
+        'tags', e.tags,
+        'userId', e."userId",
+        'geom', ST_AsText(e.geom),
+        'createdAt', e."createdAt",
+        'updatedAt', e."updatedAt",
+        'user', json_build_object(
+          'id', u.id,
+          'name', u.name,
+          'email', u.email,
+          'image', u.image
+        )
+      ) as "Event"
+    FROM collection_event ce
+    JOIN "Event" e ON ce."eventId" = e.id
+    JOIN "User" u ON e."userId" = u.id
+    ${whereSql}
+    ${limitOffsetSql}
+  `;
+
+  const collectionEvents = await prisma.$queryRawUnsafe<Array<{
+    id: string;
+    collectionId: string;
+    eventId: string;
+    createdAt: Date;
+    updatedAt: Date;
+    Event: {
+      id: string;
+      title: string;
+      description: string;
+      date: Date;
+      imageUrl: string | null;
+      tags: string[] | null;
+      userId: string;
+      geom: any;
+      createdAt: Date;
+      updatedAt: Date;
+      user: {
+        id: string;
+        name: string | null;
+        email: string | null;
+        image: string | null;
+      };
+    };
+  }>>(sqlQuery, ...params);
 
   // 获取总数
-  const total = await prisma.collection_event.count({
-    where: whereClause,
-  });
+  const totalSql = `
+    SELECT COUNT(*) as total
+    FROM collection_event ce
+    ${whereSql}
+  `;
+  // 只传递where条件参数，不包含分页参数
+  const totalResult = await prisma.$queryRawUnsafe<Array<{total: string}>>(totalSql, params[0]);
+  const total = Number(totalResult[0]?.total || 0);
 
-  // 使用转换函数将数据库模型转换为Event接口类型
+  // 使用现有的转换函数将数据转换为Event接口类型
   const events = collectionEvents.map(transformCollectionEventToEvent);
 
   return {

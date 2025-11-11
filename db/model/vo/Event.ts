@@ -40,7 +40,9 @@ export const transformEvent = (dbEvent: any) => ({
   id: dbEvent.id,
   title: dbEvent.title,
   description: dbEvent.description,
-  timestamp: dbEvent.date.toISOString(),
+  timestamp: (dbEvent.date instanceof Date)
+  ? dbEvent.date.toISOString() 
+  : dbEvent.date,
   sourceType: 'news', // 默认类型
   images: [dbEvent.imageUrl],
   tags: dbEvent.tags || [],
@@ -60,8 +62,12 @@ export const transformEvent = (dbEvent: any) => ({
       lng: parseFloat(dbEvent.geom.match(/POINT\(([^\s]+)\s+([^\)]+)\)/)?.[1] || '0')
     }
   }),
-  createdAt: dbEvent.createdAt.toISOString(),
-  updatedAt: dbEvent.updatedAt.toISOString()
+  createdAt: (dbEvent.createdAt instanceof Date)
+  ? dbEvent.createdAt.toISOString() 
+  : dbEvent.createdAt,
+  updatedAt: (dbEvent.updatedAt instanceof Date)
+  ? dbEvent.updatedAt.toISOString() 
+  : dbEvent.updatedAt,
 });
 
 export const transformCollectionEventToEvent = (dbCollectionEvent: any): Event => {
