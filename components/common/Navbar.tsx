@@ -173,6 +173,14 @@ export default function Navbar() {
                       <span>{t('createTimeline') || '创建时间轴'}</span>
                     </div>
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => {
+                    setIsCreateMenuOpen(false);
+                    router.push(`/${locale}/storymap/create`);
+                  }}>
+                    <div className="flex items-center gap-2 w-full">
+                      <span>{t('createStorymap') || '创建故事地图'}</span>
+                    </div>
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             )}
