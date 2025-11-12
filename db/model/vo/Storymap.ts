@@ -2,6 +2,7 @@ import { GeoLocation } from './Event';
 
 // 定义故事地图数据类型
 export interface StoryMapSlide {
+    id: string;
     type?: string;
     date?: string;
     text: {
@@ -9,7 +10,6 @@ export interface StoryMapSlide {
         text: string;
     };
     location?: location;
-    zoom: number;
     media?: {
         url?: string;
         credit?: string;
@@ -66,13 +66,13 @@ export const transformEventToStoryMapSlide = (event: any): StoryMapSlide => {
     }
 
     return {
+        id: event.id,
         date: event.date ? (event.date instanceof Date ? event.date.toISOString().split('T')[0] : event.date.split('T')[0]) : undefined,
         text: {
             headline: event.title || '',
             text: event.description || ''
         },
         location: slideLocation,
-        zoom: 10,
         media: {
             url: event.imageUrl || undefined,
             credit: event.user?.name || '未知用户',

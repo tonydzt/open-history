@@ -103,14 +103,14 @@ export default function CreateStoryMapPage() {
       if (!overviewSlide) {
         // 如果不存在首页slide，则创建一个新的
         overviewSlide = {
+          id: 'overview-0',
           type: 'overview',
           date: value, // 初始使用标题作为date
           text: {
             headline: field === 'title' ? value : '',
             text: field === 'description' ? value : ''
           },
-          location: { lat: 39.9042, lon: 116.4074 }, // 默认北京坐标
-          zoom: 2
+          location: { lat: 39.9042, lon: 116.4074 } // 默认北京坐标
         };
         return {
           ...prev,
@@ -157,13 +157,13 @@ export default function CreateStoryMapPage() {
       // 更新表单数据中的幻灯片列表
       const newSlides: StoryMapSlide[] = newEvents.map(event => {
         return {
+          id: event.id,
           date: new Date(event.timestamp).toISOString().split('T')[0], // 格式化为 YYYY-MM-DD
           text: {
             headline: event.title,
             text: event.description || ''
           },
           location: event.geom ? transformLocation(event.geom) : { lat: 0, lon: 0 },
-          zoom: 10,
           media: event.images && event.images.length > 0 ? {
             url: event.images[0],
             credit: '',

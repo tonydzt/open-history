@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { createStoryMap, getStoryMapById } from '@/db/access/storymap';
-import { createStorymapEvent } from '@/db/access/storymapEvent';
+import { createStoryMap, getStoryMapById, updateStoryMap } from '@/db/access/storymap';
+import { createStorymapEvent, deleteAllStorymapEvents } from '@/db/access/storymapEvent';
 import { StoryMapData, transformEventToStoryMapSlide } from '@/db/model/vo/Storymap';
 
 /**
@@ -89,12 +89,12 @@ export async function GET(request: Request) {
 
     // 创建概述幻灯片
     storyMapResult.storymap.slides.push({
+      id: 'overview-0',
       type: 'overview',
       text: {
         headline: storymapData.name,
         text: storymapData.description || ''
-      },
-      zoom: 4
+      }
     });
 
     // 添加事件幻灯片
@@ -114,5 +114,85 @@ export async function GET(request: Request) {
   } catch (error: any) {
     console.error('获取故事地图失败:', error);
     return NextResponse.json({ error: error.message || '获取故事地图失败' }, { status: 500 });
+  }
+}
+
+/**
+ * 更新故事地图的API路由
+ */
+export async function PUT(request: Request) {
+  try {
+    // 验证用户是否登录
+    const session = await getServerSession(authOptions);
+    
+    if (!session || !session.user) {
+      return NextResponse.json({ error: '需要登录' }, { status: 401 });
+    }
+
+    // 解析请求体
+    const requestData = await request.json();
+
+    // 验证必要字段
+    if (!requestData.id || typeof requestData.id !== 'string') {
+      return NextResponse.json({ error: '故事地图ID不能为空' }, { status: 400 });
+    }
+
+    // 检查故事地图是否存在
+    const existingStorymap = await getStoryMapById(requestData.id);
+    
+    // 验证用户是否有权限修改此故事地图
+    if (existingStorymap.userId !== session.user.id) {
+      return NextResponse.json({ error: '无权限修改此故事地图' }, { status: 403 });
+    }
+
+    // 准备更新数据
+    const updateData: any = {};
+    if (requestData.name !== undefined) {
+      if (typeof requestData.name !== 'string') {
+        return NextResponse.json({ error: '故事地图名称必须是字符串' }, { status: 400 });
+      }
+      updateData.name = requestData.name;
+    }
+    if (requestData.description !== undefined) {
+      updateData.description = requestData.description;
+    }
+
+    // 更新故事地图基本信息
+    const updatedStorymap = await updateStoryMap(requestData.id, updateData);
+
+    // 更新事件关联关系（如果提供了eventIds）
+    let eventRelations = [];
+    if (requestData.eventIds !== undefined) {
+      // 验证eventIds是数组
+      if (!Array.isArray(requestData.eventIds)) {
+        return NextResponse.json({ error: '事件ID列表必须是数组' }, { status: 400 });
+      }
+
+      // 删除所有现有关联关系
+      await deleteAllStorymapEvents(requestData.id);
+
+      // 添加新的关联关系
+      if (requestData.eventIds.length > 0) {
+        for (const eventId of requestData.eventIds) {
+          try {
+            const relation = await createStorymapEvent(requestData.id, eventId);
+            eventRelations.push(relation);
+          } catch (error) {
+            console.warn(`添加事件 ${eventId} 到故事地图失败:`, error);
+            // 继续处理其他事件，不中断整个流程
+          }
+        }
+      }
+    }
+
+    // 返回更新结果
+    return NextResponse.json({
+      storymap: updatedStorymap,
+      eventRelations,
+      success: true
+    }, { status: 200 });
+  } catch (error: any) {
+    console.error('更新故事地图失败:', error);
+    return NextResponse.json({ error: error.message || '更新故事地图失败' }, { status: 500 });
   }
 }

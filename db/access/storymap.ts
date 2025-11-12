@@ -93,3 +93,70 @@ export const getStoryMapById = async (id: string) => {
 
     return storyMap;
 };
+
+/**
+ * 修改事件地图
+ * @param id 事件地图ID
+ * @param data 要更新的数据
+ * @returns 更新后的事件地图对象
+ */
+export const updateStoryMap = async (id: string, data: {
+    name?: string;
+    description?: string;
+    userId?: string;
+}) => {
+    // 验证数据
+    if (!id || typeof id !== 'string') {
+        throw new Error('故事地图ID不能为空');
+    }
+
+    // 检查故事地图是否存在
+    const existingStoryMap = await prisma.storymap.findUnique({
+        where: { id },
+    });
+
+    if (!existingStoryMap) {
+        throw new Error('故事地图不存在');
+    }
+
+    // 如果提供了userId，验证用户是否存在
+    if (data.userId) {
+        if (typeof data.userId !== 'string') {
+            throw new Error('用户ID必须是字符串');
+        }
+        
+        const user = await prisma.user.findUnique({
+            where: { id: data.userId },
+        });
+
+        if (!user) {
+            throw new Error('用户不存在');
+        }
+    }
+
+    // 准备更新数据
+    const updateData: any = {
+        updatedAt: new Date(),
+    };
+
+    if (data.name !== undefined) {
+        if (!data.name || typeof data.name !== 'string') {
+            throw new Error('事件地图名称不能为空');
+        }
+        updateData.name = data.name;
+    }
+
+    if (data.description !== undefined) {
+        updateData.description = data.description || '';
+    }
+
+    if (data.userId !== undefined) {
+        updateData.userId = data.userId;
+    }
+
+    // 更新事件地图
+    return await prisma.storymap.update({
+        where: { id },
+        data: updateData,
+    });
+};

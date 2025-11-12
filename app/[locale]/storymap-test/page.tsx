@@ -8,6 +8,7 @@ const mockStoryMapData = {
     map_as_image: false,
     slides: [
       {
+        id: 'overview-0',
         type: 'overview',
         date: 'European Cultural Journey',
         text: {
@@ -17,10 +18,10 @@ const mockStoryMapData = {
         location: {
           lat: 48.5,
           lon: 10.0
-        },
-        zoom: 4
+        }
       },
       {
+        id: 'event-0',
         date: '753 BC',
         text: {
           headline: 'Rome - The Eternal City',
@@ -29,10 +30,10 @@ const mockStoryMapData = {
         location: {
           lat: 41.9028,
           lon: 12.4964
-        },
-        zoom: 12
+        }
       },
       {
+        id: 'event-1',
         date: '3rd Century BC',
         text: {
           headline: 'Paris - City of Light',
@@ -41,10 +42,10 @@ const mockStoryMapData = {
         location: {
           lat: 48.8566,
           lon: 2.3522
-        },
-        zoom: 12
+        }
       },
       {
+        id: 'event-2',
         date: '43 AD',
         text: {
           headline: 'London - Where Modern Meets Traditional',
@@ -53,10 +54,10 @@ const mockStoryMapData = {
         location: {
           lat: 51.5074,
           lon: -0.1278
-        },
-        zoom: 11
+        }
       },
       {
+        id: 'event-3',
         date: '9th Century',
         text: {
           headline: 'Prague - City of a Hundred Spires',
@@ -65,10 +66,10 @@ const mockStoryMapData = {
         location: {
           lat: 50.0755,
           lon: 14.4378
-        },
-        zoom: 12
+        }
       },
       {
+        id: 'event-4',
         date: '3000 BC',
         text: {
           headline: 'Athens - Cradle of Western Civilization',
@@ -77,8 +78,7 @@ const mockStoryMapData = {
         location: {
           lat: 37.9838,
           lon: 23.7275
-        },
-        zoom: 12
+        }
       }
     ]
   }
