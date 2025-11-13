@@ -1,5 +1,6 @@
 import prisma from '@/lib/db';
 import { v4 as uuidv4 } from 'uuid';
+import { StoryMapCard } from '@/db/model/vo/Storymap';
 
 /**
  * 创建新的事件地图
@@ -159,4 +160,31 @@ export const updateStoryMap = async (id: string, data: {
         where: { id },
         data: updateData,
     });
+};
+
+/**
+ * 根据用户ID查询该用户创建的所有事件地图列表
+ * @param userId 用户ID
+ * @returns 事件地图列表，包含每个地图的事件数量
+ */
+export const getStoryMapsByUserId = async (userId: string) => {
+    // 验证数据
+    if (!userId || typeof userId !== 'string') {
+        throw new Error('用户ID不能为空');
+    }
+
+    // 使用raw SQL查询用户创建的所有事件地图，并计算每个地图的事件数量
+    // tongbug修改: PostgreSQL 默认对列名和表名进行 不区分大小写 的处理。因此，如果列名或表名没有用双引号括起来，PostgreSQL 会将它们转换为小写字母
+    const result = await prisma.$queryRaw<Array<StoryMapCard>>`
+    SELECT 
+      sm.*, 
+      CAST(COUNT(sme.id) AS INTEGER) as "eventCount"
+    FROM storymap sm
+    LEFT JOIN storymap_event sme ON sm.id = sme."storymapId"
+    WHERE sm."userId" = ${userId}
+    GROUP BY sm.id
+    ORDER BY sm."updatedAt" DESC;
+  `;
+
+    return result;
 };

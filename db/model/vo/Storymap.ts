@@ -31,6 +31,15 @@ export interface location {
     lon: number;
 };
 
+export interface StoryMapCard {
+  id: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  eventCount: number;
+}
+
 export const transformLocation = (location: GeoLocation): location => {
     // 增加location本身为空和字段为空判断
     if (!location || !location.lat || !location.lng) {

@@ -1,0 +1,14 @@
+{
+  "MyStoryMapsTab": {
+    "myStoryMapsTitle": "My Story Maps",
+    "createNewStoryMap": "Create New Story Map",
+    "updatedAt": "Updated at",
+    "eventCount": "Event count",
+    "noStoryMapsCreated": "No story maps created yet",
+    "noStoryMapsDescription": "Create your first story map to visualize events on a map",
+    "createFirstStoryMap": "Create First Story Map",
+    "loadingStoryMaps": "Loading story maps...",
+    "errorLoadingStoryMaps": "Error loading story maps",
+    "tryAgain": "Try Again"
+  }
+}

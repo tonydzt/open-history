@@ -5,12 +5,14 @@ import { Navbar } from '@/components';
 import MyEventsTab from '@/components/features/tab/MyEventsTab';
 import MyTimelinesTab from '@/components/features/tab/MyTimelinesTab';
 import MyCollectionsTab from '@/components/features/tab/MyCollectionsTab';
+import MyStoryMapsTab from '@/components/features/tab/MyStoryMapsTab';
 
 // 创建一个缓存容器，用于存储tab组件的状态
 interface TabCache {
   events: boolean;
   timelines: boolean;
   collections: boolean;
+  storyMaps: boolean;
 }
 
 // 使用React.memo包装的Tab组件，避免不必要的重新渲染
@@ -26,19 +28,25 @@ const CachedCollectionsTab = React.memo(() => {
   return <MyCollectionsTab />;
 });
 
+const CachedStoryMapsTab = React.memo(() => {
+  return <MyStoryMapsTab />;
+});
+
 // 为了在开发环境中更好地调试
 CachedEventsTab.displayName = 'CachedEventsTab';
 CachedTimelinesTab.displayName = 'CachedTimelinesTab';
 CachedCollectionsTab.displayName = 'CachedCollectionsTab';
+CachedStoryMapsTab.displayName = 'CachedStoryMapsTab';
 
 export default function MyProfilePage() {
   const t = useTranslations('MyPage');
-  const [activeTab, setActiveTab] = useState<'events' | 'timelines' | 'collections'>('events');
+  const [activeTab, setActiveTab] = useState<'events' | 'timelines' | 'collections' | 'storyMaps'>('events');
   // 使用状态来跟踪哪些tab已经被渲染过
   const [tabCache, setTabCache] = useState<TabCache>({
     events: false,
     timelines: false,
-    collections: false
+    collections: false,
+    storyMaps: false
   });
 
   // 初始化页面时，加载默认的events tab
@@ -47,7 +55,7 @@ export default function MyProfilePage() {
   }, []);
 
   // 处理tab切换
-  const handleTabChange = (tab: 'events' | 'timelines' | 'collections') => {
+  const handleTabChange = (tab: 'events' | 'timelines' | 'collections' | 'storyMaps') => {
     setActiveTab(tab);
     // 当切换到一个新的tab时，将其添加到缓存中
     if (!tabCache[tab]) {
@@ -80,6 +88,12 @@ export default function MyProfilePage() {
               {t('tabTimelines')}
             </button>
             <button
+              onClick={() => handleTabChange('storyMaps')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === 'storyMaps' ? 'border-primary-600 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
+            >
+              {t('tabStoryMaps')}
+            </button>
+            <button
               onClick={() => handleTabChange('collections')}
               className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === 'collections' ? 'border-primary-600 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
             >
@@ -104,6 +118,14 @@ export default function MyProfilePage() {
               className={`absolute inset-0 ${activeTab === 'timelines' ? 'block' : 'hidden'}`}
             >
               <CachedTimelinesTab />
+            </div>
+          )}
+                    
+          {tabCache.storyMaps && (
+            <div
+              className={`absolute inset-0 ${activeTab === 'storyMaps' ? 'block' : 'hidden'}`}
+            >
+              <CachedStoryMapsTab />
             </div>
           )}
           

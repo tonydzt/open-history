@@ -1,0 +1,14 @@
+{
+  "MyStoryMapsTab": {
+    "myStoryMapsTitle": "我的故事地图",
+    "createNewStoryMap": "创建新故事地图",
+    "updatedAt": "更新于",
+    "eventCount": "事件数",
+    "noStoryMapsCreated": "还没有创建任何故事地图",
+    "noStoryMapsDescription": "创建您的第一个故事地图，在地图上可视化事件",
+    "createFirstStoryMap": "创建第一个故事地图",
+    "loadingStoryMaps": "正在加载故事地图...",
+    "errorLoadingStoryMaps": "加载故事地图出错",
+    "tryAgain": "重试"
+  }
+}
