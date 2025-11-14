@@ -6,6 +6,7 @@ import { useRouter, useParams } from 'next/navigation';
 import StoryMapJS from '@/components/features/storymap/storymapJS';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
 import { StoryMapData } from '@/db/model/vo/Storymap';
+import ShareComponent from '@/components/features/share/ShareComponent';
 
 export default function StoryMapDetailPage() {
   const router = useRouter();
@@ -17,6 +18,7 @@ export default function StoryMapDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [storymapInitFailed, setStorymapInitFailed] = useState(false);
+  const [storyMapUrl, setStoryMapUrl] = useState('');
 
   // 获取故事地图数据
   useEffect(() => {
@@ -51,6 +53,11 @@ export default function StoryMapDetailPage() {
 
     fetchStoryMapData();
   }, [id]);
+
+  // 获取当前页面URL用于分享
+  useEffect(() => {
+    setStoryMapUrl(`${window.location.origin}${window.location.pathname}`);
+  }, []);
 
   // 编辑故事地图
   const handleEdit = () => {
@@ -88,14 +95,22 @@ export default function StoryMapDetailPage() {
 
   return (
     <div className="relative min-h-screen bg-gray-50">
-      {/* 编辑按钮 - 固定在右上角 */}
-      <div className="absolute top-4 right-4 z-50">
+      {/* 编辑和分享按钮 - 固定在右上角 */}
+      <div className="absolute top-4 right-4 z-50 flex items-center gap-2">
         <button
           onClick={handleEdit}
           className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-md hover:bg-primary-500 transition-colors shadow-lg"
         >
           {t('edit')}
         </button>
+        <ShareComponent
+          storyMapUrl={storyMapUrl}
+          title={storymapData.storymap.slides[0].text.headline}
+          description={storymapData.storymap.slides[0].text.text}
+          featuredImage={''}
+          buttonText={t('share')}
+          buttonClassName="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-md hover:bg-primary-500 transition-colors shadow-lg"
+        />
       </div>
 
       {/* 故事地图展示 - 全页面 */}

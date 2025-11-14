@@ -8,6 +8,7 @@
     "unknownError": "An unknown error occurred",
     "back": "Back",
     "edit": "Edit",
+    "share": "Share",
     "storymapTitle": "Story Map Title",
     "storymapInitFailed": "Failed to initialize story map.",
     "retry": "Retry"

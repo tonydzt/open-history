@@ -1,8 +1,11 @@
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { getServerSession } from 'next-auth';
+import { headers } from 'next/headers';
 import { authOptions } from '@/lib/auth';
 import TimelineJS from '@/components/features/timeline/TimelineJS';
+import ShareComponent from '@/components/features/share/ShareComponent';
+import { getCurrentPageUrl } from '@/utils/Webutils';
 import { getTimelineById, formatTimelineData } from '@/db/access/timeline';
 import { getTimelineEvents, extractEventIds, getEventsByIds } from '@/db/access/timelineEvent';
 
@@ -21,6 +24,11 @@ export default async function TimelineDetailPage({
   // 异步获取params中的id和locale
   const { id, locale } = await params;
   const t = await getTranslations({ locale, namespace: 'TimelineDetailPage' });
+
+  // 构建分享URL
+  const headerList = await headers();
+  const pathname = `/${locale}/timeline/${id}`;
+  const storyMapUrl = getCurrentPageUrl({ headers: headerList, pathname });
 
   try {
     // 获取当前用户会话信息
@@ -57,15 +65,25 @@ export default async function TimelineDetailPage({
           <div className="mb-8">
             <div className="flex justify-between items-center mb-2">
               <h1 className="text-3xl font-bold">{timeline.title}</h1>
-              {/* 编辑按钮 - 只有创建人才能看到 */}
-              {user && timeline.userId === user.id && (
-                <a 
-                  href={`/timeline/${id}/edit`} 
-                  className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-500 transition-colors"
-                >
-                  {t('edit')}
-                </a>
-              )}
+              <div className="flex gap-3">
+                {/* 编辑按钮 - 只有创建人才能看到 */}
+                {user && timeline.userId === user.id && (
+                  <a 
+                    href={`/timeline/${id}/edit`} 
+                    className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-500 transition-colors"
+                  >
+                    {t('edit')}
+                  </a>
+                )}
+                {/* 分享按钮 */}
+                <div suppressHydrationWarning>
+                  <ShareComponent
+                    storyMapUrl={storyMapUrl}
+                    title={timeline.title}
+                    description={timeline.description ?? undefined}
+                  />
+                </div>
+              </div>
             </div>
             <p className="text-gray-600 mb-4">{timeline.description}</p>
           </div>

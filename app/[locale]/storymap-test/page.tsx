@@ -1,13 +1,20 @@
+'use client';
+
+import React, { useState } from 'react';
 import StoryMapJS from '@/components/features/storymap/storymapJS';
+import ShareComponent from '@/components/features/share/ShareComponent';
 
 // Mock 数据，符合 StoryMapJS 组件的数据结构
 const mockStoryMapData = {
+  id: 'test-storymap-1',
+  title: 'European Historical Cities Tour',
+  description: 'Explore five great cities that shaped European history, from the cradle of classical civilization to the center of modern art.',
+  featuredImage: '',
   storymap: {
     language: 'en',
     map_type: 'osm:standard',
     map_as_image: false,
-    slides: [
-      {
+    slides: [  {
         id: 'overview-0',
         type: 'overview',
         date: 'European Cultural Journey',
@@ -85,8 +92,24 @@ const mockStoryMapData = {
 };
 
 export default function StoryMapTest() {
+  const [storyMapUrl, setStoryMapUrl] = useState('');
+
+  React.useEffect(() => {
+    setStoryMapUrl(`${window.location.origin}${window.location.pathname}`);
+  }, []);
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <div className="flex justify-end mb-4">
+        <ShareComponent
+          storyMapUrl={storyMapUrl}
+          title={mockStoryMapData.title}
+          description={mockStoryMapData.description}
+          featuredImage={mockStoryMapData.featuredImage}
+          buttonText="分享"
+          buttonClassName="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-md hover:bg-primary-500 transition-colors shadow-lg"
+        />
+      </div>
       <h1 className="text-3xl font-bold text-gray-900 mb-6 text-center">
         StoryMapJS 演示测试
       </h1>
@@ -98,6 +121,8 @@ export default function StoryMapTest() {
         {/* 引入并使用 StoryMapJS 组件 */}
         <StoryMapJS data={mockStoryMapData} className="w-full" />
       </div>
+
+
     </div>
   );
 }
