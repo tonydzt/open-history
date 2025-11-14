@@ -12,8 +12,11 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'lh3.googleusercontent.com',
       },
-    ],
+    ]
   },
+
+  // tongbug修改: 这里如果不配置这个，那么开发环境默认走的严格模式，useEffect会执行两次，导致一些问题
+  reactStrictMode: false,
 };
  
 module.exports = withNextIntl(nextConfig);
