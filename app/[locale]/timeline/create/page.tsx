@@ -9,6 +9,7 @@ import LoadingIndicator from '@/components/common/LoadingIndicator';
 import EventSelector from '@/components/features/events/EventSelector';
 import TimelineComponent from '@/components/features/timeline/TimelineJS';
 import ImageUploader from '@/components/common/ImageUploader';
+import Image from 'next/image';
 
 // 创建时间轴的API调用
 const createTimeline = async (timelineData: Timeline): Promise<{ id: string }> => {
@@ -19,12 +20,12 @@ const createTimeline = async (timelineData: Timeline): Promise<{ id: string }> =
     },
     body: JSON.stringify(timelineData),
   });
-  
+
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
     throw new Error(errorData.error || 'Failed to create timeline');
   }
-  
+
   return response.json();
 };
 
@@ -37,12 +38,12 @@ export default function CreateTimelinePage() {
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [isEventSelectorOpen, setIsEventSelectorOpen] = useState(false);
   const [timelineInitFailed, setTimelineInitFailed] = useState(false);
-  
+
   // 时间轴基本信息
   const [formData, setFormData] = useState<Timeline>({
     events: []
   });
-  
+
   // 已选择的事件数据
   const [selectedEvents, setSelectedEvents] = useState<EventCard[]>([]);
 
@@ -91,7 +92,7 @@ export default function CreateTimelinePage() {
       }));
     }
   };
-  
+
   // 处理背景设置变更
   const handleBackgroundChange = (field: 'color' | 'alt', value: string) => {
     setFormData(prev => ({
@@ -99,27 +100,27 @@ export default function CreateTimelinePage() {
       background: prev.background ? { ...prev.background, [field]: value } : { [field]: value }
     }));
   };
-  
+
   // 处理背景图片上传成功
   const handleBackgroundImageUploadSuccess = (result: any) => {
     setFormData(prev => ({
       ...prev,
-      background: prev.background 
+      background: prev.background
         ? { ...prev.background, url: result.url, alt: result.pathname.split('/').pop() }
         : { url: result.url, alt: result.pathname.split('/').pop() }
     }));
   };
-  
+
   // 处理背景图片上传失败
   const handleBackgroundImageUploadError = (error: Error) => {
     setError(`图片上传失败: ${error.message}`);
   };
-  
+
   // 移除背景图片
   const handleRemoveBackgroundImage = () => {
     setFormData(prev => ({
       ...prev,
-      background: prev.background 
+      background: prev.background
         ? { ...prev.background, url: undefined, alt: undefined }
         : undefined
     }));
@@ -130,11 +131,11 @@ export default function CreateTimelinePage() {
     // 避免重复添加事件
     const existingEventIds = new Set(selectedEvents.map(event => event.id));
     const newEvents = events.filter(event => !existingEventIds.has(event.id));
-    
+
     if (newEvents.length > 0) {
       const updatedEvents = [...selectedEvents, ...newEvents];
       setSelectedEvents(updatedEvents);
-      
+
       // 更新表单数据中的事件列表
       setFormData(prev => ({
         ...prev,
@@ -153,7 +154,7 @@ export default function CreateTimelinePage() {
         }))
       }));
     }
-    
+
     // 关闭选择器
     setIsEventSelectorOpen(false);
   };
@@ -173,12 +174,12 @@ export default function CreateTimelinePage() {
       setError(t('titleRequired'));
       return;
     }
-    
+
     if (selectedEvents.length === 0 || formData.events.length === 0) {
       setError(t('atLeastOneEvent'));
       return;
     }
-    
+
     setError(null);
     setIsPreviewMode(true);
   };
@@ -192,24 +193,24 @@ export default function CreateTimelinePage() {
   // 提交表单
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.title || !formData.title.text || !formData.title.text.headline) {
       setError(t('titleRequired'));
       return;
     }
-    
+
     if (selectedEvents.length === 0 || formData.events.length === 0) {
       setError(t('atLeastOneEvent'));
       return;
     }
-    
+
     setLoading(true);
     setError(null);
-    
+
     try {
       // 调用实际API
       const result = await createTimeline(formData);
-      
+
       // 成功后跳转到时间轴详情页
       router.push(`/timeline/${result.id}`);
     } catch (err) {
@@ -225,11 +226,11 @@ export default function CreateTimelinePage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">      
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* 头部导航 */}
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold text-gray-900">{t('createTimeline')}</h1>
-        <button 
+        <button
           onClick={() => router.back()}
           className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-primary-600 transition-colors"
         >
@@ -250,7 +251,7 @@ export default function CreateTimelinePage() {
           <div className="p-6 border-b border-gray-100">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold text-gray-900">{t('preview')}</h2>
-              <button 
+              <button
                 onClick={handleBackToEdit}
                 className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-500 transition-colors"
               >
@@ -258,13 +259,13 @@ export default function CreateTimelinePage() {
               </button>
             </div>
           </div>
-          
+
           {/* 时间轴内容 */}
           <div className="overflow-hidden" style={{ height: 'calc(100vh - 200px)' }}>
             {timelineInitFailed ? (
               <div className="flex justify-center items-center h-64 text-gray-500">
                 {t('timelineInitFailed')}
-                <button 
+                <button
                   onClick={() => setTimelineInitFailed(false)}
                   className="ml-4 text-primary-600 hover:underline"
                 >
@@ -272,15 +273,15 @@ export default function CreateTimelinePage() {
                 </button>
               </div>
             ) : (
-              <TimelineComponent 
+              <TimelineComponent
                 data={prepareTimelineData()}
               />
             )}
           </div>
-          
+
           {/* 底部操作按钮 */}
           <div className="p-6 border-t border-gray-100 flex justify-end">
-            <button 
+            <button
               onClick={handleSubmit}
               disabled={loading}
               className={`px-6 py-3 bg-primary-600 text-white rounded-md hover:bg-primary-500 transition-colors flex items-center ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
@@ -298,7 +299,7 @@ export default function CreateTimelinePage() {
         <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-md overflow-hidden">
           <div className="p-6 border-b border-gray-100">
             <h2 className="text-xl font-bold text-gray-900 mb-6">{t('timelineInfo')}</h2>
-            
+
             {/* 时间轴标题 */}
             <div className="mb-6">
               <label htmlFor="timeline-title" className="block text-sm font-medium text-gray-700 mb-1">
@@ -314,7 +315,7 @@ export default function CreateTimelinePage() {
                 required
               />
             </div>
-            
+
             {/* 时间轴描述 */}
             <div className="mb-6">
               <label htmlFor="timeline-description" className="block text-sm font-medium text-gray-700 mb-1">
@@ -329,11 +330,11 @@ export default function CreateTimelinePage() {
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
               />
             </div>
-            
+
             {/* 背景设置 */}
             <div className="mb-6">
               <h3 className="text-lg font-medium text-gray-900 mb-4">{t('backgroundSettings')}</h3>
-              
+
               {/* 背景颜色 */}
               <div className="mb-4">
                 <label htmlFor="background-color" className="block text-sm font-medium text-gray-700 mb-1">
@@ -356,7 +357,7 @@ export default function CreateTimelinePage() {
                   />
                 </div>
               </div>
-              
+
               {/* 背景图片 */}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -364,11 +365,14 @@ export default function CreateTimelinePage() {
                 </label>
                 {formData.background?.url ? (
                   <div className="relative">
-                    <img 
-                      src={formData.background.url} 
-                      alt={formData.background.alt || ''}
-                      className="max-w-full h-48 object-cover rounded-md border border-gray-200"
-                    />
+                    <div className="max-w-full h-48 relative">
+                      <Image
+                        src={formData.background.url}
+                        alt={formData.background.alt || ''}
+                        fill
+                        className="object-contain rounded-md border border-gray-200"
+                      />
+                    </div>
                     <button
                       type="button"
                       onClick={handleRemoveBackgroundImage}
@@ -395,7 +399,7 @@ export default function CreateTimelinePage() {
                   />
                 )}
               </div>
-              
+
               {/* 背景图片替代文本 */}
               {formData.background?.url && (
                 <div className="mb-4">
@@ -414,11 +418,11 @@ export default function CreateTimelinePage() {
               )}
             </div>
           </div>
-          
+
           {/* 事件列表 */}
           <div className="p-6 border-b border-gray-100">
             <h2 className="text-xl font-bold text-gray-900 mb-6">{t('events')}</h2>
-            
+
             {/* 已选择的事件列表 */}
             {selectedEvents.length > 0 ? (
               <div>
@@ -478,7 +482,7 @@ export default function CreateTimelinePage() {
               </div>
             )}
           </div>
-          
+
           {/* 底部操作按钮 */}
           <div className="p-6 flex justify-between">
             <button
@@ -502,7 +506,7 @@ export default function CreateTimelinePage() {
           </div>
         </form>
       )}
-      
+
       {/* 事件选择器 */}
       <EventSelector
         isOpen={isEventSelectorOpen}

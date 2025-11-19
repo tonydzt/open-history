@@ -4,6 +4,7 @@ import { type PutBlobResult } from '@vercel/blob';
 import { upload } from '@vercel/blob/client';
 import { useState, useRef } from 'react';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 
 interface ImageUploaderProps {
   // 上传成功后的回调函数
@@ -313,11 +314,15 @@ export default function ImageUploader({
           <div className="flex flex-col sm:flex-row gap-4 items-start">
             {/* 图片预览 */}
             {(blob.contentType?.startsWith('image/')) && (
-              <img 
-                src={blob.url} 
-                alt="Uploaded preview" 
-                className="max-w-xs max-h-48 object-cover rounded-md"
-              />
+              <div className="relative max-w-xs max-h-48">
+                <Image
+                  src={blob.url}
+                  alt="Uploaded preview"
+                  fill
+                  objectFit="cover"
+                  className="rounded-md"
+                />
+              </div>
             )}
             {/* 文件信息 */}
             <div className="flex-1">

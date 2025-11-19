@@ -2,6 +2,7 @@
 
 import { useSession, signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState, useRef, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
@@ -196,11 +197,13 @@ export default function Navbar() {
                   aria-expanded={isUserMenuOpen}
                 >
                   {session.user?.image ? (
-                    <img
+                    <Image
                       src={session.user.image.includes('googleusercontent.com') && session.user.image.includes('=s96-c') 
                     ? session.user.image.replace('=s96-c', '') 
                     : session.user.image}
                       alt={session.user.name || t('userAvatar')}
+                      width={32}
+                      height={32}
                       className="w-full h-full object-cover"
                     />
                   ) : (
@@ -291,11 +294,13 @@ export default function Navbar() {
                   <div className="py-3 px-4 bg-gray-50 rounded-lg flex items-center justify-between">
                     <div className="flex items-center">
                       {session.user?.image ? (
-                        <img
+                        <Image
                           src={session.user.image.includes('googleusercontent.com') && session.user.image.includes('=s96-c') 
                           ? session.user.image.replace('=s96-c', '') 
                           : session.user.image}
                           alt={session.user.name || '用户头像'}
+                          width={32}
+                          height={32}
                           className="w-8 h-8 rounded-full object-cover"
                         />
                       ) : (

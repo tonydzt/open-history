@@ -1,5 +1,6 @@
 "use client";
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 import { Event } from '@/db/model/vo/Event';
 import { useTranslations } from 'next-intl';
@@ -49,10 +50,12 @@ export default function EventCard({ event }: EventCardProps) {
           {/* 固定高度的图片区域 */}
           <div className="relative h-48 overflow-hidden">
             {isImageValid ? (
-              <img
+              <Image
                 src={event.images[0]}
                 alt={event.title}
-                className="w-full h-full object-cover"
+                fill
+                objectFit="contain"
+                className="object-contain"
               />
             ) : (
               <div className="w-full h-full bg-gray-100 flex items-center justify-center">
@@ -99,13 +102,16 @@ export default function EventCard({ event }: EventCardProps) {
             <div className="flex items-center justify-between mt-auto">
               <div className="flex items-center space-x-2">
                 {event.author.image && (
-                  <img
-                    src={event.author.image.includes('googleusercontent.com') && event.author.image.includes('=s96-c') 
-                      ? event.author.image.replace('=s96-c', '') 
-                      : event.author.image}
-                    alt={event.author.name}
-                    className="w-6 h-6 rounded-full"
-                  />
+                  <Image
+                  src={event.author.image.includes('googleusercontent.com') && event.author.image.includes('=s96-c') 
+                    ? event.author.image.replace('=s96-c', '') 
+                    : event.author.image}
+                  alt={event.author.name}
+                  width={24}
+                  height={24}
+                  objectFit="contain"
+                  className="rounded-full"
+                />
                 )}
                 <span className="text-sm text-gray-600">{event.author.name}</span>
               </div>

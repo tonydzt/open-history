@@ -9,6 +9,7 @@ import LoadingIndicator from '@/components/common/LoadingIndicator';
 import EventSelector from '@/components/features/events/EventSelector';
 import TimelineComponent from '@/components/features/timeline/TimelineJS';
 import ImageUploader from '@/components/common/ImageUploader';
+import Image from 'next/image';
 
 // 更新时间轴的API调用
 const updateTimeline = async (id: string, timelineData: Timeline): Promise<{ success: boolean }> => {
@@ -477,11 +478,12 @@ export default function EditTimelinePage() {
                   {t('backgroundImage')}
                 </label>
                 {formData.background?.url ? (
-                  <div className="relative">
-                    <img 
+                  <div className="relative w-full h-48">
+                    <Image 
                       src={formData.background.url} 
                       alt={formData.background.alt || ''}
-                      className="max-w-full h-48 object-cover rounded-md border border-gray-200"
+                      fill
+                      className="object-contain rounded-md border border-gray-200"
                     />
                     <button
                       type="button"

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { type PutBlobResult } from '@vercel/blob';
 import ImageUploader from '@/components/common/ImageUploader';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 
 interface EventImageUploaderProps {
   // 当前的图片URL
@@ -111,15 +112,19 @@ export default function EventImageUploader({
           <h3 className="text-lg font-medium mb-2">{t('currentImage')}</h3>
           <div className="flex flex-col sm:flex-row gap-4 items-start">
             {/* 图片预览 */}
-            <img 
-              src={value} 
-              alt={t('currentImage')} 
-              className="max-w-xs max-h-48 object-cover rounded-md"
-              onError={() => {
-                // 处理图片加载失败的情况
-                setUploadError(t('imageLoadError'));
-              }}
-            />
+            <div className="relative max-w-xs max-h-48">
+              <Image 
+                src={value} 
+                alt={t('currentImage')} 
+                fill
+                objectFit="cover"
+                className="rounded-md"
+                onError={() => {
+                  // 处理图片加载失败的情况
+                  setUploadError(t('imageLoadError'));
+                }}
+              />
+            </div>
             {/* 文件信息 */}
             <div className="flex-1">
               <p className="text-sm break-all">{value}</p>

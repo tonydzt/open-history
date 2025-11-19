@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
 import { EventCard } from '@/db/model/vo/EventCard';
+import Image from 'next/image';
 
 interface EventSelectorProps {
   isOpen: boolean;
@@ -275,11 +276,13 @@ const EventSelector: React.FC<EventSelectorProps> = ({ isOpen, onClose, onAddEve
                           )}
                         </div>
                         {event.images && event.images[0] && (
-                          <div className="w-20 h-20 rounded-md overflow-hidden flex-shrink-0">
-                            <img
+                          <div className="w-20 h-20 rounded-md overflow-hidden flex-shrink-0 relative">
+                            <Image
                               src={event.images[0]}
                               alt={event.title}
-                              className="w-full h-full object-cover"
+                              fill
+                              objectFit="cover"
+                              className="rounded-md"
                             />
                           </div>
                         )}

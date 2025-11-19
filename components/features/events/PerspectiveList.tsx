@@ -1,5 +1,6 @@
 import { Perspective } from '@/db/model/vo/Perspective';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 
 interface PerspectiveListProps {
   perspectives: Perspective[];
@@ -41,11 +42,13 @@ export default function PerspectiveList({ perspectives }: PerspectiveListProps) 
         <div key={perspective.id} className="card p-6">
           <div className="flex items-start space-x-3">
             {perspective.author.image && (
-              <img
+              <Image
                 src={perspective.author.image.includes('googleusercontent.com') && perspective.author.image.includes('=s96-c') 
                   ? perspective.author.image.replace('=s96-c', '') 
                   : perspective.author.image}
                 alt={perspective.author.name}
+                width={40}
+                height={40}
                 className="w-10 h-10 rounded-full flex-shrink-0"
               />
             )}

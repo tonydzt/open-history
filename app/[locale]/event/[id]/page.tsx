@@ -8,6 +8,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import db from '@/lib/db';
 import { getTranslations } from 'next-intl/server';
+import Image from 'next/image';
 
 // 类型转换函数
 const transformEvent = (dbEvent: any): Event => {
@@ -213,11 +214,13 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
         
         <div className="flex items-center space-x-3 mb-6">
           {event.author.image && (
-            <img
+            <Image
               src={event.author.image.includes('googleusercontent.com') && event.author.image.includes('=s96-c') 
                 ? event.author.image.replace('=s96-c', '') 
                 : event.author.image}
               alt={event.author.name}
+              width={40}
+              height={40}
               className="w-10 h-10 rounded-full"
             />
           )}
@@ -233,11 +236,12 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
         <div className="mb-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {event.images.map((image, index) => (
-              <div key={index} className="rounded-lg overflow-hidden">
-                <img
+              <div key={index} className="relative w-full h-64 rounded-lg overflow-hidden">
+                <Image
                   src={image}
                   alt={`${event.title} - 图片 ${index + 1}`}
-                  className="w-full h-64 object-cover"
+                  fill
+                  className="object-cover"
                 />
               </div>
             ))}
