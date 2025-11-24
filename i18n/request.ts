@@ -40,7 +40,8 @@ export default getRequestConfig(async ({ requestLocale }) => {
     pagesTermsPage,
     pagesTimelineDetailPage,
     pagesMyPagePage,
-    pagesStoryMapDetailPage
+    pagesStoryMapDetailPage,
+    pagesAboutPage
   ] = await Promise.all([
     import(`./messages/common/footer.${locale}.json`),
     import(`./messages/common/Layout.${locale}.json`),
@@ -71,7 +72,8 @@ export default getRequestConfig(async ({ requestLocale }) => {
     import(`./messages/pages/TermsPage.${locale}.json`),
     import(`./messages/pages/TimelineDetailPage.${locale}.json`),
     import(`./messages/pages/MyPage.${locale}.json`),
-    import(`./messages/pages/StoryMapDetailPage.${locale}.json`)
+    import(`./messages/pages/StoryMapDetailPage.${locale}.json`),
+    import(`./messages/pages/AboutPage.${locale}.json`)
   ]);
 
   // Merge all translation files
@@ -107,7 +109,8 @@ export default getRequestConfig(async ({ requestLocale }) => {
       ...pagesTermsPage.default,
       ...pagesTimelineDetailPage.default,
       ...pagesMyPagePage.default,
-      ...pagesStoryMapDetailPage.default
+      ...pagesStoryMapDetailPage.default,
+      ...pagesAboutPage.default
     }
   };
 });

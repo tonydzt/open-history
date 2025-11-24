@@ -102,7 +102,7 @@
           "title": "撤回同意权",
           "description": "如果我们基于您的同意处理您的个人信息，您有权随时撤回您的同意"
         },
-        "contactUs": "要行使上述任何权利，请联系我们：support@chronicle.example.com"
+        "contactUs": "要行使上述任何权利，请联系我们：openhistory46@gmail.com"
       },
       "minorsProtection": {
         "title": "未成年人保护",
@@ -123,14 +123,8 @@
       "contactUs": {
         "title": "联系我们",
         "description": "如果您对本隐私政策有任何问题或疑虑，或希望行使您的数据主体权利，请联系我们：",
-        "email": "support@chronicle.example.com"
+        "email": "openhistory46@gmail.com"
       }
-    },
-    "footer": {
-      "companyName": "Chronicle",
-      "allRightsReserved": "保留所有权利。",
-      "home": "首页",
-      "terms": "服务条款"
     }
   }
 }

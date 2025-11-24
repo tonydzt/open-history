@@ -1,0 +1,14 @@
+{
+  "about": {
+    "title": "About Us",
+    "section1": {
+      "title": "Some Thoughts",
+      "content": [
+        "I just got the domain sorted today and uploaded this project that I've been working on for a while. It's a small experiment. The original intention of the project is to help people more easily access true information in today's era of information explosion.",
+        "The first version includes timeline and event map features because these two forms of storytelling are more systematic, making it easier for people to judge the authenticity of information compared to scattered information.",
+        "In the future, I will continue to add and improve the website's features around this original intention, hoping that everyone can find it useful and enjoy it. The terms of use and privacy policy are just placeholders for now and will be revised later.",
+        "For any questions, please contact openhistory46@gmail.com"
+      ]
+    }
+  }
+}

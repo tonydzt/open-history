@@ -1,8 +1,8 @@
 {
   "footer": {
-    "companyName": "Chronicle",
-    "allRightsReserved": "All rights reserved.",
-    "home": "Home",
-    "privacy": "Privacy Policy"
+    "about": "About",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "copyright": "Chronicle. All rights reserved."
   }
 }

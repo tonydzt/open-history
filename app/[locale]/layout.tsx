@@ -2,6 +2,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import Providers from '@/components/common/Providers';
 import Navbar from '@/components/common/Navbar';
+import Footer from '@/components/common/Footer';
 import { NextIntlClientProvider } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import GoogleAnalytics from '@/components/features/analytics/GoogleAnalytics';
@@ -37,11 +38,12 @@ export default async function LocaleLayout({ children, params }: Props) {
         </Suspense>
         <Providers>
           <NextIntlClientProvider>
-            <div className="min-h-screen bg-gray-50">
+            <div className="min-h-screen bg-gray-50 flex flex-col">
               <Navbar />
-              <main className="pt-16">
+              <main className="pt-16 flex-grow">
                 {children}
               </main>
+              <Footer />
             </div>
           </NextIntlClientProvider>
         </Providers>

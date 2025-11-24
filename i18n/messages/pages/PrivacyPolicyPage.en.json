@@ -102,7 +102,7 @@
           "title": "Right to Withdraw Consent",
           "description": "If we process your personal information based on your consent, you have the right to withdraw your consent at any time"
         },
-        "contactUs": "To exercise any of the above rights, please contact us: support@chronicle.example.com"
+        "contactUs": "To exercise any of the above rights, please contact us: openhistory46@gmail.com"
       },
       "minorsProtection": {
         "title": "Protection of Minors",
@@ -123,14 +123,8 @@
       "contactUs": {
         "title": "Contact Us",
         "description": "If you have any questions or concerns about this privacy policy, or wish to exercise your data subject rights, please contact us:",
-        "email": "support@chronicle.example.com"
+        "email": "openhistory46@gmail.com"
       }
-    },
-    "footer": {
-      "companyName": "Chronicle",
-      "allRightsReserved": "All rights reserved.",
-      "home": "Home",
-      "terms": "Terms of Service"
     }
   }
 }

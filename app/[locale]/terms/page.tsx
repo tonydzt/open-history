@@ -97,14 +97,6 @@ export default function TermsPage() {
             </section>
           </div>
         </div>
-        
-        <div className="text-center text-gray-500 text-sm">
-          <p>© {new Date().getFullYear()} {t('footer.companyName')}. {t('footer.allRightsReserved')}</p>
-          <div className="mt-2 space-x-4">
-            <Link href="/" className="hover:text-primary-600 transition-colors">{t('footer.home')}</Link>
-            <Link href="/privacy" className="hover:text-primary-600 transition-colors">{t('footer.privacy')}</Link>
-          </div>
-        </div>
       </main>
     </div>
   );
