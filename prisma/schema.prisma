@@ -19,6 +19,7 @@ model User {
   perspectives  Perspective[]
   collection    collection[]
   storymap      storymap[]
+  user_key      user_key[]
 }
 
 model Event {
@@ -133,4 +134,17 @@ model storymap_event {
   storymap   storymap  @relation(fields: [storymapId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "storymap_event_storymapid_fkey")
 
   @@index([storymapId])
+}
+
+model user_key {
+  id         String   @id @db.VarChar(255)
+  userId     String
+  publicKey  String
+  privateKey String
+  status     Int      @default(1) @db.SmallInt
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime
+  User       User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
 }
