@@ -117,7 +117,7 @@ export default function EventImageUploader({
                 src={value} 
                 alt={t('currentImage')} 
                 fill
-                objectFit="cover"
+                style={{objectFit: "cover"}}	
                 className="rounded-md"
                 onError={() => {
                   // 处理图片加载失败的情况

@@ -281,7 +281,7 @@ const EventSelector: React.FC<EventSelectorProps> = ({ isOpen, onClose, onAddEve
                               src={event.images[0]}
                               alt={event.title}
                               fill
-                              objectFit="cover"
+                              style={{objectFit: "cover"}}	
                               className="rounded-md"
                             />
                           </div>

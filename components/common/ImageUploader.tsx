@@ -319,7 +319,7 @@ export default function ImageUploader({
                   src={blob.url}
                   alt="Uploaded preview"
                   fill
-                  objectFit="cover"
+                  style={{objectFit: "cover"}}
                   className="rounded-md"
                 />
               </div>

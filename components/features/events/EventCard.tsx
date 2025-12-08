@@ -54,7 +54,7 @@ export default function EventCard({ event }: EventCardProps) {
                 src={event.images[0]}
                 alt={event.title}
                 fill
-                objectFit="contain"
+                style={{objectFit: "contain"}}	
                 className="object-contain"
               />
             ) : (
@@ -109,7 +109,7 @@ export default function EventCard({ event }: EventCardProps) {
                   alt={event.author.name}
                   width={24}
                   height={24}
-                  objectFit="contain"
+                  style={{objectFit: "contain"}}	
                   className="rounded-full"
                 />
                 )}
