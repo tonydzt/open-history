@@ -41,16 +41,6 @@ async function fetchWithAuth(url: string, options: RequestInit = {}) {
 }
 
 export const api = {
-  // 获取事件列表
-  async getEvents(): Promise<Event[]> {
-    try {
-      const url = `${API_BASE_URL}/events`;
-      return fetchWithAuth(url);
-    } catch (error) {
-      console.error('获取事件列表失败:', error);
-      throw new Error('获取事件列表失败');
-    }
-  },
 
   // 创建新事件
   async createEvent(data: CreateEventData): Promise<{ id: string }> {
@@ -64,17 +54,6 @@ export const api = {
     } catch (error) {
       console.error('创建事件失败:', error);
       throw new Error('创建事件失败');
-    }
-  },
-
-  // 获取特定事件
-  async getEvent(id: string): Promise<{ event: Event; perspectives: Perspective[] }> {
-    try {
-      const url = `${API_BASE_URL}/events/${id}`;
-      return fetchWithAuth(url);
-    } catch (error) {
-      console.error('获取事件详情失败:', error);
-      throw new Error('获取事件详情失败');
     }
   },
 
