@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
-import { api } from '@/lib/api';
+
 import { useTranslations } from 'next-intl';
 
 export default function AddPerspectivePage() {
@@ -56,7 +56,20 @@ export default function AddPerspectivePage() {
       setLoading(true);
       setError(null);
       
-      await api.addPerspective(eventId, { content: content.trim() });
+      // 直接调用/api/events/[id]接口添加视角
+      const response = await fetch(`/api/events/${eventId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // 包含cookies以确保认证
+        body: JSON.stringify({ content: content.trim() }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || '添加视角失败');
+      }
       
       // 跳转回事件详情页
       router.push(`/event/${eventId}`);

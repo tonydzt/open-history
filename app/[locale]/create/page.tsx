@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { api } from '@/lib/api';
+
 import { CreateEventData, GeoLocation } from '@/db/model/vo/Event';
 import LeafletMapWrapper from '@/components/features/map/LeafletMapWrapper';
 import EventImageUploader from '@/components/features/events/EventImageUploader';
@@ -103,7 +103,22 @@ export default function CreateEventPage() {
         geom: formData.geom
       };
 
-      const result = await api.createEvent(eventData);
+      // 直接调用/api/events接口创建事件
+      const response = await fetch('/api/events', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // 包含cookies以确保认证
+        body: JSON.stringify(eventData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || '创建事件失败');
+      }
+
+      const result = await response.json();
 
       router.push(`/event/${result.id}`);
     } catch (err) {
