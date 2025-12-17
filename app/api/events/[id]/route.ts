@@ -192,10 +192,20 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
       return NextResponse.json({ error: '没有权限删除此事件' }, { status: 403 });
     }
     
-    // 事务处理：先删除相关的视角数据，再删除事件
+    // 事务处理：先删除相关联的数据，再删除事件
     await db.$transaction(async (tx) => {
       // 删除与该事件相关的所有视角
       await tx.perspective.deleteMany({
+        where: { eventId: id }
+      });
+      
+      // 删除与该事件相关的所有收藏事件关联
+      await tx.collection_event.deleteMany({
+        where: { eventId: id }
+      });
+      
+      // 删除与该事件相关的所有故事地图事件关联
+      await tx.storymap_event.deleteMany({
         where: { eventId: id }
       });
       

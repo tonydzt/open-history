@@ -5,6 +5,7 @@ import { collection } from '@prisma/client';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
 import EventCard from '@/components/features/events/EventCard';
 import { CollectionEvent, CollectionEventsResponse } from '@/db/model/vo/collectionEvent';
+import Alert from '@/components/common/Alert';
 
 // 扩展collection类型，添加_count字段
 interface CollectionWithCount extends collection {
@@ -32,6 +33,12 @@ const MyCollectionsTab: React.FC = () => {
   const [newCollectionDescription, setNewCollectionDescription] = useState('');
   const [editCollectionName, setEditCollectionName] = useState('');
   const [editCollectionDescription, setEditCollectionDescription] = useState('');
+  // Alert组件状态
+  const [alert, setAlert] = useState({
+    show: false,
+    type: 'success' as 'success' | 'error' | 'warning' | 'info',
+    message: ''
+  });
   // 新增：收藏夹事件列表相关状态
   const [collectionEvents, setCollectionEvents] = useState<CollectionEvent[]>([]);
   const [eventsLoading, setEventsLoading] = useState(false);
@@ -103,7 +110,7 @@ const MyCollectionsTab: React.FC = () => {
   // 创建收藏夹
   const handleCreateCollection = async () => {
     if (!newCollectionName.trim()) {
-      alert('请输入收藏夹名称');
+      setAlert({ show: true, type: 'warning', message: '请输入收藏夹名称' });
       return;
     }
 
@@ -128,14 +135,14 @@ const MyCollectionsTab: React.FC = () => {
       await fetchCollections();
       handleCloseCreateModal();
     } catch (err) {
-      alert((err as Error).message);
+      setAlert({ show: true, type: 'error', message: (err as Error).message });
     }
   };
 
   // 编辑收藏夹
   const handleEditCollection = async () => {
     if (!editingCollection || !editCollectionName.trim()) {
-      alert('请输入收藏夹名称');
+      setAlert({ show: true, type: 'warning', message: '请输入收藏夹名称' });
       return;
     }
 
@@ -161,7 +168,7 @@ const MyCollectionsTab: React.FC = () => {
       await fetchCollections();
       handleCloseEditModal();
     } catch (err) {
-      alert((err as Error).message);
+      setAlert({ show: true, type: 'error', message: (err as Error).message });
     }
   };
 
@@ -195,7 +202,7 @@ const MyCollectionsTab: React.FC = () => {
       // 重新获取收藏夹列表
       await fetchCollections();
     } catch (err) {
-      alert((err as Error).message);
+      setAlert({ show: true, type: 'error', message: (err as Error).message });
     }
   };
 
@@ -473,6 +480,16 @@ const MyCollectionsTab: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Alert组件 */}
+      {alert.show && (
+        <Alert
+          show={alert.show}
+          type={alert.type}
+          message={alert.message}
+          onClose={() => setAlert(prev => ({ ...prev, show: false }))}
+        />
       )}
     </div>
   );
