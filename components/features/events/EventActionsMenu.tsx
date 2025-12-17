@@ -5,6 +5,7 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuIte
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Alert from '@/components/common/Alert';
+import Confirm from '@/components/common/Confirm';
 
 interface EventActionsMenuProps {
   eventId: string;
@@ -41,6 +42,11 @@ const EventActionsMenu: React.FC<EventActionsMenuProps> = ({
     type: 'success' as 'success' | 'error' | 'warning' | 'info',
     message: ''
   });
+  // Confirm组件状态
+  const [confirm, setConfirm] = useState({
+    show: false,
+    message: ''
+  });
   const router = useRouter();
   const t = useTranslations('EventDetailPage');
 
@@ -70,11 +76,17 @@ const EventActionsMenu: React.FC<EventActionsMenuProps> = ({
       return;
     }
     
-    // 使用原生confirm对话框
-    if (!window.confirm(t('deleteEventConfirm'))) {
-      return;
-    }
+    // 显示自定义确认对话框
+    setConfirm({
+      show: true,
+      message: t('deleteEventConfirm')
+    });
+  };
 
+  const handleConfirmDelete = async () => {
+    // 关闭确认对话框
+    setConfirm({ show: false, message: '' });
+    
     setIsDeleting(true);
     
     try {
@@ -172,6 +184,15 @@ const EventActionsMenu: React.FC<EventActionsMenuProps> = ({
           onClose={() => setAlert(prev => ({ ...prev, show: false }))}
         />
       )}
+
+      {/* Confirm组件 */}
+      <Confirm
+        show={confirm.show}
+        message={confirm.message}
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setConfirm({ show: false, message: '' })}
+        confirmVariant="danger"
+      />
     </div>
   );
 };

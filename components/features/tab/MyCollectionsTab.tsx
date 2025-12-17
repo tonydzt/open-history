@@ -6,6 +6,7 @@ import LoadingIndicator from '@/components/common/LoadingIndicator';
 import EventCard from '@/components/features/events/EventCard';
 import { CollectionEvent, CollectionEventsResponse } from '@/db/model/vo/collectionEvent';
 import Alert from '@/components/common/Alert';
+import Confirm from '@/components/common/Confirm';
 
 // 扩展collection类型，添加_count字段
 interface CollectionWithCount extends collection {
@@ -38,6 +39,12 @@ const MyCollectionsTab: React.FC = () => {
     show: false,
     type: 'success' as 'success' | 'error' | 'warning' | 'info',
     message: ''
+  });
+  // Confirm组件状态
+  const [confirm, setConfirm] = useState({
+    show: false,
+    message: '',
+    collectionId: null as string | null
   });
   // 新增：收藏夹事件列表相关状态
   const [collectionEvents, setCollectionEvents] = useState<CollectionEvent[]>([]);
@@ -172,11 +179,21 @@ const MyCollectionsTab: React.FC = () => {
     }
   };
 
-  // 删除收藏夹
-  const handleDeleteCollection = async (collectionId: string) => {
-    if (!confirm(t('confirmDeleteCollection'))) {
-      return;
-    }
+  // 删除收藏夹 - 显示确认对话框
+  const handleDeleteCollection = (collectionId: string) => {
+    setConfirm({
+      show: true,
+      message: t('confirmDeleteCollection'),
+      collectionId
+    });
+  };
+
+  // 确认删除收藏夹
+  const handleConfirmDeleteCollection = async () => {
+    if (!confirm.collectionId) return;
+    
+    // 关闭确认对话框
+    setConfirm(prev => ({ ...prev, show: false }));
 
     try {
       const response = await fetch('/api/component/tab/collection', {
@@ -185,7 +202,7 @@ const MyCollectionsTab: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          collectionId: collectionId,
+          collectionId: confirm.collectionId,
         }),
       });
 
@@ -195,7 +212,7 @@ const MyCollectionsTab: React.FC = () => {
       }
 
       // 如果删除的是当前选中的收藏夹，清除选中状态
-      if (selectedCollection === collectionId) {
+      if (selectedCollection === confirm.collectionId) {
         setSelectedCollection(null);
       }
 
@@ -491,6 +508,15 @@ const MyCollectionsTab: React.FC = () => {
           onClose={() => setAlert(prev => ({ ...prev, show: false }))}
         />
       )}
+
+      {/* Confirm组件 */}
+      <Confirm
+        show={confirm.show}
+        message={confirm.message}
+        onConfirm={handleConfirmDeleteCollection}
+        onCancel={() => setConfirm(prev => ({ ...prev, show: false }))}
+        confirmVariant="danger"
+      />
     </div>
   );
 };
