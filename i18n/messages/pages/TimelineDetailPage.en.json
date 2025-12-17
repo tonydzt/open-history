@@ -14,6 +14,7 @@
     "loading": "Loading timeline details...",
     "loadingMessage": "Please wait while we fetch the timeline data.",
     "edit": "Edit",
+    "addEvent": "Add Event",
     "error": {
       "title": "Something went wrong",
       "message": "We encountered an error while loading the timeline details. Please try again later.",
