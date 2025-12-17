@@ -3,6 +3,7 @@ import { useTranslations } from 'next-intl';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
 import { EventCard } from '@/db/model/vo/EventCard';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface EventSelectorProps {
   isOpen: boolean;
@@ -81,6 +82,7 @@ const fetchEvents = async (page: number, pageSize: number, collectionId?: string
 
 const EventSelector: React.FC<EventSelectorProps> = ({ isOpen, onClose, onAddEvents, selectedEventIds = [] }) => {
   const t = useTranslations('EventSelector');
+  const router = useRouter();
   const [events, setEvents] = useState<EventCard[]>([]);
   const [collections, setCollections] = useState<Collection[]>([]);
   const [selectedCollection, setSelectedCollection] = useState<string>('');
@@ -89,6 +91,10 @@ const EventSelector: React.FC<EventSelectorProps> = ({ isOpen, onClose, onAddEve
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 10;
+
+  // 判断用户是否有收藏过任何事件
+  const hasNoCollectionsWithEvents = collections.length === 0 || 
+    collections.every(collection => collection._count.collection_event === 0);
 
   // 加载收藏夹列表
   const loadCollections = async () => {
@@ -289,6 +295,33 @@ const EventSelector: React.FC<EventSelectorProps> = ({ isOpen, onClose, onAddEve
                       </div>
                     </div>
                   ))
+                ) : hasNoCollectionsWithEvents ? (
+                  <div className="text-center py-12">
+                    <div className="text-gray-600 mb-6">
+                      <h3 className="text-lg font-semibold mb-2">{t('noCollectionsWithEvents')}</h3>
+                      <p>{t('noCollectionsWithEventsDescription')}</p>
+                    </div>
+                    <div className="flex flex-col sm:flex-row justify-center gap-3">
+                      <button
+                        onClick={() => {
+                          onClose();
+                          router.push('/create');
+                        }}
+                        className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-500 transition-colors"
+                      >
+                        {t('createFirstEvent')}
+                      </button>
+                      <button
+                        onClick={() => {
+                          onClose();
+                          router.push('/');
+                        }}
+                        className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors"
+                      >
+                        {t('goToHome')}
+                      </button>
+                    </div>
+                  </div>
                 ) : (
                   <div className="text-center py-12 text-gray-500">
                     {t('noEvents')}

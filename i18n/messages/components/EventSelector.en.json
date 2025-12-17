@@ -10,6 +10,10 @@
     "cancel": "Cancel",
     "addSelected": "Add Selected",
     "selectCollection": "Select Collection",
-    "allEvents": "All Events"
+    "allEvents": "All Events",
+    "noCollectionsWithEvents": "No Collections with Events",
+    "noCollectionsWithEventsDescription": "You haven't added any events to your collections yet.",
+    "createFirstEvent": "Create First Event",
+    "goToHome": "Go to Home"
   }
 }
