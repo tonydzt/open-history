@@ -1,7 +1,7 @@
 {
   "SignInPage": {
     "loading": "Loading login options...",
-    "title": "Sign in to Chronicle",
+    "title": "Sign in to Vine of Time",
     "subtitle": "Select a method below to sign in or create an account",
     "error": "An error occurred during login, please try again or use another login method.",
     "continueWith": "Continue with {provider}",

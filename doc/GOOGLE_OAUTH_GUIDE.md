@@ -35,7 +35,7 @@
 
 4. 返回创建OAuth客户端ID的页面：
    - 选择 "Web应用程序" 作为应用类型
-   - 输入一个名称（例如：`Chronicle Web App`）
+   - 输入一个名称（例如：`Vine of Time Web App`）
    - 在 "已获授权的JavaScript来源" 部分，添加：
      - `http://localhost:3000`（用于本地开发）
      - 您的生产网站URL（如果适用）
