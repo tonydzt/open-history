@@ -15,7 +15,6 @@ interface CollectionDialogProps {
   isOpen: boolean;
   onClose: () => void;
   eventId: string;
-  userId: string;
   onSuccess?: () => void;
 }
 
@@ -23,7 +22,6 @@ export default function CollectionDialog({
   isOpen,
   onClose,
   eventId,
-  userId,
   onSuccess,
 }: CollectionDialogProps) {
   const t = useTranslations('CollectionDialog');

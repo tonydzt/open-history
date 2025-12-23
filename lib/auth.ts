@@ -2,6 +2,7 @@ import { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import { put } from '@vercel/blob';
 import db from './db';
+import { createDefaultCollection } from '@/db/access/collection';
 
 // 下载图片并上传到Vercel Blob
 async function saveUserAvatarToBlob(userId: string, avatarUrl: string): Promise<string> {
@@ -69,6 +70,16 @@ export const authOptions: NextAuthOptions = {
             
             // 更新user对象的image字段
             user.image = blobUrl;
+
+            
+          }
+          
+          // 创建默认收藏夹
+          try {
+            await createDefaultCollection(user.id);
+          } catch (error) {
+            console.error('Error creating default collection:', error);
+            // 即使创建收藏夹失败，也允许用户登录
           }
         } catch (error) {
           console.error('Error processing user avatar:', error);

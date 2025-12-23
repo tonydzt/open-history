@@ -1,6 +1,7 @@
 import prisma from '@/lib/db';
 import { Prisma } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
+import { DEFAULT_COLLECTION_PREFIX } from '@/lib/constants';
 
 /**
  * 创建收藏夹
@@ -19,6 +20,40 @@ export const createCollection = async (
       name: data.name,
       description: data.description,
       userId: data.userId,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  });
+};
+
+/**
+ * 创建默认收藏夹
+ * @param userId 用户ID
+ * @returns 创建的默认收藏夹或已存在的默认收藏夹
+ */
+export const createDefaultCollection = async (userId: string) => {
+  // 生成默认收藏夹ID
+  const defaultCollectionId = DEFAULT_COLLECTION_PREFIX + userId;
+  
+  // 检查默认收藏夹是否已经存在
+  const existingCollection = await prisma.collection.findUnique({
+    where: {
+      id: defaultCollectionId,
+    },
+  });
+  
+  // 如果已存在，直接返回
+  if (existingCollection) {
+    return existingCollection;
+  }
+  
+  // 如果不存在，创建新的默认收藏夹
+  return await prisma.collection.create({
+    data: {
+      id: defaultCollectionId,
+      name: '我的收藏夹',
+      description: '',
+      userId: userId,
       createdAt: new Date(),
       updatedAt: new Date(),
     },

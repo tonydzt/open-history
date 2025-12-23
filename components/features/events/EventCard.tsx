@@ -143,7 +143,6 @@ export default function EventCard({ event }: EventCardProps) {
           isOpen={showCollectionDialog}
           onClose={() => setShowCollectionDialog(false)}
           eventId={event.id}
-          userId={user.id}
           onSuccess={handleCollectionSuccess}
         />
       )}

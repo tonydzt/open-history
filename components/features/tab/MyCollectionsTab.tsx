@@ -5,6 +5,8 @@ import { collection } from '@prisma/client';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
 import EventCard from '@/components/features/events/EventCard';
 import { CollectionEvent, CollectionEventsResponse } from '@/db/model/vo/collectionEvent';
+import Alert from '@/components/common/Alert';
+import Confirm from '@/components/common/Confirm';
 
 // 扩展collection类型，添加_count字段
 interface CollectionWithCount extends collection {
@@ -32,6 +34,18 @@ const MyCollectionsTab: React.FC = () => {
   const [newCollectionDescription, setNewCollectionDescription] = useState('');
   const [editCollectionName, setEditCollectionName] = useState('');
   const [editCollectionDescription, setEditCollectionDescription] = useState('');
+  // Alert组件状态
+  const [alert, setAlert] = useState({
+    show: false,
+    type: 'success' as 'success' | 'error' | 'warning' | 'info',
+    message: ''
+  });
+  // Confirm组件状态
+  const [confirm, setConfirm] = useState({
+    show: false,
+    message: '',
+    collectionId: null as string | null
+  });
   // 新增：收藏夹事件列表相关状态
   const [collectionEvents, setCollectionEvents] = useState<CollectionEvent[]>([]);
   const [eventsLoading, setEventsLoading] = useState(false);
@@ -103,7 +117,7 @@ const MyCollectionsTab: React.FC = () => {
   // 创建收藏夹
   const handleCreateCollection = async () => {
     if (!newCollectionName.trim()) {
-      alert('请输入收藏夹名称');
+      setAlert({ show: true, type: 'warning', message: '请输入收藏夹名称' });
       return;
     }
 
@@ -128,14 +142,14 @@ const MyCollectionsTab: React.FC = () => {
       await fetchCollections();
       handleCloseCreateModal();
     } catch (err) {
-      alert((err as Error).message);
+      setAlert({ show: true, type: 'error', message: (err as Error).message });
     }
   };
 
   // 编辑收藏夹
   const handleEditCollection = async () => {
     if (!editingCollection || !editCollectionName.trim()) {
-      alert('请输入收藏夹名称');
+      setAlert({ show: true, type: 'warning', message: '请输入收藏夹名称' });
       return;
     }
 
@@ -161,15 +175,25 @@ const MyCollectionsTab: React.FC = () => {
       await fetchCollections();
       handleCloseEditModal();
     } catch (err) {
-      alert((err as Error).message);
+      setAlert({ show: true, type: 'error', message: (err as Error).message });
     }
   };
 
-  // 删除收藏夹
-  const handleDeleteCollection = async (collectionId: string) => {
-    if (!confirm(t('confirmDeleteCollection'))) {
-      return;
-    }
+  // 删除收藏夹 - 显示确认对话框
+  const handleDeleteCollection = (collectionId: string) => {
+    setConfirm({
+      show: true,
+      message: t('confirmDeleteCollection'),
+      collectionId
+    });
+  };
+
+  // 确认删除收藏夹
+  const handleConfirmDeleteCollection = async () => {
+    if (!confirm.collectionId) return;
+    
+    // 关闭确认对话框
+    setConfirm(prev => ({ ...prev, show: false }));
 
     try {
       const response = await fetch('/api/component/tab/collection', {
@@ -178,7 +202,7 @@ const MyCollectionsTab: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          collectionId: collectionId,
+          collectionId: confirm.collectionId,
         }),
       });
 
@@ -188,14 +212,14 @@ const MyCollectionsTab: React.FC = () => {
       }
 
       // 如果删除的是当前选中的收藏夹，清除选中状态
-      if (selectedCollection === collectionId) {
+      if (selectedCollection === confirm.collectionId) {
         setSelectedCollection(null);
       }
 
       // 重新获取收藏夹列表
       await fetchCollections();
     } catch (err) {
-      alert((err as Error).message);
+      setAlert({ show: true, type: 'error', message: (err as Error).message });
     }
   };
 
@@ -474,6 +498,25 @@ const MyCollectionsTab: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Alert组件 */}
+      {alert.show && (
+        <Alert
+          show={alert.show}
+          type={alert.type}
+          message={alert.message}
+          onClose={() => setAlert(prev => ({ ...prev, show: false }))}
+        />
+      )}
+
+      {/* Confirm组件 */}
+      <Confirm
+        show={confirm.show}
+        message={confirm.message}
+        onConfirm={handleConfirmDeleteCollection}
+        onCancel={() => setConfirm(prev => ({ ...prev, show: false }))}
+        confirmVariant="danger"
+      />
     </div>
   );
 };

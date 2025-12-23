@@ -7,6 +7,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from './DropdownMenu';
+import Logo from './Logo';
 
 export default function Navbar() {
   const { data: session, status } = useSession();
@@ -82,10 +83,8 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">C</span>
-            </div>
-            <span className="text-xl font-bold text-gray-900">Chronicle</span>
+            <Logo type="voft" size={32} alt="Vine of Time Logo" />
+            <span className="text-xl font-bold text-gray-900">Vine of Time</span>
           </Link>
 
           {/* Desktop Navigation */}

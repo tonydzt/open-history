@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { api } from '@/lib/api';
+
 import { CreateEventData, GeoLocation } from '@/db/model/vo/Event';
 import LeafletMapWrapper from '@/components/features/map/LeafletMapWrapper';
 import EventImageUploader from '@/components/features/events/EventImageUploader';
@@ -18,6 +18,17 @@ export default function CreateEventPage() {
   const t = useTranslations('CreateEventPage');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // 使用useState存储参数，在客户端渲染时获取
+  const [timelineId, setTimelineId] = useState<string | null>(null);
+  const [storymapId, setStorymapId] = useState<string | null>(null);
+  
+  // 在客户端渲染时获取URL参数
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    setTimelineId(urlParams.get('timelineId'));
+    setStorymapId(urlParams.get('storymapId'));
+  }, []);
+  
   const [formData, setFormData] = useState<CreateEventData>({
     title: '',
     description: '',
@@ -103,9 +114,68 @@ export default function CreateEventPage() {
         geom: formData.geom
       };
 
-      const result = await api.createEvent(eventData);
+      // 直接调用/api/events接口创建事件
+      const response = await fetch('/api/events', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // 包含cookies以确保认证
+        body: JSON.stringify(eventData),
+      });
 
-      router.push(`/event/${result.id}`);
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || '创建事件失败');
+      }
+
+      const result = await response.json();
+
+      // 检查是否有timelineId或storymapId参数
+      if (timelineId) {
+        // 将事件添加到时间轴
+        try {
+          await fetch(`/api/timeline/${timelineId}/events`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+              eventId: result.id
+            }),
+          });
+          // 跳转回时间轴预览页面
+          router.push(`/timeline/${timelineId}`);
+        } catch (err) {
+          console.error('Error adding event to timeline:', err);
+          // 如果添加到时间轴失败，仍然显示事件详情
+          router.push(`/event/${result.id}`);
+        }
+      } else if (storymapId) {
+        // 将事件添加到故事地图
+        try {
+          await fetch(`/api/storymap/${storymapId}/events`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+              eventId: result.id
+            }),
+          });
+          // 跳转回故事地图预览页面
+          router.push(`/storymap/${storymapId}`);
+        } catch (err) {
+          console.error('Error adding event to storymap:', err);
+          // 如果添加到故事地图失败，仍然显示事件详情
+          router.push(`/event/${result.id}`);
+        }
+      } else {
+        // 没有关联的时间轴或故事地图，直接跳转到事件详情页
+        router.push(`/event/${result.id}`);
+      }
     } catch (err) {
       setError(t('createEventFailed'));
       console.error('Error creating event:', err);

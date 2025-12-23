@@ -4,6 +4,8 @@ export * from './common/DropdownMenu';
 export { default as Navbar } from './common/Navbar';
 export { default as Providers } from './common/Providers';
 export { default as ImageUploader } from './common/ImageUploader';
+export { default as Alert } from './common/Alert';
+export { default as Confirm } from './common/Confirm';
 
 // 事件相关组件
 export { default as EventActionsMenu } from './features/events/EventActionsMenu';

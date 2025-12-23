@@ -4,6 +4,8 @@ import { authOptions } from '@/lib/auth';
 import db from '@/lib/db';
 import { CreateEventData, transformEvent } from '@/db/model/vo/Event';
 import { v4 as uuidv4 } from 'uuid';
+import { createDefaultCollection } from '@/db/access/collection';
+import { addEventToCollection } from '@/db/access/collectionEvent';
 
 export async function GET() {
   try {
@@ -118,6 +120,19 @@ export async function POST(request: Request) {
           }
         });
       }
+    
+    // 创建事件后，将事件添加到用户的默认收藏夹中
+    try {
+      // 获取或创建用户的默认收藏夹
+      const defaultCollection = await createDefaultCollection(session.user.id);
+      
+      // 将新创建的事件添加到默认收藏夹
+      await addEventToCollection(defaultCollection.id, event.id, session.user.id);
+    } catch (error) {
+      console.error('将事件添加到默认收藏夹失败:', error);
+      // 这里不抛出错误，因为事件创建已经成功，只是收藏夹操作失败
+      // 可以考虑记录日志或发送通知给用户
+    }
     
     return NextResponse.json(event, { status: 201 });
   } catch (error) {

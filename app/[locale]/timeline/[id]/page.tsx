@@ -75,6 +75,15 @@ export default async function TimelineDetailPage({
                     {t('edit')}
                   </a>
                 )}
+                {/* 添加事件按钮 - 只有创建人才能看到 */}
+                {user && timeline.userId === user.id && (
+                  <a 
+                    href={`/create?timelineId=${id}`} 
+                    className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-green-500 transition-colors"
+                  >
+                    {t('addEvent')}
+                  </a>
+                )}
                 {/* 分享按钮 */}
                 <div suppressHydrationWarning>
                   <ShareComponent

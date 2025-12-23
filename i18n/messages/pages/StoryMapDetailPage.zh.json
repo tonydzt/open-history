@@ -8,8 +8,9 @@
     "unknownError": "发生未知错误",
     "back": "返回",
     "edit": "编辑",
-    "share": "分享",
-    "storymapTitle": "故事地图标题",
+  "share": "分享",
+  "addEvent": "添加事件",
+  "storymapTitle": "故事地图标题",
     "storymapInitFailed": "初始化故事地图失败。",
     "retry": "重试"
   }

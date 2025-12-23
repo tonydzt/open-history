@@ -1,8 +1,8 @@
-# Chronicle 使用说明
+# Vine of Time 使用说明
 
 ## 🎉 项目已成功启动！
 
-Chronicle 多视角事件记录平台已经成功创建并运行在 http://localhost:3000
+Vine of Time 多视角事件记录平台已经成功创建并运行在 http://localhost:3000
 
 ## 📋 已完成的功能
 
@@ -145,4 +145,4 @@ GOOGLE_CLIENT_SECRET=your-google-client-secret
 
 ---
 
-**享受使用 Chronicle 记录和分享你的故事！** 📖✨
+**享受使用 Vine of Time 记录和分享你的故事！** 📖✨

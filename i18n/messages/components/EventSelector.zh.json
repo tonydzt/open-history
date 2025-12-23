@@ -10,6 +10,10 @@
     "cancel": "取消",
     "addSelected": "添加已选",
     "selectCollection": "选择收藏夹",
-    "allEvents": "所有事件"
+    "allEvents": "所有事件",
+    "noCollectionsWithEvents": "暂无收藏事件",
+    "noCollectionsWithEventsDescription": "您还没有将任何事件添加到收藏夹中。",
+    "createFirstEvent": "创建第一个事件",
+    "goToHome": "前往主页"
   }
 }
