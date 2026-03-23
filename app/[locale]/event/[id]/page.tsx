@@ -252,9 +252,10 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
       {/* Event Description */}
       <div className="mb-8">
         <h2 className="text-2xl font-semibold text-gray-900 mb-4">{t('eventDescription')}</h2>
-        <div className="prose max-w-none whitespace-pre-wrap">
-            {event.description}
-          </div>
+        <div 
+          className="prose max-w-none"
+          dangerouslySetInnerHTML={{ __html: event.description }}
+        />
       </div>
       {/* 显示地理位置信息 */}
       {event.geom && (

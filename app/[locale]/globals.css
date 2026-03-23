@@ -52,3 +52,8 @@
     @apply bg-gray-100 text-gray-700;
   }
 }
+
+/* 隐藏TinyMCE品牌标识 */
+.tox-statusbar__branding {
+  display: none !important;
+}

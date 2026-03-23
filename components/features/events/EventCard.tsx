@@ -36,8 +36,13 @@ export default function EventCard({ event }: EventCardProps) {
   };
 
   const truncateDescription = (text: string, maxLength: number = 100) => {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + '...';
+    // 首先移除HTML标签，只保留纯文本
+    const plainText = text.replace(/<[^>]*>/g, '');
+    if (plainText.length <= maxLength) return text;
+    // 截取纯文本，然后添加省略号
+    const truncatedText = plainText.substring(0, maxLength) + '...';
+    // 返回截取后的文本
+    return truncatedText;
   };
 
   // 检查图片是否有效
@@ -77,7 +82,8 @@ export default function EventCard({ event }: EventCardProps) {
               {event.title}
             </h3>
             
-            <p className="text-gray-600 text-sm mb-4 text-truncate-2">{truncateDescription(event.description)}</p>
+            <div className="text-gray-600 text-sm mb-4 text-truncate-2" dangerouslySetInnerHTML={{ __html: truncateDescription(event.description) }} />
+
 
             {/* Tags */}
             {event.tags.length > 0 && (

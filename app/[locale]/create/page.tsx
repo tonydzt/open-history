@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -9,6 +9,7 @@ import { CreateEventData, GeoLocation } from '@/db/model/vo/Event';
 import LeafletMapWrapper from '@/components/features/map/LeafletMapWrapper';
 import EventImageUploader from '@/components/features/events/EventImageUploader';
 import LoadingIndicator from '@/components/common/LoadingIndicator';
+import EditorClient from '@/components/features/editor/TinyMCEEditor';
 // Leaflet CSS 需要单独导入
 import 'leaflet/dist/leaflet.css';
 
@@ -21,6 +22,8 @@ export default function CreateEventPage() {
   // 使用useState存储参数，在客户端渲染时获取
   const [timelineId, setTimelineId] = useState<string | null>(null);
   const [storymapId, setStorymapId] = useState<string | null>(null);
+  // 编辑器ref，用于获取内容
+  const editorRef = useRef<any>(null);
   
   // 在客户端渲染时获取URL参数
   useEffect(() => {
@@ -96,7 +99,10 @@ export default function CreateEventPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.title.trim() || !formData.description.trim()) {
+    // 从编辑器获取内容
+    const description = editorRef.current ? editorRef.current.getContent() : '';
+
+    if (!formData.title.trim() || !description.trim()) {
       setError(t('titleAndDescriptionRequired'));
       return;
     }
@@ -108,6 +114,7 @@ export default function CreateEventPage() {
       // 准备表单数据，包含地理位置转换
       const eventData = {
         ...formData,
+        description: description,
         images: formData.images.filter(img => img.trim()),
         tags: formData.tags.filter(tag => tag.trim()),
         // 直接传递geom对象，API路由会负责转换格式
@@ -228,14 +235,9 @@ export default function CreateEventPage() {
           <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
             {t('eventDescription')} <span className="text-red-500">*</span>
           </label>
-          <textarea
-            id="description"
-            value={formData.description}
-            onChange={(e) => handleInputChange('description', e.target.value)}
-            className="input-field"
-            rows={4}
-            placeholder={t('enterEventDescription')}
-            required
+          <EditorClient
+            ref={editorRef}
+            initialValue={formData.description}
           />
         </div>
 
