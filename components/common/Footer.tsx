@@ -63,6 +63,14 @@ export default function Footer() {
               >
                 {t('privacy')}
               </Link>
+              <Link
+                href="https://developers.vineoftime.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-600 hover:text-primary-600 transition-colors"
+              >
+                {t('developers')}
+              </Link>
             </div>
             <p className="text-sm text-gray-500">&copy; {new Date().getFullYear()} {t('copyright')}</p>
           </div>
